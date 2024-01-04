@@ -1,20 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CarRentalManagement.Api.Models.Domain
+namespace CarRentalManagement.Api.Models.DTOs
 {
-    public class Car
+    public class CarDto
     {
-        [Key]
-        public int Id { get; set; }
         
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Color { get; set; }
 
         public string LicensePlateNumber { get; set; }
-        
+
         public string Make { get; set; }
-       
-        public bool Availability { get; set; } = true;
+
+        public bool Availability { get; set; }
     }
 }

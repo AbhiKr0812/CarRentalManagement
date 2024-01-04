@@ -24,7 +24,7 @@ namespace CarRentalManagement.Api.Repositories
         public async Task<Car?> DeleteAsync(int id)
         {
             var existingCar =  await _carRentalDb.Cars.FirstOrDefaultAsync(x => x.Id == id);
-            if (existingCar != null)
+            if (existingCar == null)
             {
                 return null;
             }
@@ -46,7 +46,7 @@ namespace CarRentalManagement.Api.Repositories
         public async Task<Car?> UpdateAsync(int id, Car car)
         {
             var existingCar = await _carRentalDb.Cars.FirstOrDefaultAsync(x => x.Id == id);
-            if (existingCar != null)
+            if (existingCar == null)
             {
                 return null;
             }

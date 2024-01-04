@@ -1,0 +1,32 @@
+===================================== CarRentalManagement.API ======================================
+
+=> CreateCar Request : 
+
+{
+  "name": "",
+  "licensePlateNumber": "",
+  "make": "",
+  "color": "",
+  "availability": true
+}
+
+........................................
+
+=> CreateCar Response : Status Code - 201
+
+{
+  "id": 1,
+  "name": "Thar",
+  "licensePlateNumber": "BRTHBL0001",
+  "make": "Mahindra",
+  "color": "Black",
+  "availability": true
+}
+
+=> CreateCar Response : headers
+
+content-type: application/json; charset=utf-8 
+ date: Thu,04 Jan 2024 10:57:42 GMT 
+ location: http://localhost:5006/api/Car/1 
+ server: Kestrel 
+ transfer-encoding: chunked 

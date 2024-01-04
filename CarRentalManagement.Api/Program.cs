@@ -1,4 +1,5 @@
 using CarRentalManagement.Api.Data;
+using CarRentalManagement.Api.Mapping;
 using CarRentalManagement.Api.Repositories;
 using CarRentalManagement.Api.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,8 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("CarRentalConnect
 
 // Repository Injection
 builder.Services.AddScoped<ICarRepository, CarRepository>();
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();
 
