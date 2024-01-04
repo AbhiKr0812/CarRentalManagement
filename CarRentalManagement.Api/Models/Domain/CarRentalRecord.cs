@@ -1,7 +1,10 @@
-﻿namespace CarRentalManagement.Api.Models.Domain
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CarRentalManagement.Api.Models.Domain
 {
-    public class VehicleRentalRecord
+    public class CarRentalRecord
     {
+        [Key]
         public int Id { get; set; }
         public string CustomerName { get; set; }
         public string DrivingLicenceNo { get; set; }
@@ -12,6 +15,6 @@
         public int VehicleId { get; set; }
 
         //Navigation properties
-        public Vehicle Vehicle { get; set; }
+        public Car Vehicle { get; set; }
     }
 }
