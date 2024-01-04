@@ -1,4 +1,6 @@
 using CarRentalManagement.Api.Data;
+using CarRentalManagement.Api.Repositories;
+using CarRentalManagement.Api.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +12,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// DbcontextClass Injection
 builder.Services.AddDbContext<CarRentalDbContext>(options => 
 options.UseSqlServer(builder.Configuration.GetConnectionString("CarRentalConnectionString")));
+
+// Repository Injection
+builder.Services.AddScoped<ICarRepository, CarRepository>();
 
 var app = builder.Build();
 
