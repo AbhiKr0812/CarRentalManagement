@@ -10,13 +10,13 @@ namespace CarRentalManagement.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CarController : ControllerBase
+    public class CarsController : ControllerBase
     {
         private readonly CarRentalDbContext _carRentalDb;
         private readonly ICarRepository _carRepository;
         private readonly IMapper _mapper;
 
-        public CarController(CarRentalDbContext carRentalDb,
+        public CarsController(CarRentalDbContext carRentalDb,
             ICarRepository carRepository, IMapper mapper)
         {
             _carRentalDb = carRentalDb;
