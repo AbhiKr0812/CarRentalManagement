@@ -11,7 +11,7 @@ namespace CarRentalManagement.Api.Models.Domain
         public DateTime PickUpDate { get; set; }
         public DateTime DropDate { get; set; }
         public decimal Cost { get; set; }
-        public bool CompletionStatus { get; set; }
+        public bool CompletionStatus { get; set; } = false;
         public int VehicleId { get; set; }
 
         //Navigation properties

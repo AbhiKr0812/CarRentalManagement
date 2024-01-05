@@ -3,7 +3,6 @@ using CarRentalManagement.Api.Data;
 using CarRentalManagement.Api.Models.Domain;
 using CarRentalManagement.Api.Models.DTOs;
 using CarRentalManagement.Api.Repositories.IRepositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRentalManagement.Api.Controllers

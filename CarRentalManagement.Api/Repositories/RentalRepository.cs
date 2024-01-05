@@ -18,13 +18,17 @@ namespace CarRentalManagement.Api.Repositories
         {
             await _carRentalDb.CarRentalRecords.AddAsync(record);
             await _carRentalDb.SaveChangesAsync();
+
+            //var car = _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == record.Id);
+            //int carId = car.Id;
+            //ShuffleCarAvailability(carId);
             return record;
         }
 
         public async Task<CarRentalRecord?> DeleteAsync(int id)
         {
             var existingRecord = await _carRentalDb.CarRentalRecords.FirstOrDefaultAsync(r => r.Id == id);
-            if (existingRecord != null)
+            if (existingRecord == null)
             {
                 return null;
             }
@@ -47,7 +51,7 @@ namespace CarRentalManagement.Api.Repositories
         public async Task<CarRentalRecord?> UpdateAsync(int id, CarRentalRecord record)
         {
             var existingRecord = await _carRentalDb.CarRentalRecords.FirstOrDefaultAsync(r => r.Id == id);
-            if (existingRecord != null)
+            if (existingRecord == null)
             {
                 return null;
             }
@@ -60,9 +64,24 @@ namespace CarRentalManagement.Api.Repositories
             existingRecord.CompletionStatus = record.CompletionStatus;
             existingRecord.VehicleId = record.VehicleId;
 
+            if (record.CompletionStatus == true)
+            {
+                ShuffleCarAvailability(record.VehicleId);
+            }
+
             _carRentalDb.SaveChangesAsync();
             return existingRecord;
 
+        }
+
+        private async void ShuffleCarAvailability(int id)
+        {
+            var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == id);
+            if (car.Availability)
+                car.Availability = false;
+            car.Availability = true;
+
+            _carRentalDb.SaveChangesAsync();
         }
     }
 }

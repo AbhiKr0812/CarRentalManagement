@@ -47,6 +47,7 @@
             // 
             // gvCars
             // 
+            this.gvCars.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gvCars.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gvCars.Location = new System.Drawing.Point(12, 12);
             this.gvCars.Name = "gvCars";
@@ -54,6 +55,7 @@
             this.gvCars.RowTemplate.Height = 24;
             this.gvCars.Size = new System.Drawing.Size(1141, 438);
             this.gvCars.TabIndex = 1;
+            this.gvCars.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvCars_CellMouseDoubleClick);
             // 
             // tbCarColor
             // 
@@ -75,7 +77,7 @@
             // 
             // tbCarNo
             // 
-            this.tbCarNo.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.tbCarNo.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tbCarNo.Location = new System.Drawing.Point(248, 496);
             this.tbCarNo.Name = "tbCarNo";
             this.tbCarNo.Size = new System.Drawing.Size(198, 22);
@@ -130,7 +132,7 @@
             // 
             // tbAvailability
             // 
-            this.tbAvailability.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.tbAvailability.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tbAvailability.Location = new System.Drawing.Point(495, 570);
             this.tbAvailability.Name = "tbAvailability";
             this.tbAvailability.Size = new System.Drawing.Size(198, 22);
@@ -156,6 +158,7 @@
             this.btnAdd.TabIndex = 14;
             this.btnAdd.Text = "Add ";
             this.btnAdd.UseVisualStyleBackColor = false;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnUpdate
             // 
@@ -166,6 +169,7 @@
             this.btnUpdate.TabIndex = 15;
             this.btnUpdate.Text = "Update";
             this.btnUpdate.UseVisualStyleBackColor = false;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // btnDelete
             // 
@@ -176,6 +180,7 @@
             this.btnDelete.TabIndex = 16;
             this.btnDelete.Text = "Delete";
             this.btnDelete.UseVisualStyleBackColor = false;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // ManageCars
             // 
@@ -199,6 +204,7 @@
             this.Controls.Add(this.gvCars);
             this.Name = "ManageCars";
             this.Text = "Manage Cars";
+            this.Load += new System.EventHandler(this.ManageCars_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gvCars)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
