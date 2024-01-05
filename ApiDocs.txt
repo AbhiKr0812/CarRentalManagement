@@ -4,9 +4,9 @@
 
 {
   "name": "",
+  "color": "",
   "licensePlateNumber": "",
   "make": "",
-  "color": "",
   "availability": true
 }
 
@@ -17,9 +17,9 @@
 {
   "id": 1,
   "name": "Thar",
+  "color": "Black",
   "licensePlateNumber": "BRTHBL0001",
   "make": "Mahindra",
-  "color": "Black",
   "availability": true
 }
 
