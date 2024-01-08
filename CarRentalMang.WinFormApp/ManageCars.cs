@@ -23,7 +23,6 @@ namespace CarRentalMang.WinFormApp
 
         private void ManageCars_Load(object sender, EventArgs e)
         {
-
             try
             {
                 PopulateGrid();
@@ -97,7 +96,7 @@ namespace CarRentalMang.WinFormApp
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var id = (int)gvCars.SelectedRows[0].Cells[0].Value ;
+                var id = (int)gvCars.SelectedRows[0].Cells[0].Value;
                 
 
                 var carToBeUpdate = new Car

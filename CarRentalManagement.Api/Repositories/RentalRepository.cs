@@ -17,11 +17,12 @@ namespace CarRentalManagement.Api.Repositories
         public async Task<CarRentalRecord> CreateAsync(CarRentalRecord record)
         {
             await _carRentalDb.CarRentalRecords.AddAsync(record);
-            await _carRentalDb.SaveChangesAsync();
+            
+            // Shuffle Car Availability
+            var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == record.VehicleId);
+            car.Availability = false;
 
-            //var car = _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == record.Id);
-            //int carId = car.Id;
-            //ShuffleCarAvailability(carId);
+            await _carRentalDb.SaveChangesAsync();
             return record;
         }
 
@@ -64,10 +65,9 @@ namespace CarRentalManagement.Api.Repositories
             existingRecord.CompletionStatus = record.CompletionStatus;
             existingRecord.VehicleId = record.VehicleId;
 
-            if (record.CompletionStatus == true)
-            {
-                ShuffleCarAvailability(record.VehicleId);
-            }
+            // Shuffle Car Availability
+            var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == record.VehicleId);
+            car.Availability = record.CompletionStatus;
 
             _carRentalDb.SaveChangesAsync();
             return existingRecord;

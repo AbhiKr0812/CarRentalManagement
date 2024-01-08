@@ -56,6 +56,7 @@
             this.gvCars.Size = new System.Drawing.Size(1141, 438);
             this.gvCars.TabIndex = 1;
             this.gvCars.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvCars_CellMouseDoubleClick);
+           
             // 
             // tbCarColor
             // 

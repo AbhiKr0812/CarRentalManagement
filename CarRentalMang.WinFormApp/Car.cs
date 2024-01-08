@@ -18,6 +18,6 @@ namespace CarRentalMang.WinFormApp
 
         public string Make { get; set; }
 
-        public bool Availability { get; set; } = true;
+        public bool Availability { get; set; }
     }
 }

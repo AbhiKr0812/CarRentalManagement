@@ -23,5 +23,12 @@ namespace CarRentalMang.WinFormApp
             cars.ShowDialog();
             cars.MdiParent = this;
         }
+
+        private void mangeRentalsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var rentals = new ManageRentals();
+            rentals.ShowDialog();
+            rentals.MdiParent = this;
+        }
     }
 }

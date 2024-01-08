@@ -58,6 +58,7 @@
             this.mangeRentalsToolStripMenuItem.Name = "mangeRentalsToolStripMenuItem";
             this.mangeRentalsToolStripMenuItem.Size = new System.Drawing.Size(129, 24);
             this.mangeRentalsToolStripMenuItem.Text = "Manage Rentals";
+            this.mangeRentalsToolStripMenuItem.Click += new System.EventHandler(this.mangeRentalsToolStripMenuItem_Click);
             // 
             // HomePage
             // 
