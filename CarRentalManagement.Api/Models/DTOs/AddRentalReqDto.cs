@@ -16,7 +16,6 @@ namespace CarRentalManagement.Api.Models.DTOs
         public string DrivingLicenceNo { get; set; }
 
         [Required]
-        
         public DateTime PickUpDate { get; set; }
 
         [Required]

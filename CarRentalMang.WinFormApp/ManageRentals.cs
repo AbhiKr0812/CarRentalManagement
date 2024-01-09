@@ -130,15 +130,23 @@ namespace CarRentalMang.WinFormApp
                     CompletionStatus = false
 
                 };
-                var json = JsonConvert.SerializeObject(newRental);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PostAsync("Rentals", content);
-                if (response.IsSuccessStatusCode)
+                var errorMsg = ValidateUserInput(newRental);
+
+                if (errorMsg.Length == 0)
                 {
-                    string result = await response.Content.ReadAsStringAsync();
-                    MessageBox.Show(result);
+                    var json = JsonConvert.SerializeObject(newRental);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    HttpResponseMessage response = await client.PostAsync("Rentals", content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string result = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show(result);
+                    } 
                 }
+                else 
+                    MessageBox.Show($"Error: {errorMsg}");
             }
             PopulateGrid();
         }
@@ -167,15 +175,22 @@ namespace CarRentalMang.WinFormApp
                         CompletionStatus = bool.Parse(tbCompletion.Text)
                     };
 
-                    var json = JsonConvert.SerializeObject(rentalToBeUpdate);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    var errorMsg = ValidateUserInput(rentalToBeUpdate);
 
-                    HttpResponseMessage response = await client.PutAsync($"Rentals/{id}", content);
-                    if (response.IsSuccessStatusCode)
+                    if (errorMsg.Length == 0)
                     {
-                        string result = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show(result);
+                        var json = JsonConvert.SerializeObject(rentalToBeUpdate);
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                        HttpResponseMessage response = await client.PutAsync($"Rentals/{id}", content);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string result = await response.Content.ReadAsStringAsync();
+                            MessageBox.Show(result);
+                        } 
                     }
+                    else
+                        MessageBox.Show($"Error: {errorMsg}");
 
                 }
                 PopulateGrid();
@@ -202,8 +217,9 @@ namespace CarRentalMang.WinFormApp
                 {
                     string result = await response.Content.ReadAsStringAsync();
                     MessageBox.Show(result);
-
                 }
+                else
+                    MessageBox.Show(await response.Content.ReadAsStringAsync());
 
             }
             PopulateGrid();
@@ -228,6 +244,39 @@ namespace CarRentalMang.WinFormApp
             DateTime utcDateTime = istDateTime.ToUniversalTime();
             return utcDateTime;
         }
+
+        private string ValidateUserInput(Rental rental)
+        {
+
+            var errorMessage = "";
+
+            if (string.IsNullOrWhiteSpace(rental.CustomerName))
+                errorMessage += "Error : Please Enter Customer Name.\n\r";
+
+            if (string.IsNullOrWhiteSpace(rental.DrivingLicenceNo))
+                errorMessage += "Error : Please Enter Driving License Number.\n\r";
+
+            if ((rental.VehicleId) == 0)
+                errorMessage += "Error : Please Select A Available Car";
+
+            if ((rental.DrivingLicenceNo).Length != 11)
+                errorMessage += "Error : License Plate Number Should Be 11-Characters Long.\n\r";
+
+            if (rental.PickUpDate > rental.DropDate)           
+                errorMessage += "Error : Drop Date/Time Should Be Greater Than PickUp Date/Time.\n\r";
+
+            if (rental.DropDate - rental.PickUpDate < TimeSpan.FromHours(8))
+                errorMessage += "Error : Minimum Duration of a car to be rented is 8 hours.\n\r";
+
+            if (rental.Cost == 0)
+                errorMessage += "Error : Please Enter Cost";
+
+            //if (!rental.CompletionStatus)
+            //    errorMessage += "Error : Do Not Mark Completion While Adding.\n\r";
+
+            return errorMessage;
+        }
+
 
     }
 }

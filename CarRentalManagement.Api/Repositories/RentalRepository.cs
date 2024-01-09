@@ -30,32 +30,40 @@ namespace CarRentalManagement.Api.Repositories
         {
             var existingRecord = await _carRentalDb.CarRentalRecords.FirstOrDefaultAsync(r => r.Id == id);
             if (existingRecord == null)
-            {
-                return null;
-            }
+                throw new Exception("There Is No Such Record Present")
 
-            _carRentalDb.CarRentalRecords.Remove(existingRecord);
-            _carRentalDb.SaveChangesAsync();
-            return existingRecord;
+
+            if (existingRecord.CompletionStatus)
+            {
+                _carRentalDb.CarRentalRecords.Remove(existingRecord);
+                _carRentalDb.SaveChangesAsync();
+                return existingRecord;
+            }
+            else
+                throw new Exception("Without completion approval of the rental, record can't be deleted.");
+
+            
         }
 
         public async  Task<List<CarRentalRecord>> GetAllAsync()
         {
-            return await _carRentalDb.CarRentalRecords.ToListAsync();
+            var rentals = await _carRentalDb.CarRentalRecords.ToListAsync();
+            if (rentals.Count == 0)
+                throw new Exception("There is no record available at the moment");
+            return rentals;
         }
 
         public async Task<CarRentalRecord?> GetByIdAsync(int id)
         {
-            return await _carRentalDb.CarRentalRecords.FirstOrDefaultAsync(r => r.Id == id);    
+            var rental = await _carRentalDb.CarRentalRecords.FirstOrDefaultAsync(r => r.Id == id);
+            if (rental == null) throw new Exception("There is no such record exist");
+            return rental;
         }
 
         public async Task<CarRentalRecord?> UpdateAsync(int id, CarRentalRecord record)
         {
             var existingRecord = await _carRentalDb.CarRentalRecords.FirstOrDefaultAsync(r => r.Id == id);
-            if (existingRecord == null)
-            {
-                return null;
-            }
+            if (existingRecord == null) throw new Exception("There is no such record exist");
 
             existingRecord.CustomerName = record.CustomerName;
             existingRecord.DrivingLicenceNo = record.DrivingLicenceNo;
@@ -74,14 +82,14 @@ namespace CarRentalManagement.Api.Repositories
 
         }
 
-        private async void ShuffleCarAvailability(int id)
-        {
-            var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == id);
-            if (car.Availability)
-                car.Availability = false;
-            car.Availability = true;
+        //private async void ShuffleCarAvailability(int id)
+        //{
+        //    var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == id);
+        //    if (car.Availability)
+        //        car.Availability = false;
+        //    car.Availability = true;
 
-            _carRentalDb.SaveChangesAsync();
-        }
+        //    _carRentalDb.SaveChangesAsync();
+        //}
     }
 }
