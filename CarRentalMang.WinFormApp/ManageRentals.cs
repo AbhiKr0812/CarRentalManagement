@@ -262,7 +262,7 @@ namespace CarRentalMang.WinFormApp
             if ((rental.DrivingLicenceNo).Length != 11)
                 errorMessage += "Error : License Plate Number Should Be 11-Characters Long.\n\r";
 
-            if (rental.PickUpDate > rental.DropDate)           
+            if (rental.PickUpDate >= rental.DropDate)           
                 errorMessage += "Error : Drop Date/Time Should Be Greater Than PickUp Date/Time.\n\r";
 
             if (rental.DropDate - rental.PickUpDate < TimeSpan.FromHours(8))

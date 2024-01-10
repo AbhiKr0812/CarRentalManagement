@@ -1,5 +1,6 @@
 using CarRentalManagement.Api.Data;
 using CarRentalManagement.Api.Mapping;
+using CarRentalManagement.Api.Middleware;
 using CarRentalManagement.Api.Repositories;
 using CarRentalManagement.Api.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddTransient<ExceptionMiddleware>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -33,6 +35,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
+
+// Global Exception Middleware
+app.ConfigureExceptionMiddleware();
 
 app.MapControllers();
 

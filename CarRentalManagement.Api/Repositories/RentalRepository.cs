@@ -1,4 +1,5 @@
 ﻿using CarRentalManagement.Api.Data;
+using CarRentalManagement.Api.Exceptions;
 using CarRentalManagement.Api.Models.Domain;
 using CarRentalManagement.Api.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
@@ -16,21 +17,27 @@ namespace CarRentalManagement.Api.Repositories
 
         public async Task<CarRentalRecord> CreateAsync(CarRentalRecord record)
         {
-            await _carRentalDb.CarRentalRecords.AddAsync(record);
-            
-            // Shuffle Car Availability
-            var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == record.VehicleId);
-            car.Availability = false;
+            var errorMsg = ValidateRental(record);
+            if (errorMsg.Length == 0)
+            {
+                await _carRentalDb.CarRentalRecords.AddAsync(record);
 
-            await _carRentalDb.SaveChangesAsync();
-            return record;
+                // Shuffle Car Availability
+                var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == record.VehicleId);
+                car.Availability = false;
+
+                await _carRentalDb.SaveChangesAsync();
+                return record;
+            }
+            throw new BadRequestException(errorMsg);
+            
         }
 
         public async Task<CarRentalRecord?> DeleteAsync(int id)
         {
             var existingRecord = await _carRentalDb.CarRentalRecords.FirstOrDefaultAsync(r => r.Id == id);
             if (existingRecord == null)
-                throw new Exception("There Is No Such Record Present")
+                throw new NotFoundException($"There Is No Such Record Present With The Id: {id}");
 
 
             if (existingRecord.CompletionStatus)
@@ -40,7 +47,7 @@ namespace CarRentalManagement.Api.Repositories
                 return existingRecord;
             }
             else
-                throw new Exception("Without completion approval of the rental, record can't be deleted.");
+                throw new BadRequestException("A Rental Record Completion-Approval Should Be True, Before Deletion");
 
             
         }
@@ -49,21 +56,21 @@ namespace CarRentalManagement.Api.Repositories
         {
             var rentals = await _carRentalDb.CarRentalRecords.ToListAsync();
             if (rentals.Count == 0)
-                throw new Exception("There is no record available at the moment");
+                throw new NotFoundException("There is no record available at this moment");
             return rentals;
         }
 
         public async Task<CarRentalRecord?> GetByIdAsync(int id)
         {
             var rental = await _carRentalDb.CarRentalRecords.FirstOrDefaultAsync(r => r.Id == id);
-            if (rental == null) throw new Exception("There is no such record exist");
+            if (rental == null) throw new NotFoundException($"There Is No Such Record Present With The Id: {id}");
             return rental;
         }
 
         public async Task<CarRentalRecord?> UpdateAsync(int id, CarRentalRecord record)
         {
             var existingRecord = await _carRentalDb.CarRentalRecords.FirstOrDefaultAsync(r => r.Id == id);
-            if (existingRecord == null) throw new Exception("There is no such record exist");
+            if (existingRecord == null) throw new NotFoundException($"There Is No Such Record Present With The Id: {id}");
 
             existingRecord.CustomerName = record.CustomerName;
             existingRecord.DrivingLicenceNo = record.DrivingLicenceNo;
@@ -91,5 +98,22 @@ namespace CarRentalManagement.Api.Repositories
 
         //    _carRentalDb.SaveChangesAsync();
         //}
+
+        private  string ValidateRental(CarRentalRecord carRental)
+        {
+            var errorMessage = "";
+
+            var rental = _carRentalDb.CarRentalRecords.
+                FirstOrDefault(r => r.DrivingLicenceNo == carRental.DrivingLicenceNo && r.DropDate >= DateTime.Now);
+            if (rental != null)
+                return errorMessage = ($"{carRental.DrivingLicenceNo} is already occupied with active rental.");
+            
+            if (carRental.PickUpDate == carRental.DropDate || carRental.PickUpDate > carRental.DropDate)
+                return errorMessage = "Drop Date/Time Should Be Greater Than PickUp Date/Time.";
+            else if (carRental.DropDate - carRental.PickUpDate < TimeSpan.FromHours(8))
+                return errorMessage = " At least car should be rented for minimum duration of 8 hours.";
+
+            return errorMessage;
+        }
     }
 }

@@ -28,19 +28,11 @@ namespace CarRentalManagement.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                //Get Data From Database - Domain models
-                var cars = await _carRepository.GetAllAsync();
+            //Get Data From Database - Domain models
+            var cars = await _carRepository.GetAllAsync();
 
-                //Map Domain Models to DTOs
-                return Ok(_mapper.Map<List<CarDto>>(cars));
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
+            //Map Domain Models to DTOs
+            return Ok(_mapper.Map<List<CarDto>>(cars));
         }
 
         #endregion
@@ -50,26 +42,12 @@ namespace CarRentalManagement.Api.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
+            //Get Car From Database: Domain Model
+            var car = await _carRepository.GetByIdAsync(id);
 
-            try
-            {
-                //Get Car From Database: Domain Model
-                var car = await _carRepository.GetByIdAsync(id);
-
-                if (car == null)
-                {
-                    return NotFound();
-                }
-
-                //Map/Convert Domain Model to DTO
-                //Return DTO back to client
-                return Ok(_mapper.Map<CarDto>(car));
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
+            //Map/Convert Domain Model to DTO
+            //Return DTO back to client
+            return Ok(_mapper.Map<CarDto>(car));
         }
 
         #endregion
@@ -78,27 +56,17 @@ namespace CarRentalManagement.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] AddCarRequestDto carRequestDto)
         {
+            //Map or Convert DTO to Domain Model
+            var newCar = _mapper.Map<Car>(carRequestDto);
 
-            try
-            {
-                //Map or Convert DTO to Domain Model
-                var newCar = _mapper.Map<Car>(carRequestDto);
+            //Use Domain Model to create Region
+            newCar = await _carRepository.CreateAsync(newCar);
+            await _carRentalDb.SaveChangesAsync();
 
-                //Use Domain Model to create Region
-                newCar = await _carRepository.CreateAsync(newCar);
-                await _carRentalDb.SaveChangesAsync();
+            //Map Domain Model back to DTO
+            var carDto = _mapper.Map<CarDto>(newCar);
 
-                //Map Domain Model back to DTO
-                var carDto = _mapper.Map<CarDto>(newCar);
-
-                return CreatedAtAction(nameof(GetById), new { newCar.Id }, carDto);
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
+            return CreatedAtAction(nameof(GetById), new { newCar.Id }, carDto);
         }
         #endregion
 
@@ -107,27 +75,14 @@ namespace CarRentalManagement.Api.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCarReqDto updateCar)
         {
-            try
-            {
-                //Map DTO to Domain Model
-                var carToBeUpdated = _mapper.Map<Car>(updateCar);
-                //Update if region exists
-                carToBeUpdated = await _carRepository.UpdateAsync(id, carToBeUpdated);
 
-                if (carToBeUpdated == null)
-                {
-                    return NotFound();
-                }
+            // Map DTO to Domain Model
+            var carToBeUpdated = _mapper.Map<Car>(updateCar);
+            // Update if region exists
+            carToBeUpdated = await _carRepository.UpdateAsync(id, carToBeUpdated);
 
-                // Convert Domain Model to DTO
-
-                return Ok(_mapper.Map<CarDto>(carToBeUpdated));
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
+            // Convert Domain Model to DTO
+            return Ok(_mapper.Map<CarDto>(carToBeUpdated));
         }
 
         #endregion
@@ -137,26 +92,12 @@ namespace CarRentalManagement.Api.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            try
-            {
-                var carToBeDeleted = await _carRepository.DeleteAsync(id);
+            var carToBeDeleted = await _carRepository.DeleteAsync(id);
 
-                if (carToBeDeleted == null)
-                {
-                    return NotFound();
-                }
+            // returning deleted car == Optional { return Ok() also f9}
 
-                // returning deleted car == Optional { return Ok() also f9}
-
-                // Convert Domain Model to DTO
-
-                return Ok(_mapper.Map<CarDto>(carToBeDeleted));
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
+            // Convert Domain Model to DTO
+            return Ok(_mapper.Map<CarDto>(carToBeDeleted));
         }
 
         #endregion

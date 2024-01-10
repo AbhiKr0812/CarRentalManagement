@@ -1,4 +1,5 @@
 ﻿using CarRentalManagement.Api.Data;
+using CarRentalManagement.Api.Exceptions;
 using CarRentalManagement.Api.Models.Domain;
 using CarRentalManagement.Api.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ namespace CarRentalManagement.Api.Repositories
             var existingCar =  await _carRentalDb.Cars.FirstOrDefaultAsync(x => x.Id == id);
             
             if (existingCar == null)
-                throw new Exception("This Car Doesn't Exist");
+                throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");
 
             if (existingCar.Availability == true)
             {
@@ -35,7 +36,7 @@ namespace CarRentalManagement.Api.Repositories
                 return existingCar;
             }
             else
-                throw new Exception("Car availability is false : couldn't be deleted ");
+                throw new BadRequestException("Car Availability Should Be True, Before Deleting");
             
         }
 
@@ -43,7 +44,7 @@ namespace CarRentalManagement.Api.Repositories
         {
             var cars = await _carRentalDb.Cars.ToListAsync();
             if (cars.Count == 0)
-                throw new Exception("No Car Is Available");
+                throw new NotFoundException("There Is No Car Available At This Moment");
             return cars;
         }
 
@@ -51,7 +52,7 @@ namespace CarRentalManagement.Api.Repositories
         {
             var car = await _carRentalDb.Cars.FirstOrDefaultAsync(x => x.Id == id);
             if (car == null)
-                throw new Exception("This Car Doesn't Exist");
+                throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");
             return car;
         }
 
@@ -60,7 +61,7 @@ namespace CarRentalManagement.Api.Repositories
             var existingCar = await _carRentalDb.Cars.FirstOrDefaultAsync(x => x.Id == id);
 
             if (existingCar == null)
-                throw new Exception("This Car Doesn't Exist");
+                throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");
 
             existingCar.Name = car.Name;
             existingCar.LicensePlateNumber = car.LicensePlateNumber;
