@@ -141,8 +141,17 @@ namespace CarRentalMang.WinFormApp
                     HttpResponseMessage response = await client.PostAsync("Rentals", content);
                     if (response.IsSuccessStatusCode)
                     {
-                        string result = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show(result);
+                        //string result = await response.Content.ReadAsStringAsync();
+                        //MessageBox.Show(result);
+                        MessageBox.Show(
+                        $"YOU HAVE ADDED: \n\r"+
+                        $"Customer Name: {tbCustName.Text}\n\r" +
+                        $"Customer DL NO.: {tbDLNo.Text}\n\r" +
+                        $"Rented Car Type: {cbAvailCars.Text}\n\r" +
+                        $"Rented Car Cost: {tbCost.Text}\n\r" +
+                        $"Rented Date: {dtPickUp.Value}\n\r" +
+                        $"Returned Date: {dtDrop.Value}\n\r"
+                        );
                     } 
                 }
                 else 
@@ -185,8 +194,17 @@ namespace CarRentalMang.WinFormApp
                         HttpResponseMessage response = await client.PutAsync($"Rentals/{id}", content);
                         if (response.IsSuccessStatusCode)
                         {
-                            string result = await response.Content.ReadAsStringAsync();
-                            MessageBox.Show(result);
+                            //string result = await response.Content.ReadAsStringAsync();
+                            //MessageBox.Show(result);
+                            MessageBox.Show(
+                        $"YOU HAVE UPDATED: \n\r" +
+                        $"Customer Name: {tbCustName.Text}\n\r" +
+                        $"Customer DL NO.: {tbDLNo.Text}\n\r" +
+                        $"Rented Car Type: {cbAvailCars.Text}\n\r" +
+                        $"Rented Car Cost: {tbCost.Text}\n\r" +
+                        $"Rented Date: {dtPickUp.Value}\n\r" +
+                        $"Returned Date: {dtDrop.Value}\n\r"
+                        );
                         } 
                     }
                     else
@@ -256,16 +274,15 @@ namespace CarRentalMang.WinFormApp
             if (string.IsNullOrWhiteSpace(rental.DrivingLicenceNo))
                 errorMessage += "Error : Please Enter Driving License Number.\n\r";
 
-            if ((rental.VehicleId) == 0)
-                errorMessage += "Error : Please Select A Available Car";
-
             if ((rental.DrivingLicenceNo).Length != 11)
                 errorMessage += "Error : License Plate Number Should Be 11-Characters Long.\n\r";
 
+            if ((rental.VehicleId) == 0)
+                errorMessage += "Error : Please Select A Available Car";
+
             if (rental.PickUpDate >= rental.DropDate)           
                 errorMessage += "Error : Drop Date/Time Should Be Greater Than PickUp Date/Time.\n\r";
-
-            if (rental.DropDate - rental.PickUpDate < TimeSpan.FromHours(8))
+            else if (rental.DropDate - rental.PickUpDate < TimeSpan.FromHours(8))
                 errorMessage += "Error : Minimum Duration of a car to be rented is 8 hours.\n\r";
 
             if (rental.Cost == 0)

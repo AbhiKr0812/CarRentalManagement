@@ -1,4 +1,4 @@
-﻿using CarRentalManagement.Api.Contract;
+﻿
 using CarRentalManagement.Api.Exceptions;
 using System.Net;
 using System.Text.Json;

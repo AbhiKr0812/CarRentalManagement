@@ -50,6 +50,7 @@ namespace CarRentalMang.WinFormApp
                     gvCars.DataSource = cars;
                     gvCars.Columns[0].Visible = false;
                     gvCars.Columns[3].HeaderText = "License Plate Number";
+                    
                 }
             }
 
@@ -69,8 +70,8 @@ namespace CarRentalMang.WinFormApp
                     Color = tbCarColor.Text,
                     Make = tbCarBrand.Text,
                     LicensePlateNumber = tbCarNo.Text,
-                    Availability = bool.Parse(tbAvailability.Text)
-
+                    Availability = true
+                    
                 };
                 var errorMsg = ValidateUserInput(newCar);
                 if (errorMsg.Length == 0)
@@ -81,9 +82,20 @@ namespace CarRentalMang.WinFormApp
                     HttpResponseMessage response = await client.PostAsync("Cars", content);
                     if (response.IsSuccessStatusCode)
                     {
-                        string result = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show(result);
+                        //string result = await response.Content.ReadAsStringAsync();
+                        //MessageBox.Show(result);
+                        MessageBox.Show(
+                           $"YOU HAVE ADDED : \n\r" +
+                           $"Name : {tbCarName.Text}\n\r" +
+                           $"Color : {tbCarColor.Text}\n\r" +
+                           $"Make : {tbCarBrand.Text}\n\r" +
+                           $"LplateNo.: {tbCarNo.Text}\n\r" +
+                           $"Availability : {tbAvailability.Text}\n\r"
+
+                          );
                     }
+                    else
+                        MessageBox.Show(await response.Content.ReadAsStringAsync());
                 }
                 else
                     MessageBox.Show($"Error: {errorMsg}");
@@ -121,9 +133,20 @@ namespace CarRentalMang.WinFormApp
                     HttpResponseMessage response = await client.PutAsync($"Cars/{id}", content);
                     if (response.IsSuccessStatusCode)
                     {
-                        string result = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show(result);
+                        //string result = await response.Content.ReadAsStringAsync();
+                        //MessageBox.Show(result);
+                        MessageBox.Show(
+                           $"YOU HAVE UPDATED : \n\r" +
+                           $"Name : {tbCarName.Text}\n\r" +
+                           $"Color : {tbCarColor.Text}\n\r" +
+                           $"Make : {tbCarBrand.Text}\n\r" +
+                           $"LplateNo.: {tbCarNo.Text}\n\r" +
+                           $"Availability : {tbAvailability.Text}\n\r"
+
+                          );
                     }
+                    else
+                        MessageBox.Show(await response.Content.ReadAsStringAsync());
                 }
                 else
                     MessageBox.Show($"Error: {errorMsg}");
@@ -174,23 +197,26 @@ namespace CarRentalMang.WinFormApp
             if (string.IsNullOrWhiteSpace(car.Name))
                 errorMessage += "Error : Please Enter Name.\n\r";
 
-            if (car.Name.Length < 4)
-                errorMessage += "Error : Car Name Sould Be Minimum Of 4-Chars Long";
-
-            if (car.Name.Length > 50)
-                errorMessage += "Error : Car Name Sould Be Maximium Of 50-Chars Long";
+            if (car.Name.Length < 4 || car.Name.Length > 50)
+                errorMessage += "Error : Car Name Sould Be In The Range Of 4-50 Chars.";
 
             if (string.IsNullOrWhiteSpace(car.Color))
                 errorMessage += "Error : Please Enter Color.\n\r";
+
+            if (car.Color.Length < 4 || car.Color.Length > 50)
+                errorMessage += "Error : Car Color Sould Be In The Range Of 3-15 Chars.";
 
             if (string.IsNullOrWhiteSpace(car.LicensePlateNumber))
                 errorMessage += "Error : Please Enter License Plate Number.\n\r";
 
             if ((car.LicensePlateNumber).Length != 10)
-                errorMessage += "Error : License Plate Number Should Be 8-Characters Long.\n\r";
+                errorMessage += "Error : License Plate Number Should Be 10-Characters Long.\n\r";
 
             if (string.IsNullOrWhiteSpace(car.Make))
                 errorMessage += "Error : Please Enter Make Name.\n\r";
+
+            if (car.Make.Length < 4 || car.Make.Length > 24)
+                errorMessage += "Error : Car Make Sould Be In The Range Of 4-24 Chars.";
 
             //if (!car.Availability )
             //    errorMessage += "Error : Car Should Be Available While Adding.\n\r";

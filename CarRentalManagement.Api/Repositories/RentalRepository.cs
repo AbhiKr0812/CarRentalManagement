@@ -88,17 +88,7 @@ namespace CarRentalManagement.Api.Repositories
             return existingRecord;
 
         }
-
-        //private async void ShuffleCarAvailability(int id)
-        //{
-        //    var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == id);
-        //    if (car.Availability)
-        //        car.Availability = false;
-        //    car.Availability = true;
-
-        //    _carRentalDb.SaveChangesAsync();
-        //}
-
+  
         private  string ValidateRental(CarRentalRecord carRental)
         {
             var errorMessage = "";
@@ -115,5 +105,16 @@ namespace CarRentalManagement.Api.Repositories
 
             return errorMessage;
         }
+
+        //private async void ShuffleCarAvailability(int id)
+        //{
+        //    var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == id);
+        //    if (car.Availability)
+        //        car.Availability = false;
+        //    car.Availability = true;
+
+        //    _carRentalDb.SaveChangesAsync();
+        //}
+
     }
 }

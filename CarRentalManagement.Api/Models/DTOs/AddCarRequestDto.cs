@@ -20,9 +20,11 @@ namespace CarRentalManagement.Api.Models.DTOs
         public string LicensePlateNumber { get; set; }
 
         [Required]
-        [MinLength(4, ErrorMessage = "Name has to be a minimum of 3 characters")]
-        [MaxLength(15, ErrorMessage = "Color has to be a maximum of 15 characters")]
+        [MinLength(4, ErrorMessage = "Name has to be a minimum of 4 characters")]
+        [MaxLength(24, ErrorMessage = "Color has to be a maximum of 24 characters")]
         public string Make { get; set; }
-        public bool Availability { get; set; } = true;
+        [Required]
+        
+        public bool Availability { get; set; } 
     }
 }

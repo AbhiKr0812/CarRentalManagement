@@ -17,9 +17,20 @@ namespace CarRentalManagement.Api.Repositories
 
         public async Task<Car> CreateAsync(Car car)
         {
-            await _carRentalDb.Cars.AddAsync(car);
-            await _carRentalDb.SaveChangesAsync();
-            return car;
+            var existingCar = await _carRentalDb.Cars.SingleOrDefaultAsync(c => c.LicensePlateNumber == car.LicensePlateNumber);
+            if (existingCar == null)
+            {
+                if (car.Availability == true)
+                {
+                    await _carRentalDb.Cars.AddAsync(car);
+                    await _carRentalDb.SaveChangesAsync();
+                    return car;
+                }
+                throw new BadRequestException("Car Availability Should Be True");
+            }
+            else
+                throw new BadRequestException($"Car With License Plate No. : {car.LicensePlateNumber}  Already Exist");
+  
         }
 
         public async Task<Car?> DeleteAsync(int id)
@@ -36,7 +47,7 @@ namespace CarRentalManagement.Api.Repositories
                 return existingCar;
             }
             else
-                throw new BadRequestException("Car Availability Should Be True, Before Deleting");
+                throw new BadRequestException("Car Availability Should Be True, To Delete A Car");
             
         }
 
@@ -72,5 +83,7 @@ namespace CarRentalManagement.Api.Repositories
             _carRentalDb.SaveChangesAsync();
             return existingCar;
         }
+
+        
     }
 }

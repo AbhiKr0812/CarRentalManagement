@@ -52,9 +52,9 @@
             // btnDelete
             // 
             this.btnDelete.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.btnDelete.Location = new System.Drawing.Point(981, 574);
+            this.btnDelete.Location = new System.Drawing.Point(983, 570);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(125, 39);
+            this.btnDelete.Size = new System.Drawing.Size(107, 39);
             this.btnDelete.TabIndex = 30;
             this.btnDelete.Text = "Delete";
             this.btnDelete.UseVisualStyleBackColor = false;
@@ -63,9 +63,9 @@
             // btnUpdate
             // 
             this.btnUpdate.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.btnUpdate.Location = new System.Drawing.Point(855, 574);
+            this.btnUpdate.Location = new System.Drawing.Point(858, 570);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(110, 39);
+            this.btnUpdate.Size = new System.Drawing.Size(107, 39);
             this.btnUpdate.TabIndex = 29;
             this.btnUpdate.Text = "Update";
             this.btnUpdate.UseVisualStyleBackColor = false;
@@ -74,7 +74,7 @@
             // btnAdd
             // 
             this.btnAdd.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.btnAdd.Location = new System.Drawing.Point(732, 574);
+            this.btnAdd.Location = new System.Drawing.Point(732, 570);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(107, 39);
             this.btnAdd.TabIndex = 28;
@@ -183,7 +183,7 @@
             // 
             // dtDrop
             // 
-            this.dtDrop.CustomFormat = "dd-mm-yyyy HH:mm:ss";
+            this.dtDrop.CustomFormat = "dd-MM-yyyy HH:mm:ss";
             this.dtDrop.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtDrop.Location = new System.Drawing.Point(252, 587);
             this.dtDrop.Name = "dtDrop";
