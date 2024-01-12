@@ -46,6 +46,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tbCompletion = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.btnClosedRentals = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.gvRentals)).BeginInit();
             this.SuspendLayout();
             // 
@@ -230,12 +231,24 @@
             this.label3.TabIndex = 35;
             this.label3.Text = "Approve Completion";
             // 
+            // btnClosedRentals
+            // 
+            this.btnClosedRentals.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.btnClosedRentals.Location = new System.Drawing.Point(969, 491);
+            this.btnClosedRentals.Name = "btnClosedRentals";
+            this.btnClosedRentals.Size = new System.Drawing.Size(121, 57);
+            this.btnClosedRentals.TabIndex = 37;
+            this.btnClosedRentals.Text = "Closed Rentals";
+            this.btnClosedRentals.UseVisualStyleBackColor = false;
+            this.btnClosedRentals.Click += new System.EventHandler(this.btnClosedRentals_Click);
+            // 
             // ManageRentals
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ClientSize = new System.Drawing.Size(1118, 642);
+            this.Controls.Add(this.btnClosedRentals);
             this.Controls.Add(this.tbCompletion);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -283,5 +296,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbCompletion;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnClosedRentals;
     }
 }

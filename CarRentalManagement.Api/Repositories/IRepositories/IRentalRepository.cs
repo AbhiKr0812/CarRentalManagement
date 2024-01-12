@@ -4,7 +4,9 @@ namespace CarRentalManagement.Api.Repositories.IRepositories
 {
     public interface IRentalRepository
     {
-        Task<List<CarRentalRecord>> GetAllAsync();
+        Task<List<CarRentalRecord>> GetOpenRentalsAsync();
+
+        Task<List<CarRentalRecord>> GetClosedRentalsAsync();
 
         Task<CarRentalRecord?> GetByIdAsync(int id);
 

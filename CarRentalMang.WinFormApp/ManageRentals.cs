@@ -69,7 +69,7 @@ namespace CarRentalMang.WinFormApp
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    HttpResponseMessage response = await client.GetAsync("Rentals");
+                    HttpResponseMessage response = await client.GetAsync("Rentals/Open");
                     if (response.IsSuccessStatusCode)
                     {
                         string json = await response.Content.ReadAsStringAsync();
@@ -109,6 +109,64 @@ namespace CarRentalMang.WinFormApp
                 MessageBox.Show($"Error: {ex.Message}");
             }
 
+        }
+
+        private async void PopulateGridWithClosedRentals()
+        {
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:5006/api/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage response = await client.GetAsync("Rentals/Closed");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+                        List<Rental> rentals = JsonConvert.DeserializeObject<List<Rental>>(json);
+
+                        gvRentals.DataSource = rentals;
+                        gvRentals.Columns[0].Visible = false;
+                        gvRentals.Columns[1].HeaderText = "Customer Name";
+                        gvRentals.Columns[2].HeaderText = "Driving License";
+                        gvRentals.Columns[3].HeaderText = "Rented Car";
+                        gvRentals.Columns[4].HeaderText = "PickUp Date";
+                        gvRentals.Columns[5].HeaderText = "Drop Date";
+                        gvRentals.Columns[6].HeaderText = "Cost";
+                        gvRentals.Columns[7].HeaderText = "Approve Completion";
+
+
+                        gvRentals.Columns[4].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
+                        gvRentals.Columns[5].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
+
+                        TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+                        foreach (DataGridViewRow row in gvRentals.Rows)
+                        {
+                            DateTime pickUpDate = (DateTime)row.Cells[4].Value;
+                            DateTime convertedPickUpDate = TimeZoneInfo.ConvertTimeFromUtc(pickUpDate, timeZoneInfo);
+                            row.Cells[4].Value = convertedPickUpDate.ToString("dd-MM-yyyy HH:mm:ss");
+
+                            DateTime dropDate = (DateTime)row.Cells[5].Value;
+                            DateTime convertedDropDate = TimeZoneInfo.ConvertTimeFromUtc(dropDate, timeZoneInfo);
+                            row.Cells[5].Value = convertedDropDate.ToString("dd-MM-yyyy HH:mm:ss");
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+
+        }
+
+        private void btnClosedRentals_Click(object sender, EventArgs e)
+        {
+            PopulateGridWithClosedRentals();
         }
 
         private async void btnAdd_Click(object sender, EventArgs e)
@@ -294,6 +352,6 @@ namespace CarRentalMang.WinFormApp
             return errorMessage;
         }
 
-
+        
     }
 }

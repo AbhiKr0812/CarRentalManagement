@@ -52,9 +52,17 @@ namespace CarRentalManagement.Api.Repositories
             
         }
 
-        public async  Task<List<CarRentalRecord>> GetAllAsync()
+        public async Task<List<CarRentalRecord>> GetOpenRentalsAsync()
         {
-            var rentals = await _carRentalDb.CarRentalRecords.ToListAsync();
+            var rentals = await _carRentalDb.CarRentalRecords.Where(r => r.DropDate >= DateTime.UtcNow).ToListAsync();
+            if (rentals.Count == 0)
+                throw new NotFoundException("There is no record available at this moment");
+            return rentals;
+        }
+
+        public async Task<List<CarRentalRecord>> GetClosedRentalsAsync()
+        {
+            var rentals = await _carRentalDb.CarRentalRecords.Where(r => r.DropDate <= DateTime.UtcNow).ToListAsync();
             if (rentals.Count == 0)
                 throw new NotFoundException("There is no record available at this moment");
             return rentals;
@@ -100,8 +108,8 @@ namespace CarRentalManagement.Api.Repositories
             
             if (carRental.PickUpDate == carRental.DropDate || carRental.PickUpDate > carRental.DropDate)
                 return errorMessage = "Drop Date/Time Should Be Greater Than PickUp Date/Time.";
-            else if (carRental.DropDate - carRental.PickUpDate < TimeSpan.FromHours(8))
-                return errorMessage = " At least car should be rented for minimum duration of 8 hours.";
+            //else if (carRental.DropDate - carRental.PickUpDate < TimeSpan.FromHours(8))
+            //    return errorMessage = " At least car should be rented for minimum duration of 8 hours.";
 
             return errorMessage;
         }

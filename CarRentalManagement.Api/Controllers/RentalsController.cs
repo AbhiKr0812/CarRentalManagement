@@ -24,17 +24,30 @@ namespace CarRentalManagement.Api.Controllers
             _mapper = mapper;
         }
 
-        #region Get All Rentals
+        #region Get Open Rentals
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("Open")]
+        public async Task<IActionResult> GetOpenRentals()
         {
             //Get Data From Database - Domain models
-            var rentals = await _rentalRepository.GetAllAsync();
+            var rentals = await _rentalRepository.GetOpenRentalsAsync();
 
             //Map Domain Models to DTOs
             return Ok(_mapper.Map<List<CarRentalRecordDto>>(rentals));
 
+        }
+
+        #endregion
+
+        #region Get Closed Rentals
+        [HttpGet("Closed")]
+        public async Task<IActionResult> GetClosedRentals()
+        {
+            //Get Data From Database - Domain models
+            var rentals = await _rentalRepository.GetClosedRentalsAsync();
+
+            //Map Domain Models to DTOs
+            return Ok(_mapper.Map<List<CarRentalRecordDto>>(rentals));
         }
 
         #endregion
