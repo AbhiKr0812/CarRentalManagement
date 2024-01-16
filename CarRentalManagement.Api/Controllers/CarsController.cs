@@ -71,8 +71,8 @@ namespace CarRentalManagement.Api.Controllers
         #endregion
 
         #region Update A Car
-        [HttpPut]
-        [Route("{id:int}")]
+        [HttpPut("Update/{id:int}")]
+        //[Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCarReqDto updateCar)
         {
 
@@ -83,6 +83,21 @@ namespace CarRentalManagement.Api.Controllers
 
             // Convert Domain Model to DTO
             return Ok(_mapper.Map<CarDto>(carToBeUpdated));
+        }
+
+        #endregion
+
+        #region Toggle Car Availability
+        [HttpPut("Availability/{id:int}")]
+        //[Route("{id:int}")]
+        public async Task<IActionResult> ShuffleAvailability([FromRoute] int id)
+        {
+
+            // Update if region exists
+            var updatedCar = await _carRepository.ShuffleCarAvailabilityAsync(id);
+
+            // Convert Domain Model to DTO
+            return Ok(_mapper.Map<CarDto>(updatedCar));
         }
 
         #endregion

@@ -59,11 +59,11 @@ namespace CarRentalManagement.Api.Controllers
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             //Get Car From Database: Domain Model
-            var rental = await _rentalRepository.GetByIdAsync(id);
+            return Ok( await _rentalRepository.GetByIdAsync(id));
 
             //Map/Convert Domain Model to DTO
             //Return DTO back to client
-            return Ok(_mapper.Map<CarRentalRecordDto>(rental));
+            //return Ok(_mapper.Map<CarRentalRecordDto>(rental));
         }
 
         #endregion
@@ -92,8 +92,8 @@ namespace CarRentalManagement.Api.Controllers
 
         #region Update Rental
 
-        [HttpPut]
-        [Route("{id:int}")]
+        [HttpPut("Update/{id:int}")]
+        //[Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateRentalRecord updateRental)
         {
             //Map DTO to Domain Model
@@ -105,6 +105,22 @@ namespace CarRentalManagement.Api.Controllers
 
             return Ok(_mapper.Map<CarRentalRecordDto>(rentalToBeUpdated));
         }
+
+        #endregion
+
+        #region Approve Rental Completion
+
+        //[HttpPut("Approve/{id:int}")]
+        ////[Route("{id:int}")]
+        //public async Task<IActionResult> Update([FromRoute] int id)
+        //{
+        //    //Update if region exists
+        //    var rentalToBeApprove = await _rentalRepository.ApproveCompletion(id);
+
+        //    // Convert Domain Model to DTO
+
+        //    return Ok(_mapper.Map<CarRentalRecordDto>(rentalToBeApprove));
+        //}
 
         #endregion
 

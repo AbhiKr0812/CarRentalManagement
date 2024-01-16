@@ -20,41 +20,26 @@ namespace CarRentalManagement.Api.Repositories
             var errorMsg = ValidateRental(record);
             if (errorMsg.Length == 0)
             {
-                await _carRentalDb.CarRentalRecords.AddAsync(record);
+                if(record.CompletionStatus == false)
+                {
+                    await _carRentalDb.CarRentalRecords.AddAsync(record);
 
-                // Shuffle Car Availability
-                var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == record.VehicleId);
-                car.Availability = false;
+                    // Shuffle Car Availability
+                    var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == record.VehicleId);
+                    car.Availability = false;
 
-                await _carRentalDb.SaveChangesAsync();
-                return record;
+                    await _carRentalDb.SaveChangesAsync();
+                    return record;
+                }
+                throw new BadRequestException("Completion Status Should Be False, While Adding");
             }
             throw new BadRequestException(errorMsg);
             
         }
 
-        public async Task<CarRentalRecord?> DeleteAsync(int id)
-        {
-            var existingRecord = await _carRentalDb.CarRentalRecords.FirstOrDefaultAsync(r => r.Id == id);
-            if (existingRecord == null)
-                throw new NotFoundException($"There Is No Such Record Present With The Id: {id}");
-
-
-            if (existingRecord.CompletionStatus)
-            {
-                _carRentalDb.CarRentalRecords.Remove(existingRecord);
-                _carRentalDb.SaveChangesAsync();
-                return existingRecord;
-            }
-            else
-                throw new BadRequestException("A Rental Record Completion-Approval Should Be True, Before Deletion");
-
-            
-        }
-
         public async Task<List<CarRentalRecord>> GetOpenRentalsAsync()
         {
-            var rentals = await _carRentalDb.CarRentalRecords.Where(r => r.DropDate >= DateTime.UtcNow).ToListAsync();
+            var rentals = await _carRentalDb.CarRentalRecords.Where(r => r.CompletionStatus == false).ToListAsync();
             if (rentals.Count == 0)
                 throw new NotFoundException("There is no record available at this moment");
             return rentals;
@@ -62,7 +47,7 @@ namespace CarRentalManagement.Api.Repositories
 
         public async Task<List<CarRentalRecord>> GetClosedRentalsAsync()
         {
-            var rentals = await _carRentalDb.CarRentalRecords.Where(r => r.DropDate <= DateTime.UtcNow).ToListAsync();
+            var rentals = await _carRentalDb.CarRentalRecords.Where(r => r.CompletionStatus == true).ToListAsync();
             if (rentals.Count == 0)
                 throw new NotFoundException("There is no record available at this moment");
             return rentals;
@@ -96,7 +81,42 @@ namespace CarRentalManagement.Api.Repositories
             return existingRecord;
 
         }
-  
+
+        public async Task<CarRentalRecord?> ApproveCompletion(int id)
+        {
+            var carRental = await _carRentalDb.CarRentalRecords.FirstOrDefaultAsync(c => c.Id == id);
+            if (carRental != null)
+            {
+                if (carRental.CompletionStatus == true)
+                    carRental.CompletionStatus = false;
+                else if (carRental.CompletionStatus == false)
+                    carRental.CompletionStatus = true;
+
+                _carRentalDb.SaveChangesAsync();
+                return carRental;
+            }
+            throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");
+        }
+
+        public async Task<CarRentalRecord?> DeleteAsync(int id)
+        {
+            var existingRecord = await _carRentalDb.CarRentalRecords.FirstOrDefaultAsync(r => r.Id == id);
+            if (existingRecord == null)
+                throw new NotFoundException($"There Is No Such Record Present With The Id: {id}");
+
+
+            if (existingRecord.CompletionStatus)
+            {
+                _carRentalDb.CarRentalRecords.Remove(existingRecord);
+                _carRentalDb.SaveChangesAsync();
+                return existingRecord;
+            }
+            else
+                throw new BadRequestException("A Rental Record Completion-Approval Should Be True, Before Deletion");
+
+
+        }
+
         private  string ValidateRental(CarRentalRecord carRental)
         {
             var errorMessage = "";
@@ -114,6 +134,11 @@ namespace CarRentalManagement.Api.Repositories
             return errorMessage;
         }
 
+       
+    }
+
+
+
         //private async void ShuffleCarAvailability(int id)
         //{
         //    var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == id);
@@ -124,5 +149,5 @@ namespace CarRentalManagement.Api.Repositories
         //    _carRentalDb.SaveChangesAsync();
         //}
 
-    }
+    
 }

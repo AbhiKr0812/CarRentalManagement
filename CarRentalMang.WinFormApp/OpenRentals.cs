@@ -14,14 +14,14 @@ using System.Globalization;
 
 namespace CarRentalMang.WinFormApp
 {
-    public partial class ManageRentals : Form
+    public partial class OpenRentals : Form
     {
-        public ManageRentals()
+        public OpenRentals()
         {
             InitializeComponent();
         }
 
-        private async void ManageRentals_Load(object sender, EventArgs e)
+        private async void OpenRentals_Load(object sender, EventArgs e)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace CarRentalMang.WinFormApp
                             Availability = q.Availability
                         }).ToList();
 
-                        var availCars = cars.Where(c => c.Availability == true).ToList();
+                        var availCars = cbCars.Where(c => c.Availability == true).ToList();
                         cbAvailCars.DisplayMember = "Name";
                         cbAvailCars.ValueMember = "Id";
                         cbAvailCars.DataSource = availCars;
@@ -76,29 +76,28 @@ namespace CarRentalMang.WinFormApp
                         List<Rental> rentals = JsonConvert.DeserializeObject<List<Rental>>(json);
 
                         gvRentals.DataSource = rentals;
-                        gvRentals.Columns[0].Visible = false;
-                        gvRentals.Columns[1].HeaderText = "Customer Name";
-                        gvRentals.Columns[2].HeaderText = "Driving License";
-                        gvRentals.Columns[3].HeaderText = "Rented Car";
-                        gvRentals.Columns[4].HeaderText = "PickUp Date";
-                        gvRentals.Columns[5].HeaderText = "Drop Date";
-                        gvRentals.Columns[6].HeaderText = "Cost";
-                        gvRentals.Columns[7].HeaderText = "Approve Completion";
 
-
-                        gvRentals.Columns[4].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
-                        gvRentals.Columns[5].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
-
-                        TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
-                        foreach (DataGridViewRow row in gvRentals.Rows)
+                        try
                         {
-                            DateTime pickUpDate = (DateTime)row.Cells[4].Value;
-                            DateTime convertedPickUpDate = TimeZoneInfo.ConvertTimeFromUtc(pickUpDate, timeZoneInfo);
-                            row.Cells[4].Value = convertedPickUpDate.ToString("dd-MM-yyyy HH:mm:ss");
+                            gvRentals.Columns[4].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
+                            gvRentals.Columns[5].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
 
-                            DateTime dropDate = (DateTime)row.Cells[5].Value;
-                            DateTime convertedDropDate = TimeZoneInfo.ConvertTimeFromUtc(dropDate, timeZoneInfo);
-                            row.Cells[5].Value = convertedDropDate.ToString("dd-MM-yyyy HH:mm:ss");
+                            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+                            foreach (DataGridViewRow row in gvRentals.Rows)
+                            {
+                                DateTime pickUpDate = (DateTime)row.Cells[4].Value;
+                                DateTime convertedPickUpDate = TimeZoneInfo.ConvertTimeFromUtc(pickUpDate, timeZoneInfo);
+                                row.Cells[4].Value = convertedPickUpDate.ToString("dd-MM-yyyy HH:mm:ss");
+
+                                DateTime dropDate = (DateTime)row.Cells[5].Value;
+                                DateTime convertedDropDate = TimeZoneInfo.ConvertTimeFromUtc(dropDate, timeZoneInfo);
+                                row.Cells[5].Value = convertedDropDate.ToString("dd-MM-yyyy HH:mm:ss");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+
+                            throw ex;
                         }
 
                     }
@@ -109,64 +108,6 @@ namespace CarRentalMang.WinFormApp
                 MessageBox.Show($"Error: {ex.Message}");
             }
 
-        }
-
-        private async void PopulateGridWithClosedRentals()
-        {
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("http://localhost:5006/api/");
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    HttpResponseMessage response = await client.GetAsync("Rentals/Closed");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string json = await response.Content.ReadAsStringAsync();
-                        List<Rental> rentals = JsonConvert.DeserializeObject<List<Rental>>(json);
-
-                        gvRentals.DataSource = rentals;
-                        gvRentals.Columns[0].Visible = false;
-                        gvRentals.Columns[1].HeaderText = "Customer Name";
-                        gvRentals.Columns[2].HeaderText = "Driving License";
-                        gvRentals.Columns[3].HeaderText = "Rented Car";
-                        gvRentals.Columns[4].HeaderText = "PickUp Date";
-                        gvRentals.Columns[5].HeaderText = "Drop Date";
-                        gvRentals.Columns[6].HeaderText = "Cost";
-                        gvRentals.Columns[7].HeaderText = "Approve Completion";
-
-
-                        gvRentals.Columns[4].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
-                        gvRentals.Columns[5].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
-
-                        TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
-                        foreach (DataGridViewRow row in gvRentals.Rows)
-                        {
-                            DateTime pickUpDate = (DateTime)row.Cells[4].Value;
-                            DateTime convertedPickUpDate = TimeZoneInfo.ConvertTimeFromUtc(pickUpDate, timeZoneInfo);
-                            row.Cells[4].Value = convertedPickUpDate.ToString("dd-MM-yyyy HH:mm:ss");
-
-                            DateTime dropDate = (DateTime)row.Cells[5].Value;
-                            DateTime convertedDropDate = TimeZoneInfo.ConvertTimeFromUtc(dropDate, timeZoneInfo);
-                            row.Cells[5].Value = convertedDropDate.ToString("dd-MM-yyyy HH:mm:ss");
-                        }
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error: {ex.Message}");
-            }
-
-        }
-
-        private void btnClosedRentals_Click(object sender, EventArgs e)
-        {
-            PopulateGridWithClosedRentals();
         }
 
         private async void btnAdd_Click(object sender, EventArgs e)
@@ -228,14 +169,14 @@ namespace CarRentalMang.WinFormApp
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var id = (int)gvRentals.SelectedRows[0].Cells[0].Value;
-
+                    //var id = (int)gvRentals.SelectedRows[0].Cells[0].Value;
+                    var id = int.Parse(tbRentalId.Text);
 
                     var rentalToBeUpdate = new Rental
                     {
                         CustomerName = tbCustName.Text,
                         DrivingLicenceNo = tbDLNo.Text,
-                        VehicleId = int.Parse(gvRentals.SelectedRows[0].Cells[3].Value.ToString()),
+                        VehicleId = int.Parse(cbAvailCars.Text),
                         PickUpDate = ConvertIntoUTC(dtPickUp.Value.ToString()),
                         DropDate = ConvertIntoUTC(dtDrop.Value.ToString()),
                         Cost = Convert.ToDecimal(tbCost.Text),
@@ -249,20 +190,21 @@ namespace CarRentalMang.WinFormApp
                         var json = JsonConvert.SerializeObject(rentalToBeUpdate);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                        HttpResponseMessage response = await client.PutAsync($"Rentals/{id}", content);
+                        HttpResponseMessage response = await client.PutAsync($"Rentals/Update/{id}", content);
                         if (response.IsSuccessStatusCode)
                         {
                             //string result = await response.Content.ReadAsStringAsync();
                             //MessageBox.Show(result);
                             MessageBox.Show(
-                        $"YOU HAVE UPDATED: \n\r" +
-                        $"Customer Name: {tbCustName.Text}\n\r" +
-                        $"Customer DL NO.: {tbDLNo.Text}\n\r" +
-                        $"Rented Car Type: {cbAvailCars.Text}\n\r" +
-                        $"Rented Car Cost: {tbCost.Text}\n\r" +
-                        $"Rented Date: {dtPickUp.Value}\n\r" +
-                        $"Returned Date: {dtDrop.Value}\n\r"
+                                $"YOU HAVE UPDATED: \n\r" +
+                                $"Customer Name: {tbCustName.Text}\n\r" +
+                                $"Customer DL NO.: {tbDLNo.Text}\n\r" +
+                                $"Rented Car Type: {cbAvailCars.Text}\n\r" +
+                                $"Rented Car Cost: {tbCost.Text}\n\r" +
+                                $"Rented Date: {dtPickUp.Value}\n\r" +
+                                $"Returned Date: {dtDrop.Value}\n\r"
                         );
+
                         } 
                     }
                     else
@@ -278,39 +220,64 @@ namespace CarRentalMang.WinFormApp
 
         }
 
-        private async void btnDelete_Click(object sender, EventArgs e)
+        private async void gvRentals_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            using (var client = new HttpClient())
+            if (gvRentals.Columns[e.ColumnIndex].HeaderText == "Completed")
             {
-                client.BaseAddress = new Uri("http://localhost:5006/api/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var id = gvRentals.Rows[e.RowIndex].Cells[0].Value;
+                var name = gvRentals.Rows[e.RowIndex].Cells[1].Value;
+                var dlNo = gvRentals.Rows[e.RowIndex].Cells[2].Value;
+                var rentedCar = gvRentals.Rows[e.RowIndex].Cells[3].Value;
+                var pickUp = gvRentals.Rows[e.RowIndex].Cells[4].Value;
+                var drop = gvRentals.Rows[e.RowIndex].Cells[5].Value;
+                var cost = gvRentals.Rows[e.RowIndex].Cells[6].Value;
 
-                var id = (int)gvRentals.SelectedRows[0].Cells[0].Value;
 
-                HttpResponseMessage response = await client.DeleteAsync($"Rentals/{id}");
-                if (response.IsSuccessStatusCode)
+                using (var client = new HttpClient())
                 {
-                    string result = await response.Content.ReadAsStringAsync();
-                    MessageBox.Show(result);
+                    client.BaseAddress = new Uri("http://localhost:5006/api/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    var rentalToBeApproved = new Rental
+                    {
+
+                        CustomerName = name.ToString(),
+                        DrivingLicenceNo = dlNo.ToString(),
+                        VehicleId = (int)rentedCar,
+                        PickUpDate = ConvertIntoUTC(pickUp.ToString()),
+                        DropDate = ConvertIntoUTC(drop.ToString()),
+                        Cost = decimal.Parse(cost.ToString()),
+                        CompletionStatus = true
+
+                    };
+
+                    var json = JsonConvert.SerializeObject(rentalToBeApproved);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    HttpResponseMessage response = await client.PutAsync($"Rentals/Update/{id}", content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string result = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show(result);
+                    }
+                    else
+                        MessageBox.Show(await response.Content.ReadAsStringAsync());
+                    PopulateGrid();
                 }
-                else
-                    MessageBox.Show(await response.Content.ReadAsStringAsync());
-
             }
-            PopulateGrid();
-        }
 
-        private void gvRentals_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            tbCustName.Text = gvRentals.SelectedRows[0].Cells[1].Value.ToString();
-            tbDLNo.Text = gvRentals.SelectedRows[0].Cells[2].Value.ToString();
-            cbAvailCars.Text = gvRentals.SelectedRows[0].Cells[3].Value.ToString();
-            dtPickUp.Text = gvRentals.SelectedRows[0].Cells[4].Value.ToString();
-            dtDrop.Text = gvRentals.SelectedRows[0].Cells[5].Value.ToString();
-            tbCost.Text = gvRentals.SelectedRows[0].Cells[6].Value.ToString();
-            tbCompletion.Text = gvRentals.SelectedRows[0].Cells[7].Value.ToString();
-
+            if (gvRentals.Columns[e.ColumnIndex].HeaderText == "Customer Name")
+            {
+                tbRentalId.Text = gvRentals.Rows[e.RowIndex].Cells[0].Value.ToString();
+                tbCustName.Text = gvRentals.Rows[e.RowIndex].Cells[1].Value.ToString();
+                tbDLNo.Text = gvRentals.Rows[e.RowIndex].Cells[2].Value.ToString();
+                cbAvailCars.Text = gvRentals.Rows[e.RowIndex].Cells[3].Value.ToString();
+                dtPickUp.Text = gvRentals.Rows[e.RowIndex].Cells[4].Value.ToString();
+                dtDrop.Text = gvRentals.Rows[e.RowIndex].Cells[5].Value.ToString();
+                tbCost.Text = gvRentals.Rows[e.RowIndex].Cells[6].Value.ToString();
+                tbCompletion.Text = gvRentals.Rows[e.RowIndex].Cells[7].Value.ToString();
+            }
         }
 
         private DateTime ConvertIntoUTC(string date)
@@ -340,8 +307,8 @@ namespace CarRentalMang.WinFormApp
 
             if (rental.PickUpDate >= rental.DropDate)           
                 errorMessage += "Error : Drop Date/Time Should Be Greater Than PickUp Date/Time.\n\r";
-            else if (rental.DropDate - rental.PickUpDate < TimeSpan.FromHours(8))
-                errorMessage += "Error : Minimum Duration of a car to be rented is 8 hours.\n\r";
+            //else if (rental.DropDate - rental.PickUpDate < TimeSpan.FromHours(8))
+            //    errorMessage += "Error : Minimum Duration of a car to be rented is 8 hours.\n\r";
 
             if (rental.Cost == 0)
                 errorMessage += "Error : Please Enter Cost";
@@ -352,6 +319,65 @@ namespace CarRentalMang.WinFormApp
             return errorMessage;
         }
 
-        
+        private async void bynReset_Click(object sender, EventArgs e)
+        {
+            tbRentalId.Clear();
+            tbCustName.Clear();
+            tbDLNo.Clear();
+            tbCompletion.Text = false.ToString();
+            dtPickUp.Text = DateTime.Now.ToString();
+            dtDrop.Text = DateTime.Now.ToString();
+            tbCost.Clear();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:5006/api/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = await client.GetAsync("Cars");
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    List<Car> cars = JsonConvert.DeserializeObject<List<Car>>(json);
+                    var cbCars = cars.Select(q => new
+                    {
+                        q.Id,
+                        q.Name,
+                        q.Availability
+                    }).ToList();
+
+                    var availCars = cars.Where(c => c.Availability == true).ToList();
+                    cbAvailCars.DisplayMember = "Name";
+                    cbAvailCars.ValueMember = "Id";
+                    cbAvailCars.DataSource = availCars;
+                }
+            }
+
+            PopulateGrid();
+        }
+
+        private void btnClosedRentals_Click(object sender, EventArgs e)
+        {
+            var rentals = new ClosedRentals();
+            rentals.ShowDialog();
+            rentals.MdiParent = this.MdiParent;
+        }
+
+
+
+
+
+        //private void gvRentals_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        //{
+        //    tbCustName.Text = gvRentals.SelectedRows[0].Cells[1].Value.ToString();
+        //    tbDLNo.Text = gvRentals.SelectedRows[0].Cells[2].Value.ToString();
+        //    cbAvailCars.Text = gvRentals.SelectedRows[0].Cells[3].Value.ToString();
+        //    dtPickUp.Text = gvRentals.SelectedRows[0].Cells[4].Value.ToString();
+        //    dtDrop.Text = gvRentals.SelectedRows[0].Cells[5].Value.ToString();
+        //    tbCost.Text = gvRentals.SelectedRows[0].Cells[6].Value.ToString();
+        //    tbCompletion.Text = gvRentals.SelectedRows[0].Cells[7].Value.ToString();
+
+        //}
     }
 }

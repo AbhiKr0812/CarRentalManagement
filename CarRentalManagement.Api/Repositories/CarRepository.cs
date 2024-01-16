@@ -84,6 +84,22 @@ namespace CarRentalManagement.Api.Repositories
             return existingCar;
         }
 
-        
+        public async Task<Car?> ShuffleCarAvailabilityAsync(int id)
+        {
+            var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == id);
+            if (car != null)
+            {
+                if (car.Availability == true)
+                    car.Availability = false;
+                else if (car.Availability == false)
+                    car.Availability = true;
+
+                _carRentalDb.SaveChangesAsync();
+                return car;
+            }    
+            throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");
+        }
+
+
     }
 }

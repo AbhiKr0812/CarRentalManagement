@@ -5,7 +5,7 @@ namespace CarRentalManagement.Api.Models.DTOs
     public class AddCarRequestDto
     {
         [Required]
-        [MinLength(4, ErrorMessage = "Name has to be a minimum of 3 characters")]
+        [MinLength(4, ErrorMessage = "Name has to be a minimum of 4 characters")]
         [MaxLength(50, ErrorMessage = "Color has to be a maximum of 50 characters")]
         public string Name { get; set; }
 

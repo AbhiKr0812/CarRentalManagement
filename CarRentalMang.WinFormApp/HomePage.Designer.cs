@@ -31,6 +31,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.manageCarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mangeRentalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openRentalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closedRentalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,10 +57,26 @@
             // 
             // mangeRentalsToolStripMenuItem
             // 
+            this.mangeRentalsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openRentalsToolStripMenuItem,
+            this.closedRentalsToolStripMenuItem});
             this.mangeRentalsToolStripMenuItem.Name = "mangeRentalsToolStripMenuItem";
             this.mangeRentalsToolStripMenuItem.Size = new System.Drawing.Size(129, 24);
             this.mangeRentalsToolStripMenuItem.Text = "Manage Rentals";
-            this.mangeRentalsToolStripMenuItem.Click += new System.EventHandler(this.mangeRentalsToolStripMenuItem_Click);
+            // 
+            // openRentalsToolStripMenuItem
+            // 
+            this.openRentalsToolStripMenuItem.Name = "openRentalsToolStripMenuItem";
+            this.openRentalsToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.openRentalsToolStripMenuItem.Text = "Open Rentals";
+            this.openRentalsToolStripMenuItem.Click += new System.EventHandler(this.openRentalsToolStripMenuItem_Click);
+            // 
+            // closedRentalsToolStripMenuItem
+            // 
+            this.closedRentalsToolStripMenuItem.Name = "closedRentalsToolStripMenuItem";
+            this.closedRentalsToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.closedRentalsToolStripMenuItem.Text = "Closed Rentals";
+            this.closedRentalsToolStripMenuItem.Click += new System.EventHandler(this.closedRentalsToolStripMenuItem_Click);
             // 
             // HomePage
             // 
@@ -82,6 +100,8 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem manageCarsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mangeRentalsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openRentalsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem closedRentalsToolStripMenuItem;
     }
 }
 

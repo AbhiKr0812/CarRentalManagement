@@ -1,6 +1,6 @@
 ﻿namespace CarRentalMang.WinFormApp
 {
-    partial class ManageRentals
+    partial class OpenRentals
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnDelete = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.tbCost = new System.Windows.Forms.TextBox();
@@ -40,31 +39,31 @@
             this.lbCarNo = new System.Windows.Forms.Label();
             this.lbColor = new System.Windows.Forms.Label();
             this.gvRentals = new System.Windows.Forms.DataGridView();
+            this.rentalId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.custName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rentedCar = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pickUp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.drop = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cost = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.completion = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.dtPickUp = new System.Windows.Forms.DateTimePicker();
             this.dtDrop = new System.Windows.Forms.DateTimePicker();
             this.cbAvailCars = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tbCompletion = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.tbRentalId = new System.Windows.Forms.TextBox();
+            this.lbrentalId = new System.Windows.Forms.Label();
+            this.bynReset = new System.Windows.Forms.Button();
             this.btnClosedRentals = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.gvRentals)).BeginInit();
             this.SuspendLayout();
             // 
-            // btnDelete
-            // 
-            this.btnDelete.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.btnDelete.Location = new System.Drawing.Point(983, 570);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(107, 39);
-            this.btnDelete.TabIndex = 30;
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.UseVisualStyleBackColor = false;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            // 
             // btnUpdate
             // 
             this.btnUpdate.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.btnUpdate.Location = new System.Drawing.Point(858, 570);
+            this.btnUpdate.Location = new System.Drawing.Point(867, 579);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(107, 39);
             this.btnUpdate.TabIndex = 29;
@@ -75,7 +74,7 @@
             // btnAdd
             // 
             this.btnAdd.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.btnAdd.Location = new System.Drawing.Point(732, 570);
+            this.btnAdd.Location = new System.Drawing.Point(732, 579);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(107, 39);
             this.btnAdd.TabIndex = 28;
@@ -165,13 +164,81 @@
             // 
             this.gvRentals.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gvRentals.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gvRentals.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.rentalId,
+            this.custName,
+            this.dlNo,
+            this.rentedCar,
+            this.pickUp,
+            this.drop,
+            this.cost,
+            this.completion});
             this.gvRentals.Location = new System.Drawing.Point(16, 26);
             this.gvRentals.Name = "gvRentals";
             this.gvRentals.RowHeadersWidth = 51;
             this.gvRentals.RowTemplate.Height = 24;
             this.gvRentals.Size = new System.Drawing.Size(1090, 438);
             this.gvRentals.TabIndex = 17;
-            this.gvRentals.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvRentals_CellMouseDoubleClick);
+            this.gvRentals.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvRentals_CellClick);
+            // 
+            // rentalId
+            // 
+            this.rentalId.DataPropertyName = "Id";
+            this.rentalId.HeaderText = "Id";
+            this.rentalId.MinimumWidth = 6;
+            this.rentalId.Name = "rentalId";
+            this.rentalId.Visible = false;
+            // 
+            // custName
+            // 
+            this.custName.DataPropertyName = "CustomerName";
+            this.custName.HeaderText = "Customer Name";
+            this.custName.MinimumWidth = 6;
+            this.custName.Name = "custName";
+            // 
+            // dlNo
+            // 
+            this.dlNo.DataPropertyName = "DrivingLicenceNo";
+            this.dlNo.HeaderText = "Driving License No";
+            this.dlNo.MinimumWidth = 6;
+            this.dlNo.Name = "dlNo";
+            // 
+            // rentedCar
+            // 
+            this.rentedCar.DataPropertyName = "VehicleId";
+            this.rentedCar.HeaderText = "Rented Car";
+            this.rentedCar.MinimumWidth = 6;
+            this.rentedCar.Name = "rentedCar";
+            // 
+            // pickUp
+            // 
+            this.pickUp.DataPropertyName = "PickUpDate";
+            this.pickUp.HeaderText = "PickUp Date/Time";
+            this.pickUp.MinimumWidth = 6;
+            this.pickUp.Name = "pickUp";
+            // 
+            // drop
+            // 
+            this.drop.DataPropertyName = "DropDate";
+            this.drop.HeaderText = "Drop Date/Time";
+            this.drop.MinimumWidth = 6;
+            this.drop.Name = "drop";
+            // 
+            // cost
+            // 
+            this.cost.DataPropertyName = "Cost";
+            this.cost.HeaderText = "Rental Cost";
+            this.cost.MinimumWidth = 6;
+            this.cost.Name = "cost";
+            // 
+            // completion
+            // 
+            this.completion.DataPropertyName = "CompletionStatus";
+            this.completion.HeaderText = "Completed";
+            this.completion.MinimumWidth = 6;
+            this.completion.Name = "completion";
+            this.completion.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.completion.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // dtPickUp
             // 
@@ -231,31 +298,65 @@
             this.label3.TabIndex = 35;
             this.label3.Text = "Approve Completion";
             // 
+            // tbRentalId
+            // 
+            this.tbRentalId.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tbRentalId.Location = new System.Drawing.Point(709, 538);
+            this.tbRentalId.Name = "tbRentalId";
+            this.tbRentalId.Size = new System.Drawing.Size(39, 22);
+            this.tbRentalId.TabIndex = 38;
+            this.tbRentalId.Visible = false;
+            // 
+            // lbrentalId
+            // 
+            this.lbrentalId.AutoSize = true;
+            this.lbrentalId.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbrentalId.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbrentalId.Location = new System.Drawing.Point(709, 511);
+            this.lbrentalId.Name = "lbrentalId";
+            this.lbrentalId.Size = new System.Drawing.Size(2, 22);
+            this.lbrentalId.TabIndex = 37;
+            this.lbrentalId.Visible = false;
+            // 
+            // bynReset
+            // 
+            this.bynReset.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.bynReset.Location = new System.Drawing.Point(999, 579);
+            this.bynReset.Name = "bynReset";
+            this.bynReset.Size = new System.Drawing.Size(107, 39);
+            this.bynReset.TabIndex = 39;
+            this.bynReset.Text = "Reset";
+            this.bynReset.UseVisualStyleBackColor = false;
+            this.bynReset.Click += new System.EventHandler(this.bynReset_Click);
+            // 
             // btnClosedRentals
             // 
             this.btnClosedRentals.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.btnClosedRentals.Location = new System.Drawing.Point(969, 491);
+            this.btnClosedRentals.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClosedRentals.Location = new System.Drawing.Point(960, 498);
             this.btnClosedRentals.Name = "btnClosedRentals";
-            this.btnClosedRentals.Size = new System.Drawing.Size(121, 57);
-            this.btnClosedRentals.TabIndex = 37;
+            this.btnClosedRentals.Size = new System.Drawing.Size(133, 52);
+            this.btnClosedRentals.TabIndex = 40;
             this.btnClosedRentals.Text = "Closed Rentals";
             this.btnClosedRentals.UseVisualStyleBackColor = false;
             this.btnClosedRentals.Click += new System.EventHandler(this.btnClosedRentals_Click);
             // 
-            // ManageRentals
+            // OpenRentals
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ClientSize = new System.Drawing.Size(1118, 642);
             this.Controls.Add(this.btnClosedRentals);
+            this.Controls.Add(this.bynReset);
+            this.Controls.Add(this.tbRentalId);
+            this.Controls.Add(this.lbrentalId);
             this.Controls.Add(this.tbCompletion);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cbAvailCars);
             this.Controls.Add(this.dtDrop);
             this.Controls.Add(this.dtPickUp);
-            this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.tbCost);
@@ -267,9 +368,9 @@
             this.Controls.Add(this.lbCarNo);
             this.Controls.Add(this.lbColor);
             this.Controls.Add(this.gvRentals);
-            this.Name = "ManageRentals";
-            this.Text = "Manage Rentals";
-            this.Load += new System.EventHandler(this.ManageRentals_Load);
+            this.Name = "OpenRentals";
+            this.Text = "Open Rentals";
+            this.Load += new System.EventHandler(this.OpenRentals_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gvRentals)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -277,8 +378,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.TextBox tbCost;
@@ -296,6 +395,17 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbCompletion;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn rentalId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn custName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dlNo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn rentedCar;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pickUp;
+        private System.Windows.Forms.DataGridViewTextBoxColumn drop;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cost;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn completion;
+        private System.Windows.Forms.TextBox tbRentalId;
+        private System.Windows.Forms.Label lbrentalId;
+        private System.Windows.Forms.Button bynReset;
         private System.Windows.Forms.Button btnClosedRentals;
     }
 }
