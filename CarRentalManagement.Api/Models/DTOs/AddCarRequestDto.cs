@@ -23,8 +23,8 @@ namespace CarRentalManagement.Api.Models.DTOs
         [MinLength(4, ErrorMessage = "Name has to be a minimum of 4 characters")]
         [MaxLength(24, ErrorMessage = "Color has to be a maximum of 24 characters")]
         public string Make { get; set; }
+
         [Required]
-        
         public bool Availability { get; set; } 
     }
 }

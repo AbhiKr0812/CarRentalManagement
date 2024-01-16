@@ -364,10 +364,6 @@ namespace CarRentalMang.WinFormApp
             rentals.MdiParent = this.MdiParent;
         }
 
-
-
-
-
         //private void gvRentals_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         //{
         //    tbCustName.Text = gvRentals.SelectedRows[0].Cells[1].Value.ToString();

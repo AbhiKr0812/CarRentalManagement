@@ -48,7 +48,7 @@ namespace CarRentalMang.WinFormApp
                     string json = await response.Content.ReadAsStringAsync();
                     List<Car> cars = JsonConvert.DeserializeObject<List<Car>>(json);
                     gvCars.DataSource = cars;
-                    gvCars.Columns[0].Visible = false;
+                    //gvCars.Columns[0].Visible = false;
                     gvCars.Columns[3].HeaderText = "License Plate Number";
                     
                 }
@@ -71,7 +71,7 @@ namespace CarRentalMang.WinFormApp
                     Make = tbCarBrand.Text,
                     LicensePlateNumber = tbCarNo.Text,
                     Availability = true
-                    
+
                 };
                 var errorMsg = ValidateUserInput(newCar);
                 if (errorMsg.Length == 0)
@@ -112,8 +112,8 @@ namespace CarRentalMang.WinFormApp
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+                //var id = int.Parse(tbCarId.Text);
                 var id = (int)gvCars.SelectedRows[0].Cells[0].Value;
-                
 
                 var carToBeUpdate = new Car
                 {
@@ -130,7 +130,7 @@ namespace CarRentalMang.WinFormApp
                     var json = JsonConvert.SerializeObject(carToBeUpdate);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await client.PutAsync($"Cars/{id}", content);
+                    HttpResponseMessage response = await client.PutAsync($"Cars/Update/{id}", content);
                     if (response.IsSuccessStatusCode)
                     {
                         //string result = await response.Content.ReadAsStringAsync();
@@ -165,15 +165,23 @@ namespace CarRentalMang.WinFormApp
 
                 var id = (int)gvCars.SelectedRows[0].Cells[0].Value;
 
-                HttpResponseMessage response = await client.DeleteAsync($"Cars/{id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    string result = await response.Content.ReadAsStringAsync();
-                    MessageBox.Show(result);
+                DialogResult dr = MessageBox.Show("Are You Sure Want To Delete This Record?",
+                    "Delete", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
 
+                if (dr == DialogResult.Yes)
+                {
+                    HttpResponseMessage response = await client.DeleteAsync($"Cars/{id}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        //string result = await response.Content.ReadAsStringAsync();
+                        //MessageBox.Show(result);
+                        MessageBox.Show("Deleted Successfully!");
+
+                    }
+                    else
+                        MessageBox.Show(await response.Content.ReadAsStringAsync());
                 }
-                else
-                    MessageBox.Show(await response.Content.ReadAsStringAsync());   
+                    
 
             }
             PopulateGrid();
@@ -182,6 +190,7 @@ namespace CarRentalMang.WinFormApp
 
         private void gvCars_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            //tbCarId.Text = gvCars.SelectedRows[0].Cells[0].Value.ToString();
             tbCarName.Text = gvCars.SelectedRows[0].Cells[1].Value.ToString();
             tbCarColor.Text = gvCars.SelectedRows[0].Cells[2].Value.ToString();
             tbCarNo.Text = gvCars.SelectedRows[0].Cells[3].Value.ToString();
@@ -203,7 +212,7 @@ namespace CarRentalMang.WinFormApp
             if (string.IsNullOrWhiteSpace(car.Color))
                 errorMessage += "Error : Please Enter Color.\n\r";
 
-            if (car.Color.Length < 4 || car.Color.Length > 50)
+            if (car.Color.Length < 3 || car.Color.Length > 50)
                 errorMessage += "Error : Car Color Sould Be In The Range Of 3-15 Chars.";
 
             if (string.IsNullOrWhiteSpace(car.LicensePlateNumber))
@@ -218,11 +227,17 @@ namespace CarRentalMang.WinFormApp
             if (car.Make.Length < 4 || car.Make.Length > 24)
                 errorMessage += "Error : Car Make Sould Be In The Range Of 4-24 Chars.";
 
-            //if (!car.Availability )
-            //    errorMessage += "Error : Car Should Be Available While Adding.\n\r";
-
             return errorMessage;
         }
 
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            tbCarName.Clear();
+            tbCarColor.Clear();
+            tbCarNo.Clear();
+            tbCarBrand.Clear();
+
+            PopulateGrid();
+        }
     }
 }
