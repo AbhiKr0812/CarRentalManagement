@@ -77,6 +77,44 @@ namespace CarRentalMang.WinFormApp
 
         }
 
+        private async void btnDelete_Click(object sender, EventArgs e)
+        {
+           
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:5006/api/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                if (gvRentals.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Please Select A Rental");
+                }
+                else
+                {
+                    var id = (int)gvRentals.SelectedRows[0].Cells[0].Value;
+
+                    DialogResult dr = MessageBox.Show("Are You Sure Want To Delete This Record?",
+                            "Delete", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+
+                    if (dr == DialogResult.Yes)
+                    {
+                        HttpResponseMessage response = await client.DeleteAsync($"Rentals/{id}");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            //string result = await response.Content.ReadAsStringAsync();
+                            //MessageBox.Show(result);
+                            MessageBox.Show("Deleted Successfully!");
+                            PopulateGrid();
+                        }
+                        else
+                            MessageBox.Show("Server is not responding");
+                    }                  
+                }
+
+            }
+
+        }
 
         private void btnOpenRentals_Click(object sender, EventArgs e)
         {
@@ -85,27 +123,6 @@ namespace CarRentalMang.WinFormApp
             rentals.MdiParent = this.MdiParent;
         }
 
-        private async void btnDelete_Click(object sender, EventArgs e)
-        {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("http://localhost:5006/api/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var id = (int)gvRentals.SelectedRows[0].Cells[0].Value;
-
-                HttpResponseMessage response = await client.DeleteAsync($"Rentals/{id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    string result = await response.Content.ReadAsStringAsync();
-                    MessageBox.Show(result);
-                }
-                else
-                    MessageBox.Show(await response.Content.ReadAsStringAsync());
-
-            }
-            PopulateGrid();
-        }
+        
     }
 }

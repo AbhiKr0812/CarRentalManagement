@@ -1,16 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
+
 
 namespace CarRentalMang.WinFormApp
 {
@@ -35,156 +30,212 @@ namespace CarRentalMang.WinFormApp
 
         public async void PopulateGrid()
         {
-            
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("http://localhost:5006/api/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpResponseMessage response = await client.GetAsync("Cars");
-                if (response.IsSuccessStatusCode)
+            try
+            {
+                using (var client = new HttpClient())
                 {
-                    string json = await response.Content.ReadAsStringAsync();
-                    List<Car> cars = JsonConvert.DeserializeObject<List<Car>>(json);
-                    gvCars.DataSource = cars;
-                    //gvCars.Columns[0].Visible = false;
-                    gvCars.Columns[3].HeaderText = "License Plate Number";
-                    
+                    client.BaseAddress = new Uri("http://localhost:5006/api/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage response = await client.GetAsync("Cars");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+                        List<Car> cars = JsonConvert.DeserializeObject<List<Car>>(json);
+                        gvCars.DataSource = cars;
+                        //gvCars.Columns[0].Visible = false;
+                        gvCars.Columns[3].HeaderText = "License Plate Number";
+
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
 
         }
 
         private async void btnAdd_Click(object sender, EventArgs e)
         {
-            using (var client = new HttpClient())
+            try
             {
-                client.BaseAddress = new Uri("http://localhost:5006/api/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var newCar = new Car
+                using (var client = new HttpClient())
                 {
-                    Name = tbCarName.Text,
-                    Color = tbCarColor.Text,
-                    Make = tbCarBrand.Text,
-                    LicensePlateNumber = tbCarNo.Text,
-                    Availability = true
+                    client.BaseAddress = new Uri("http://localhost:5006/api/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                };
-                var errorMsg = ValidateUserInput(newCar);
-                if (errorMsg.Length == 0)
-                {
-                    var json = JsonConvert.SerializeObject(newCar);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                    HttpResponseMessage response = await client.PostAsync("Cars", content);
-                    if (response.IsSuccessStatusCode)
+                    var newCar = new Car
                     {
-                        //string result = await response.Content.ReadAsStringAsync();
-                        //MessageBox.Show(result);
-                        MessageBox.Show(
-                           $"YOU HAVE ADDED : \n\r" +
-                           $"Name : {tbCarName.Text}\n\r" +
-                           $"Color : {tbCarColor.Text}\n\r" +
-                           $"Make : {tbCarBrand.Text}\n\r" +
-                           $"LplateNo.: {tbCarNo.Text}\n\r" +
-                           $"Availability : {tbAvailability.Text}\n\r"
+                        Name = tbCarName.Text,
+                        Color = tbCarColor.Text,
+                        Make = tbCarBrand.Text,
+                        LicensePlateNumber = tbCarNo.Text,
+                        Availability = bool.Parse(tbAvailability.Text)
 
-                          );
+                    };
+                    var errorMsg = ValidateUserInput(newCar);
+                    if (errorMsg.Length == 0)
+                    {
+                        var json = JsonConvert.SerializeObject(newCar);
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                        HttpResponseMessage response = await client.PostAsync("Cars/Add", content);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            //string result = await response.Content.ReadAsStringAsync();
+                            //MessageBox.Show(result);
+                            MessageBox.Show(
+                               $"YOU HAVE ADDED : \n\r" +
+                               $"Name : {tbCarName.Text}\n\r" +
+                               $"Color : {tbCarColor.Text}\n\r" +
+                               $"Make : {tbCarBrand.Text}\n\r" +
+                               $"LplateNo.: {tbCarNo.Text}\n\r" +
+                               $"Availability : {tbAvailability.Text}\n\r"
+
+                              );
+                        }
+                        else
+                        {
+                            string result = await response.Content.ReadAsStringAsync();
+                            if (result.Contains("Already Exist"))
+                                MessageBox.Show($"Car With License Plate No. : {tbCarNo.Text}  Already Exist");
+                            else if (result.Contains("Car Availability Should Be True"))
+                                MessageBox.Show("Car Availability Should Be True,While Adding");
+                            else 
+                            MessageBox.Show("Server Is Not Responding");
+                        }
+
                     }
                     else
-                        MessageBox.Show(await response.Content.ReadAsStringAsync());
-                }
-                else
-                    MessageBox.Show($"Error: {errorMsg}");
+                        MessageBox.Show(errorMsg);
 
+                }
+                PopulateGrid();
             }
-            PopulateGrid();
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         private async void btnUpdate_Click(object sender, EventArgs e)
         {
-            using (var client = new HttpClient())
+            try
             {
-                client.BaseAddress = new Uri("http://localhost:5006/api/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                //var id = int.Parse(tbCarId.Text);
-                var id = (int)gvCars.SelectedRows[0].Cells[0].Value;
-
-                var carToBeUpdate = new Car
+                using (var client = new HttpClient())
                 {
-                    Name = tbCarName.Text,
-                    Color = tbCarColor.Text,
-                    Make = tbCarBrand.Text,
-                    LicensePlateNumber = tbCarNo.Text,
-                    Availability = bool.Parse(tbAvailability.Text)
-                };
+                    client.BaseAddress = new Uri("http://localhost:5006/api/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var errorMsg = ValidateUserInput(carToBeUpdate);
-                if (errorMsg.Length == 0)
-                {
-                    var json = JsonConvert.SerializeObject(carToBeUpdate);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                    HttpResponseMessage response = await client.PutAsync($"Cars/Update/{id}", content);
-                    if (response.IsSuccessStatusCode)
+                    if (gvCars.SelectedRows.Count == 0)
                     {
-                        //string result = await response.Content.ReadAsStringAsync();
-                        //MessageBox.Show(result);
-                        MessageBox.Show(
-                           $"YOU HAVE UPDATED : \n\r" +
-                           $"Name : {tbCarName.Text}\n\r" +
-                           $"Color : {tbCarColor.Text}\n\r" +
-                           $"Make : {tbCarBrand.Text}\n\r" +
-                           $"LplateNo.: {tbCarNo.Text}\n\r" +
-                           $"Availability : {tbAvailability.Text}\n\r"
-
-                          );
+                        MessageBox.Show("Please Select A Car");
                     }
                     else
-                        MessageBox.Show(await response.Content.ReadAsStringAsync());
-                }
-                else
-                    MessageBox.Show($"Error: {errorMsg}");
+                    {
+                        //var id = int.Parse(tbCarId.Text);
+                        var id = (int)gvCars.SelectedRows[0].Cells[0].Value;
 
+                        var carToBeUpdate = new Car
+                        {
+                            Name = tbCarName.Text,
+                            Color = tbCarColor.Text,
+                            Make = tbCarBrand.Text,
+                            LicensePlateNumber = tbCarNo.Text,
+                            Availability = bool.Parse(tbAvailability.Text)
+                        };
+
+                        var errorMsg = ValidateUserInput(carToBeUpdate);
+                        if (errorMsg.Length == 0)
+                        {
+                            var json = JsonConvert.SerializeObject(carToBeUpdate);
+                            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                            HttpResponseMessage response = await client.PutAsync($"Cars/Update/{id}", content);
+                            if (response.IsSuccessStatusCode)
+                            {
+                                //string result = await response.Content.ReadAsStringAsync();
+                                //MessageBox.Show(result);
+                                MessageBox.Show(
+                                   $"YOU HAVE UPDATED : \n\r" +
+                                   $"Name : {tbCarName.Text}\n\r" +
+                                   $"Color : {tbCarColor.Text}\n\r" +
+                                   $"Make : {tbCarBrand.Text}\n\r" +
+                                   $"LplateNo.: {tbCarNo.Text}\n\r" +
+                                   $"Availability : {tbAvailability.Text}\n\r"
+
+                                  );
+                                PopulateGrid();
+                            }
+                            else
+                                MessageBox.Show(await response.Content.ReadAsStringAsync());
+                        }
+                        else
+                            MessageBox.Show($"Error: {errorMsg}");
+                    }
+
+
+                }
+               
             }
-            PopulateGrid();
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         private async void btnDelete_Click(object sender, EventArgs e)
         {
-            using (var client = new HttpClient())
+            try
             {
-                client.BaseAddress = new Uri("http://localhost:5006/api/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var id = (int)gvCars.SelectedRows[0].Cells[0].Value;
-
-                DialogResult dr = MessageBox.Show("Are You Sure Want To Delete This Record?",
-                    "Delete", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-
-                if (dr == DialogResult.Yes)
+                using (var client = new HttpClient())
                 {
-                    HttpResponseMessage response = await client.DeleteAsync($"Cars/{id}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        //string result = await response.Content.ReadAsStringAsync();
-                        //MessageBox.Show(result);
-                        MessageBox.Show("Deleted Successfully!");
+                    client.BaseAddress = new Uri("http://localhost:5006/api/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+                    if (gvCars.SelectedRows.Count == 0)
+                    {
+                        MessageBox.Show("Please Select A Car");
                     }
                     else
-                        MessageBox.Show(await response.Content.ReadAsStringAsync());
-                }
-                    
+                    {
+                        var id = (int)gvCars.SelectedRows[0].Cells[0].Value;
 
+                        DialogResult dr = MessageBox.Show("Are You Sure Want To Delete This Record?",
+                            "Delete", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+
+                        if (dr == DialogResult.Yes)
+                        {
+                            HttpResponseMessage response = await client.DeleteAsync($"Cars/Delete/{id}");
+                            if (response.IsSuccessStatusCode)
+                            {
+                                //string result = await response.Content.ReadAsStringAsync();
+                                //MessageBox.Show(result);
+                                MessageBox.Show("Deleted Successfully!");
+                                PopulateGrid();
+                            }
+                            else
+                                MessageBox.Show("Server is not responding");
+                        }
+                    }
+
+                }
+                
             }
-            PopulateGrid();
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
 
         }
 
@@ -207,13 +258,13 @@ namespace CarRentalMang.WinFormApp
                 errorMessage += "Error : Please Enter Name.\n\r";
 
             if (car.Name.Length < 4 || car.Name.Length > 50)
-                errorMessage += "Error : Car Name Sould Be In The Range Of 4-50 Chars.";
+                errorMessage += "Error : Car Name Sould Be In The Range Of 4-50 Chars.\n\r";
 
             if (string.IsNullOrWhiteSpace(car.Color))
                 errorMessage += "Error : Please Enter Color.\n\r";
 
             if (car.Color.Length < 3 || car.Color.Length > 50)
-                errorMessage += "Error : Car Color Sould Be In The Range Of 3-15 Chars.";
+                errorMessage += "Error : Car Color Sould Be In The Range Of 3-15 Chars.\n\r";
 
             if (string.IsNullOrWhiteSpace(car.LicensePlateNumber))
                 errorMessage += "Error : Please Enter License Plate Number.\n\r";
@@ -225,7 +276,7 @@ namespace CarRentalMang.WinFormApp
                 errorMessage += "Error : Please Enter Make Name.\n\r";
 
             if (car.Make.Length < 4 || car.Make.Length > 24)
-                errorMessage += "Error : Car Make Sould Be In The Range Of 4-24 Chars.";
+                errorMessage += "Error : Car Make Sould Be In The Range Of 4-24 Chars.\n\r";
 
             return errorMessage;
         }

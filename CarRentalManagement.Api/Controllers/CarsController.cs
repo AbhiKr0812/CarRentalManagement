@@ -53,7 +53,7 @@ namespace CarRentalManagement.Api.Controllers
         #endregion
 
         #region Add New Car
-        [HttpPost]
+        [HttpPost("Add")]
         public async Task<IActionResult> Create([FromBody] AddCarRequestDto carRequestDto)
         {
             //Map or Convert DTO to Domain Model
@@ -104,7 +104,7 @@ namespace CarRentalManagement.Api.Controllers
 
         #region Delete A Car
         [HttpDelete]
-        [Route("{id:int}")]
+        [Route("Delete/{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var carToBeDeleted = await _carRepository.DeleteAsync(id);

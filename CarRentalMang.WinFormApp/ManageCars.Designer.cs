@@ -43,8 +43,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbAvailability = new System.Windows.Forms.TextBox();
             this.btnReset = new System.Windows.Forms.Button();
-            this.tbCarId = new System.Windows.Forms.TextBox();
-            this.lbCarId = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.gvCars)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,11 +51,11 @@
             // 
             this.gvCars.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gvCars.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gvCars.Location = new System.Drawing.Point(12, 12);
+            this.gvCars.Location = new System.Drawing.Point(12, 28);
             this.gvCars.Name = "gvCars";
             this.gvCars.RowHeadersWidth = 51;
             this.gvCars.RowTemplate.Height = 24;
-            this.gvCars.Size = new System.Drawing.Size(1141, 438);
+            this.gvCars.Size = new System.Drawing.Size(1141, 419);
             this.gvCars.TabIndex = 1;
             this.gvCars.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvCars_CellMouseDoubleClick);
             // 
@@ -197,25 +196,16 @@
             this.btnReset.UseVisualStyleBackColor = false;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
-            // tbCarId
+            // label2
             // 
-            this.tbCarId.Location = new System.Drawing.Point(586, 496);
-            this.tbCarId.Name = "tbCarId";
-            this.tbCarId.Size = new System.Drawing.Size(198, 22);
-            this.tbCarId.TabIndex = 18;
-            this.tbCarId.Visible = false;
-            // 
-            // lbCarId
-            // 
-            this.lbCarId.AutoSize = true;
-            this.lbCarId.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbCarId.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCarId.Location = new System.Drawing.Point(587, 469);
-            this.lbCarId.Name = "lbCarId";
-            this.lbCarId.Size = new System.Drawing.Size(62, 22);
-            this.lbCarId.TabIndex = 19;
-            this.lbCarId.Text = "Car Id";
-            this.lbCarId.Visible = false;
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.label2.Location = new System.Drawing.Point(12, 5);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(331, 20);
+            this.label2.TabIndex = 18;
+            this.label2.Text = "Please Double Click On A Row, To Update.";
             // 
             // ManageCars
             // 
@@ -223,8 +213,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.ClientSize = new System.Drawing.Size(1165, 627);
-            this.Controls.Add(this.tbCarId);
-            this.Controls.Add(this.lbCarId);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnUpdate);
@@ -266,7 +255,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbAvailability;
         private System.Windows.Forms.Button btnReset;
-        private System.Windows.Forms.TextBox tbCarId;
-        private System.Windows.Forms.Label lbCarId;
+        private System.Windows.Forms.Label label2;
     }
 }

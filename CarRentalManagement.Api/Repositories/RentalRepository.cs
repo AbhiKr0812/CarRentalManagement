@@ -122,9 +122,9 @@ namespace CarRentalManagement.Api.Repositories
             var errorMessage = "";
 
             var rental = _carRentalDb.CarRentalRecords.
-                FirstOrDefault(r => r.DrivingLicenceNo == carRental.DrivingLicenceNo && r.DropDate >= DateTime.Now);
+                FirstOrDefault(r => r.DrivingLicenceNo == carRental.DrivingLicenceNo && r.DropDate >= DateTime.UtcNow);
             if (rental != null)
-                return errorMessage = ($"{carRental.DrivingLicenceNo} is already occupied with active rental.");
+                return errorMessage = ($"Driving License {carRental.DrivingLicenceNo} is already occupied with active rental.");
             
             if (carRental.PickUpDate == carRental.DropDate || carRental.PickUpDate > carRental.DropDate)
                 return errorMessage = "Drop Date/Time Should Be Greater Than PickUp Date/Time.";
@@ -133,21 +133,7 @@ namespace CarRentalManagement.Api.Repositories
 
             return errorMessage;
         }
-
-       
-    }
-
-
-
-        //private async void ShuffleCarAvailability(int id)
-        //{
-        //    var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == id);
-        //    if (car.Availability)
-        //        car.Availability = false;
-        //    car.Availability = true;
-
-        //    _carRentalDb.SaveChangesAsync();
-        //}
-
     
+    }
+   
 }

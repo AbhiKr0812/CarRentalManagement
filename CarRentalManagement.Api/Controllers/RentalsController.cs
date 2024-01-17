@@ -70,7 +70,7 @@ namespace CarRentalManagement.Api.Controllers
 
         #region Add Rental
 
-        [HttpPost]
+        [HttpPost("Add")]
         public async Task<IActionResult> Create([FromBody] AddRentalReqDto addRentalReq)
         {
 

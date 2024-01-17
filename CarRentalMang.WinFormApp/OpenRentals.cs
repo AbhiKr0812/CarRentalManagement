@@ -118,32 +118,32 @@ namespace CarRentalMang.WinFormApp
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var newRental = new Rental
+                var textBoxError = CheckRequiredTextBoxes();
+
+                if (textBoxError.Length == 0)
                 {
-                    CustomerName = tbCustName.Text,
-                    DrivingLicenceNo = tbDLNo.Text,
-                    VehicleId = (int)cbAvailCars.SelectedValue,
-                    PickUpDate = ConvertIntoUTC(dtPickUp.Value.ToString()),
-                    DropDate = ConvertIntoUTC(dtDrop.Value.ToString()),
-                    Cost = Convert.ToDecimal(tbCost.Text),
-                    CompletionStatus = false
+                    var newRental = new Rental
+                    {
+                        CustomerName = tbCustName.Text,
+                        DrivingLicenceNo = tbDLNo.Text,
+                        VehicleId = (int)cbAvailCars.SelectedValue,
+                        PickUpDate = ConvertIntoUTC(dtPickUp.Value.ToString()),
+                        DropDate = ConvertIntoUTC(dtDrop.Value.ToString()),
+                        Cost = Convert.ToDecimal(tbCost.Text),
+                        CompletionStatus = bool.Parse(tbCompletion.Text)
 
-                };
+                    };
 
-                var errorMsg = ValidateUserInput(newRental);
-
-                if (errorMsg.Length == 0)
-                {
                     var json = JsonConvert.SerializeObject(newRental);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await client.PostAsync("Rentals", content);
+                    HttpResponseMessage response = await client.PostAsync("Rentals/Add", content);
                     if (response.IsSuccessStatusCode)
                     {
                         //string result = await response.Content.ReadAsStringAsync();
                         //MessageBox.Show(result);
                         MessageBox.Show(
-                        $"YOU HAVE ADDED: \n\r"+
+                        $"YOU HAVE ADDED: \n\r" +
                         $"Customer Name: {tbCustName.Text}\n\r" +
                         $"Customer DL NO.: {tbDLNo.Text}\n\r" +
                         $"Rented Car Type: {cbAvailCars.Text}\n\r" +
@@ -151,12 +151,26 @@ namespace CarRentalMang.WinFormApp
                         $"Rented Date: {dtPickUp.Value}\n\r" +
                         $"Returned Date: {dtDrop.Value}\n\r"
                         );
-                    } 
+
+                        PopulateGrid();
+                    }
+                    else
+                    {
+                        string result = await response.Content.ReadAsStringAsync();
+                        if (result.Contains("Should Be False"))
+                            MessageBox.Show("Error : Completion Status Should Be False, While Adding");
+                        else if (result.Contains("already occupied"))
+                            MessageBox.Show($"Error : Driving License {tbDLNo.Text} Is Already Occupied With Active Rental.");
+                        else
+                        MessageBox.Show("Error : Server is not responding");
+                    }
+
                 }
-                else 
-                    MessageBox.Show($"Error: {errorMsg}");
+                else
+                    MessageBox.Show(textBoxError);
+              
             }
-            PopulateGrid();
+            
         }
 
         private async void btnUpdate_Click(object sender, EventArgs e)
@@ -169,49 +183,57 @@ namespace CarRentalMang.WinFormApp
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    //var id = (int)gvRentals.SelectedRows[0].Cells[0].Value;
-                    var id = int.Parse(tbRentalId.Text);
-
-                    var rentalToBeUpdate = new Rental
+                    if (tbRentalId.Text.Length == 0)
                     {
-                        CustomerName = tbCustName.Text,
-                        DrivingLicenceNo = tbDLNo.Text,
-                        VehicleId = int.Parse(cbAvailCars.Text),
-                        PickUpDate = ConvertIntoUTC(dtPickUp.Value.ToString()),
-                        DropDate = ConvertIntoUTC(dtDrop.Value.ToString()),
-                        Cost = Convert.ToDecimal(tbCost.Text),
-                        CompletionStatus = bool.Parse(tbCompletion.Text)
-                    };
-
-                    var errorMsg = ValidateUserInput(rentalToBeUpdate);
-
-                    if (errorMsg.Length == 0)
-                    {
-                        var json = JsonConvert.SerializeObject(rentalToBeUpdate);
-                        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                        HttpResponseMessage response = await client.PutAsync($"Rentals/Update/{id}", content);
-                        if (response.IsSuccessStatusCode)
-                        {
-                            //string result = await response.Content.ReadAsStringAsync();
-                            //MessageBox.Show(result);
-                            MessageBox.Show(
-                                $"YOU HAVE UPDATED: \n\r" +
-                                $"Customer Name: {tbCustName.Text}\n\r" +
-                                $"Customer DL NO.: {tbDLNo.Text}\n\r" +
-                                $"Rented Car Type: {cbAvailCars.Text}\n\r" +
-                                $"Rented Car Cost: {tbCost.Text}\n\r" +
-                                $"Rented Date: {dtPickUp.Value}\n\r" +
-                                $"Returned Date: {dtDrop.Value}\n\r"
-                        );
-
-                        } 
+                        MessageBox.Show("Please Select A Rental");
                     }
                     else
-                        MessageBox.Show($"Error: {errorMsg}");
+                    {
+                        var textBoxError = CheckRequiredTextBoxes();
+
+                        if (textBoxError.Length == 0)
+                        {
+                            //var id = (int)gvRentals.SelectedRows[0].Cells[0].Value;
+                            var id = int.Parse(tbRentalId.Text);
+
+                            var rentalToBeUpdate = new Rental
+                            {
+                                CustomerName = tbCustName.Text,
+                                DrivingLicenceNo = tbDLNo.Text,
+                                VehicleId = int.Parse(cbAvailCars.Text),
+                                PickUpDate = ConvertIntoUTC(dtPickUp.Value.ToString()),
+                                DropDate = ConvertIntoUTC(dtDrop.Value.ToString()),
+                                Cost = Convert.ToDecimal(tbCost.Text),
+                                CompletionStatus = bool.Parse(tbCompletion.Text)
+                            };
+
+                            var json = JsonConvert.SerializeObject(rentalToBeUpdate);
+                            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                            HttpResponseMessage response = await client.PutAsync($"Rentals/Update/{id}", content);
+                            if (response.IsSuccessStatusCode)
+                            {
+                                //string result = await response.Content.ReadAsStringAsync();
+                                //MessageBox.Show(result);
+                                MessageBox.Show(
+                                    $"YOU HAVE UPDATED: \n\r" +
+                                    $"Customer Name: {tbCustName.Text}\n\r" +
+                                    $"Customer DL NO.: {tbDLNo.Text}\n\r" +
+                                    $"Rented Car Type: {cbAvailCars.Text}\n\r" +
+                                    $"Rented Car Cost: {tbCost.Text}\n\r" +
+                                    $"Rented Date: {dtPickUp.Value}\n\r" +
+                                    $"Returned Date: {dtDrop.Value}\n\r"
+                                    );
+
+                                PopulateGrid();
+                            }
+                        }
+                        else
+                            MessageBox.Show(textBoxError);
+                    }
 
                 }
-                PopulateGrid();
+                
             }
             catch (Exception ex)
             {
@@ -258,11 +280,12 @@ namespace CarRentalMang.WinFormApp
                     HttpResponseMessage response = await client.PutAsync($"Rentals/Update/{id}", content);
                     if (response.IsSuccessStatusCode)
                     {
-                        string result = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show(result);
+                        //string result = await response.Content.ReadAsStringAsync();
+                        //MessageBox.Show(result);
+                        MessageBox.Show("Completed Marked!!");
                     }
                     else
-                        MessageBox.Show(await response.Content.ReadAsStringAsync());
+                        MessageBox.Show("Server is not responding");
                     PopulateGrid();
                 }
             }
@@ -277,6 +300,8 @@ namespace CarRentalMang.WinFormApp
                 dtDrop.Text = gvRentals.Rows[e.RowIndex].Cells[5].Value.ToString();
                 tbCost.Text = gvRentals.Rows[e.RowIndex].Cells[6].Value.ToString();
                 tbCompletion.Text = gvRentals.Rows[e.RowIndex].Cells[7].Value.ToString();
+
+                tbCustName.ReadOnly = true; tbDLNo.ReadOnly = true; 
             }
         }
 
@@ -288,39 +313,35 @@ namespace CarRentalMang.WinFormApp
             return utcDateTime;
         }
 
-        private string ValidateUserInput(Rental rental)
+        private string CheckRequiredTextBoxes()
         {
-
             var errorMessage = "";
 
-            if (string.IsNullOrWhiteSpace(rental.CustomerName))
+            if (string.IsNullOrWhiteSpace(tbCustName.Text))
                 errorMessage += "Error : Please Enter Customer Name.\n\r";
-
-            if (string.IsNullOrWhiteSpace(rental.DrivingLicenceNo))
+            else if (tbCustName.Text.Length < 4 || tbCustName.Text.Length > 50)
+                errorMessage += "Error : Customer Name Sould Be In The Range Of 4-50 Chars.\n\r";
+            if (string.IsNullOrEmpty(tbDLNo.Text))
                 errorMessage += "Error : Please Enter Driving License Number.\n\r";
-
-            if ((rental.DrivingLicenceNo).Length != 11)
+            else if (tbDLNo.Text.Length != 11)
                 errorMessage += "Error : License Plate Number Should Be 11-Characters Long.\n\r";
 
-            if ((rental.VehicleId) == 0)
-                errorMessage += "Error : Please Select A Available Car";
-
-            if (rental.PickUpDate >= rental.DropDate)           
+            if (dtPickUp.Value >= dtDrop.Value)
                 errorMessage += "Error : Drop Date/Time Should Be Greater Than PickUp Date/Time.\n\r";
             //else if (rental.DropDate - rental.PickUpDate < TimeSpan.FromHours(8))
             //    errorMessage += "Error : Minimum Duration of a car to be rented is 8 hours.\n\r";
-
-            if (rental.Cost == 0)
+            if (string.IsNullOrEmpty(tbCost.Text))
                 errorMessage += "Error : Please Enter Cost";
-
-            //if (!rental.CompletionStatus)
-            //    errorMessage += "Error : Do Not Mark Completion While Adding.\n\r";
-
             return errorMessage;
         }
-
+    
         private async void bynReset_Click(object sender, EventArgs e)
         {
+            if(tbCustName.ReadOnly == true)
+                tbCustName.ReadOnly = false;
+            if (tbDLNo.ReadOnly == true)
+                tbDLNo.ReadOnly = false;
+
             tbRentalId.Clear();
             tbCustName.Clear();
             tbDLNo.Clear();
@@ -342,12 +363,12 @@ namespace CarRentalMang.WinFormApp
                     List<Car> cars = JsonConvert.DeserializeObject<List<Car>>(json);
                     var cbCars = cars.Select(q => new
                     {
-                        q.Id,
-                        q.Name,
-                        q.Availability
+                        Id = q.Id,
+                        Name = q.Name + " " + q.Color,
+                        Availability = q.Availability
                     }).ToList();
 
-                    var availCars = cars.Where(c => c.Availability == true).ToList();
+                    var availCars = cbCars.Where(c => c.Availability == true).ToList();
                     cbAvailCars.DisplayMember = "Name";
                     cbAvailCars.ValueMember = "Id";
                     cbAvailCars.DataSource = availCars;
