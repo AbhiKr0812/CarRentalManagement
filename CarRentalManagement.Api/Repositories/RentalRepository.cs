@@ -42,6 +42,11 @@ namespace CarRentalManagement.Api.Repositories
             var rentals = await _carRentalDb.CarRentalRecords.Where(r => r.CompletionStatus == false).ToListAsync();
             if (rentals.Count == 0)
                 throw new NotFoundException("There is no record available at this moment");
+            foreach (var rental in rentals)
+            {
+                var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id .Equals(rental.VehicleId));
+                rental.CarName = car.Name + " " + car.Color;
+            }
             return rentals;
         }
 
@@ -50,6 +55,11 @@ namespace CarRentalManagement.Api.Repositories
             var rentals = await _carRentalDb.CarRentalRecords.Where(r => r.CompletionStatus == true).ToListAsync();
             if (rentals.Count == 0)
                 throw new NotFoundException("There is no record available at this moment");
+            foreach (var rental in rentals)
+            {
+                var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id.Equals(rental.VehicleId));
+                rental.CarName = car.Name + " " + car.Color;
+            }
             return rentals;
         }
 
@@ -112,7 +122,7 @@ namespace CarRentalManagement.Api.Repositories
                 return existingRecord;
             }
             else
-                throw new BadRequestException("A Rental Record Completion-Approval Should Be True, Before Deletion");
+                throw new BadRequestException("Rental Record Completion-Status Should Be True, Before Deletion");
 
 
         }
@@ -130,6 +140,9 @@ namespace CarRentalManagement.Api.Repositories
                 return errorMessage = "Drop Date/Time Should Be Greater Than PickUp Date/Time.";
             //else if (carRental.DropDate - carRental.PickUpDate < TimeSpan.FromHours(8))
             //    return errorMessage = " At least car should be rented for minimum duration of 8 hours.";
+
+            if (!(carRental.Cost > 0))
+                return errorMessage = "Rental Cost Should Not Be Zero.";
 
             return errorMessage;
         }

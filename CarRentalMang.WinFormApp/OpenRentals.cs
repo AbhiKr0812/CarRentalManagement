@@ -47,6 +47,7 @@ namespace CarRentalMang.WinFormApp
                         cbAvailCars.DisplayMember = "Name";
                         cbAvailCars.ValueMember = "Id";
                         cbAvailCars.DataSource = availCars;
+                        lbAvailableCars.Text = "Available Cars";
                     }
                 }
                 
@@ -76,22 +77,22 @@ namespace CarRentalMang.WinFormApp
                         List<Rental> rentals = JsonConvert.DeserializeObject<List<Rental>>(json);
 
                         gvRentals.DataSource = rentals;
-
+                        
                         try
                         {
-                            gvRentals.Columns[4].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
                             gvRentals.Columns[5].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
+                            gvRentals.Columns[6].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
 
                             TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
                             foreach (DataGridViewRow row in gvRentals.Rows)
                             {
-                                DateTime pickUpDate = (DateTime)row.Cells[4].Value;
+                                DateTime pickUpDate = (DateTime)row.Cells[5].Value;
                                 DateTime convertedPickUpDate = TimeZoneInfo.ConvertTimeFromUtc(pickUpDate, timeZoneInfo);
-                                row.Cells[4].Value = convertedPickUpDate.ToString("dd-MM-yyyy HH:mm:ss");
+                                row.Cells[5].Value = convertedPickUpDate.ToString("dd-MM-yyyy HH:mm:ss");
 
-                                DateTime dropDate = (DateTime)row.Cells[5].Value;
+                                DateTime dropDate = (DateTime)row.Cells[6].Value;
                                 DateTime convertedDropDate = TimeZoneInfo.ConvertTimeFromUtc(dropDate, timeZoneInfo);
-                                row.Cells[5].Value = convertedDropDate.ToString("dd-MM-yyyy HH:mm:ss");
+                                row.Cells[6].Value = convertedDropDate.ToString("dd-MM-yyyy HH:mm:ss");
                             }
                         }
                         catch (Exception ex)
@@ -130,7 +131,8 @@ namespace CarRentalMang.WinFormApp
                         PickUpDate = ConvertIntoUTC(dtPickUp.Value.ToString()),
                         DropDate = ConvertIntoUTC(dtDrop.Value.ToString()),
                         Cost = Convert.ToDecimal(tbCost.Text),
-                        CompletionStatus = bool.Parse(tbCompletion.Text)
+                        CompletionStatus = false
+                        //CompletionStatus = bool.Parse(tbCompletion.Text)
 
                     };
 
@@ -200,11 +202,10 @@ namespace CarRentalMang.WinFormApp
                             {
                                 CustomerName = tbCustName.Text,
                                 DrivingLicenceNo = tbDLNo.Text,
-                                VehicleId = int.Parse(cbAvailCars.Text),
+                                VehicleId = int.Parse(tbCarId.Text),
                                 PickUpDate = ConvertIntoUTC(dtPickUp.Value.ToString()),
                                 DropDate = ConvertIntoUTC(dtDrop.Value.ToString()),
                                 Cost = Convert.ToDecimal(tbCost.Text),
-                                CompletionStatus = bool.Parse(tbCompletion.Text)
                             };
 
                             var json = JsonConvert.SerializeObject(rentalToBeUpdate);
@@ -247,12 +248,13 @@ namespace CarRentalMang.WinFormApp
             if (gvRentals.Columns[e.ColumnIndex].HeaderText == "Completed")
             {
                 var id = gvRentals.Rows[e.RowIndex].Cells[0].Value;
-                var name = gvRentals.Rows[e.RowIndex].Cells[1].Value;
-                var dlNo = gvRentals.Rows[e.RowIndex].Cells[2].Value;
-                var rentedCar = gvRentals.Rows[e.RowIndex].Cells[3].Value;
-                var pickUp = gvRentals.Rows[e.RowIndex].Cells[4].Value;
-                var drop = gvRentals.Rows[e.RowIndex].Cells[5].Value;
-                var cost = gvRentals.Rows[e.RowIndex].Cells[6].Value;
+                var vehicleId = gvRentals.Rows[e.RowIndex].Cells[1].Value;
+                var name = gvRentals.Rows[e.RowIndex].Cells[2].Value;
+                var dlNo = gvRentals.Rows[e.RowIndex].Cells[3].Value;
+                var rentedCar = gvRentals.Rows[e.RowIndex].Cells[4].Value;
+                var pickUp = gvRentals.Rows[e.RowIndex].Cells[5].Value;
+                var drop = gvRentals.Rows[e.RowIndex].Cells[6].Value;
+                var cost = gvRentals.Rows[e.RowIndex].Cells[7].Value;
 
 
                 using (var client = new HttpClient())
@@ -266,7 +268,7 @@ namespace CarRentalMang.WinFormApp
 
                         CustomerName = name.ToString(),
                         DrivingLicenceNo = dlNo.ToString(),
-                        VehicleId = (int)rentedCar,
+                        VehicleId = (int)vehicleId,
                         PickUpDate = ConvertIntoUTC(pickUp.ToString()),
                         DropDate = ConvertIntoUTC(drop.ToString()),
                         Cost = decimal.Parse(cost.ToString()),
@@ -283,25 +285,29 @@ namespace CarRentalMang.WinFormApp
                         //string result = await response.Content.ReadAsStringAsync();
                         //MessageBox.Show(result);
                         MessageBox.Show("Completed Marked!!");
+                        PopulateGrid();
                     }
                     else
                         MessageBox.Show("Server is not responding");
-                    PopulateGrid();
+                    
                 }
             }
 
             if (gvRentals.Columns[e.ColumnIndex].HeaderText == "Customer Name")
             {
+                
                 tbRentalId.Text = gvRentals.Rows[e.RowIndex].Cells[0].Value.ToString();
-                tbCustName.Text = gvRentals.Rows[e.RowIndex].Cells[1].Value.ToString();
-                tbDLNo.Text = gvRentals.Rows[e.RowIndex].Cells[2].Value.ToString();
-                cbAvailCars.Text = gvRentals.Rows[e.RowIndex].Cells[3].Value.ToString();
-                dtPickUp.Text = gvRentals.Rows[e.RowIndex].Cells[4].Value.ToString();
-                dtDrop.Text = gvRentals.Rows[e.RowIndex].Cells[5].Value.ToString();
-                tbCost.Text = gvRentals.Rows[e.RowIndex].Cells[6].Value.ToString();
-                tbCompletion.Text = gvRentals.Rows[e.RowIndex].Cells[7].Value.ToString();
+                tbCarId.Text = gvRentals.Rows[e.RowIndex].Cells[1].Value.ToString();
+                tbCustName.Text = gvRentals.Rows[e.RowIndex].Cells[2].Value.ToString();
+                tbDLNo.Text = gvRentals.Rows[e.RowIndex].Cells[3].Value.ToString();
+                dtPickUp.Text = gvRentals.Rows[e.RowIndex].Cells[5].Value.ToString();
+                dtDrop.Text = gvRentals.Rows[e.RowIndex].Cells[6].Value.ToString();
+                tbCost.Text = gvRentals.Rows[e.RowIndex].Cells[7].Value.ToString();
+                //tbCompletion.Text = gvRentals.Rows[e.RowIndex].Cells[8].Value.ToString();
 
-                tbCustName.ReadOnly = true; tbDLNo.ReadOnly = true; 
+                tbCustName.ReadOnly = true; tbDLNo.ReadOnly = true;
+                lbAvailableCars.Text = "Rented Car";
+                cbAvailCars.Enabled = false;
             }
         }
 
@@ -341,11 +347,12 @@ namespace CarRentalMang.WinFormApp
                 tbCustName.ReadOnly = false;
             if (tbDLNo.ReadOnly == true)
                 tbDLNo.ReadOnly = false;
+            lbAvailableCars.Text = "Available Cars";
+            cbAvailCars.Enabled = true;
 
             tbRentalId.Clear();
             tbCustName.Clear();
             tbDLNo.Clear();
-            tbCompletion.Text = false.ToString();
             dtPickUp.Text = DateTime.Now.ToString();
             dtDrop.Text = DateTime.Now.ToString();
             tbCost.Clear();
@@ -385,6 +392,7 @@ namespace CarRentalMang.WinFormApp
             rentals.MdiParent = this.MdiParent;
         }
 
+       
         //private void gvRentals_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         //{
         //    tbCustName.Text = gvRentals.SelectedRows[0].Cells[1].Value.ToString();

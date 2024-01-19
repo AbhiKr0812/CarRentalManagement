@@ -13,6 +13,7 @@ namespace CarRentalManagement.Api.Models.Domain
         public decimal Cost { get; set; }
         public bool CompletionStatus { get; set; } = false;
         public int VehicleId { get; set; }
+        public string? CarName { get; set; }
 
         //Navigation properties
         public Car Vehicle { get; set; }

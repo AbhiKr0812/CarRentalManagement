@@ -12,8 +12,10 @@ namespace CarRentalManagement.Api.Models.DTOs
         public decimal Cost { get; set; }
         public bool CompletionStatus { get; set; }
         public int VehicleId { get; set; }
+        public string CarName { get; set; }
 
         //Navigation properties
-        public Car Vehicle { get; set; }
+        //public Car Vehicle { get; set; }
+        
     }
 }
