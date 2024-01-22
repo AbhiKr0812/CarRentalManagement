@@ -4,6 +4,7 @@ using CarRentalManagement.Api.Models.Domain;
 using CarRentalManagement.Api.Models.DTOs;
 using CarRentalManagement.Api.Repositories.IRepositories;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace CarRentalManagement.Api.Controllers
 {
@@ -14,13 +15,15 @@ namespace CarRentalManagement.Api.Controllers
         private readonly CarRentalDbContext _carRentalDb;
         private readonly ICarRepository _carRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<CarsController> _logger;
 
         public CarsController(CarRentalDbContext carRentalDb,
-            ICarRepository carRepository, IMapper mapper)
+            ICarRepository carRepository, IMapper mapper, ILogger<CarsController> logger)
         {
             _carRentalDb = carRentalDb;
             _carRepository = carRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
@@ -32,6 +35,7 @@ namespace CarRentalManagement.Api.Controllers
             var cars = await _carRepository.GetAllAsync();
 
             //Map Domain Models to DTOs
+            _logger.LogInformation($" Existing Cars : {JsonSerializer.Serialize(cars)} Displayed Successfully");
             return Ok(_mapper.Map<List<CarDto>>(cars));
         }
 
@@ -47,6 +51,7 @@ namespace CarRentalManagement.Api.Controllers
 
             //Map/Convert Domain Model to DTO
             //Return DTO back to client
+            _logger.LogInformation($" Serched Car : {JsonSerializer.Serialize(car)} Displayed Successfully");
             return Ok(_mapper.Map<CarDto>(car));
         }
 
@@ -66,6 +71,7 @@ namespace CarRentalManagement.Api.Controllers
             //Map Domain Model back to DTO
             var carDto = _mapper.Map<CarDto>(newCar);
 
+            _logger.LogInformation($" Car : {JsonSerializer.Serialize(carDto)} Got Added Successfully");
             return CreatedAtAction(nameof(GetById), new { newCar.Id }, carDto);
         }
         #endregion
@@ -82,6 +88,8 @@ namespace CarRentalManagement.Api.Controllers
             carToBeUpdated = await _carRepository.UpdateAsync(id, carToBeUpdated);
 
             // Convert Domain Model to DTO
+
+            _logger.LogInformation($" Car : {JsonSerializer.Serialize(carToBeUpdated)} Got Updated Successfully");
             return Ok(_mapper.Map<CarDto>(carToBeUpdated));
         }
 
@@ -112,6 +120,8 @@ namespace CarRentalManagement.Api.Controllers
             // returning deleted car == Optional { return Ok() also f9}
 
             // Convert Domain Model to DTO
+
+            _logger.LogInformation($" Car : {JsonSerializer.Serialize(carToBeDeleted)} Deleted Successfully");
             return Ok(_mapper.Map<CarDto>(carToBeDeleted));
         }
 

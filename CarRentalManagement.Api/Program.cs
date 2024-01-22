@@ -4,6 +4,7 @@ using CarRentalManagement.Api.Middleware;
 using CarRentalManagement.Api.Repositories;
 using CarRentalManagement.Api.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,9 @@ builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<IRentalRepository, RentalRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+builder.Host.UseSerilog((context, loggerconfiguration) => loggerconfiguration
+.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
 
 var app = builder.Build();
 

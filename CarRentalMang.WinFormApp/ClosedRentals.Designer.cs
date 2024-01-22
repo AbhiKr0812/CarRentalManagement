@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.gvClosedRentals = new System.Windows.Forms.DataGridView();
+            this.gvRentals = new System.Windows.Forms.DataGridView();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnOpenRentals = new System.Windows.Forms.Button();
             this.rentalId = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -40,14 +40,14 @@
             this.drop = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cost = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.completion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.gvClosedRentals)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gvRentals)).BeginInit();
             this.SuspendLayout();
             // 
-            // gvClosedRentals
+            // gvRentals
             // 
-            this.gvClosedRentals.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.gvClosedRentals.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gvClosedRentals.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.gvRentals.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.gvRentals.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gvRentals.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.rentalId,
             this.vehicleId,
             this.custName,
@@ -57,12 +57,12 @@
             this.drop,
             this.cost,
             this.completion});
-            this.gvClosedRentals.Location = new System.Drawing.Point(12, 12);
-            this.gvClosedRentals.Name = "gvClosedRentals";
-            this.gvClosedRentals.RowHeadersWidth = 51;
-            this.gvClosedRentals.RowTemplate.Height = 24;
-            this.gvClosedRentals.Size = new System.Drawing.Size(1090, 438);
-            this.gvClosedRentals.TabIndex = 18;
+            this.gvRentals.Location = new System.Drawing.Point(12, 12);
+            this.gvRentals.Name = "gvRentals";
+            this.gvRentals.RowHeadersWidth = 51;
+            this.gvRentals.RowTemplate.Height = 24;
+            this.gvRentals.Size = new System.Drawing.Size(1090, 438);
+            this.gvRentals.TabIndex = 18;
             // 
             // btnDelete
             // 
@@ -99,7 +99,7 @@
             // vehicleId
             // 
             this.vehicleId.DataPropertyName = "VehicleId";
-            this.vehicleId.HeaderText = "VehicleId";
+            this.vehicleId.HeaderText = "Car Id";
             this.vehicleId.MinimumWidth = 6;
             this.vehicleId.Name = "vehicleId";
             this.vehicleId.Visible = false;
@@ -161,18 +161,18 @@
             this.ClientSize = new System.Drawing.Size(1112, 560);
             this.Controls.Add(this.btnOpenRentals);
             this.Controls.Add(this.btnDelete);
-            this.Controls.Add(this.gvClosedRentals);
+            this.Controls.Add(this.gvRentals);
             this.Name = "ClosedRentals";
             this.Text = "Closed Rentals";
             this.Load += new System.EventHandler(this.ClosedRentals_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.gvClosedRentals)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gvRentals)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.DataGridView gvClosedRentals;
+        private System.Windows.Forms.DataGridView gvRentals;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnOpenRentals;
         private System.Windows.Forms.DataGridViewTextBoxColumn rentalId;

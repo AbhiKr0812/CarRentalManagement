@@ -334,8 +334,8 @@ namespace CarRentalMang.WinFormApp
 
             if (dtPickUp.Value >= dtDrop.Value)
                 errorMessage += "Error : Drop Date/Time Should Be Greater Than PickUp Date/Time.\n\r";
-            //else if (rental.DropDate - rental.PickUpDate < TimeSpan.FromHours(8))
-            //    errorMessage += "Error : Minimum Duration of a car to be rented is 8 hours.\n\r";
+            else if (dtDrop.Value - dtPickUp.Value < TimeSpan.FromHours(2))
+                errorMessage += "Error : Minimum Duration of a car to be rented is 2 hours.\n\r";
             if (string.IsNullOrEmpty(tbCost.Text))
                 errorMessage += "Error : Please Enter Cost";
             return errorMessage;
@@ -356,6 +356,8 @@ namespace CarRentalMang.WinFormApp
             dtPickUp.Text = DateTime.Now.ToString();
             dtDrop.Text = DateTime.Now.ToString();
             tbCost.Clear();
+
+            PopulateGrid();
 
             using (var client = new HttpClient())
             {
@@ -381,8 +383,7 @@ namespace CarRentalMang.WinFormApp
                     cbAvailCars.DataSource = availCars;
                 }
             }
-
-            PopulateGrid();
+            
         }
 
         private void btnClosedRentals_Click(object sender, EventArgs e)

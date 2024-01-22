@@ -138,8 +138,8 @@ namespace CarRentalManagement.Api.Repositories
             
             if (carRental.PickUpDate == carRental.DropDate || carRental.PickUpDate > carRental.DropDate)
                 return errorMessage = "Drop Date/Time Should Be Greater Than PickUp Date/Time.";
-            //else if (carRental.DropDate - carRental.PickUpDate < TimeSpan.FromHours(8))
-            //    return errorMessage = " At least car should be rented for minimum duration of 8 hours.";
+            else if (carRental.DropDate - carRental.PickUpDate < TimeSpan.FromHours(2))
+                return errorMessage = " At least car should be rented for minimum duration of 2 hours.";
 
             if (!(carRental.Cost > 0))
                 return errorMessage = "Rental Cost Should Not Be Zero.";

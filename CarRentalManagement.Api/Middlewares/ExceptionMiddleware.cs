@@ -7,7 +7,12 @@ namespace CarRentalManagement.Api.Middleware
 {
     public class ExceptionMiddleware : IMiddleware
     {
-        
+        private readonly ILogger<ExceptionMiddleware> _logger;
+
+        public ExceptionMiddleware(ILogger<ExceptionMiddleware> logger)
+        {
+            _logger = logger;
+        }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
@@ -17,6 +22,7 @@ namespace CarRentalManagement.Api.Middleware
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Something Went Wrong, While Processing{context.Request.Path}");
                 await HandleException(context, ex);
             }
         }
@@ -59,6 +65,7 @@ namespace CarRentalManagement.Api.Middleware
 
 
     }
+
     // Extension method for this middleware
     public static class ExceptionMiddlewareExtension
     {

@@ -50,13 +50,13 @@ namespace CarRentalMang.WinFormApp
                         string json = await response.Content.ReadAsStringAsync();
                         List<Rental> rentals = JsonConvert.DeserializeObject<List<Rental>>(json);
 
-                        gvClosedRentals.DataSource = rentals;
+                        gvRentals.DataSource = rentals;
 
-                        gvClosedRentals.Columns[5].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
-                        gvClosedRentals.Columns[6].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
+                        gvRentals.Columns[5].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
+                        gvRentals.Columns[6].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
 
                         TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
-                        foreach (DataGridViewRow row in gvClosedRentals.Rows)
+                        foreach (DataGridViewRow row in gvRentals.Rows)
                         {
                             DateTime pickUpDate = (DateTime)row.Cells[5].Value;
                             DateTime convertedPickUpDate = TimeZoneInfo.ConvertTimeFromUtc(pickUpDate, timeZoneInfo);
@@ -86,13 +86,13 @@ namespace CarRentalMang.WinFormApp
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                if (gvClosedRentals.SelectedRows.Count == 0)
+                if (gvRentals.SelectedRows.Count == 0)
                 {
                     MessageBox.Show("Please Select A Rental");
                 }
                 else
                 {
-                    var id = (int)gvClosedRentals.SelectedRows[0].Cells[0].Value;
+                    var id = (int)gvRentals.SelectedRows[0].Cells[0].Value;
 
                     DialogResult dr = MessageBox.Show("Are You Sure Want To Delete This Record?",
                             "Delete", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);

@@ -39,15 +39,6 @@
             this.lbCarNo = new System.Windows.Forms.Label();
             this.lbPickUp = new System.Windows.Forms.Label();
             this.gvRentals = new System.Windows.Forms.DataGridView();
-            this.rentalId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vehicleId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.custName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.rentedCar = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.pickUp = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.drop = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cost = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.compStatus = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.dtPickUp = new System.Windows.Forms.DateTimePicker();
             this.dtDrop = new System.Windows.Forms.DateTimePicker();
             this.cbAvailCars = new System.Windows.Forms.ComboBox();
@@ -59,6 +50,15 @@
             this.label4 = new System.Windows.Forms.Label();
             this.tbCarId = new System.Windows.Forms.TextBox();
             this.lbCarId = new System.Windows.Forms.Label();
+            this.rentalId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vehicleId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.custName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rentedCar = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pickUp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.drop = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cost = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.compStatus = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gvRentals)).BeginInit();
             this.SuspendLayout();
             // 
@@ -186,73 +186,6 @@
             this.gvRentals.TabIndex = 17;
             this.gvRentals.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvRentals_CellClick);
             // 
-            // rentalId
-            // 
-            this.rentalId.DataPropertyName = "Id";
-            this.rentalId.HeaderText = "Id";
-            this.rentalId.MinimumWidth = 6;
-            this.rentalId.Name = "rentalId";
-            this.rentalId.Visible = false;
-            // 
-            // vehicleId
-            // 
-            this.vehicleId.DataPropertyName = "VehicleId";
-            this.vehicleId.HeaderText = "Car Id";
-            this.vehicleId.MinimumWidth = 6;
-            this.vehicleId.Name = "vehicleId";
-            this.vehicleId.Visible = false;
-            // 
-            // custName
-            // 
-            this.custName.DataPropertyName = "CustomerName";
-            this.custName.HeaderText = "Customer Name";
-            this.custName.MinimumWidth = 6;
-            this.custName.Name = "custName";
-            // 
-            // dlNo
-            // 
-            this.dlNo.DataPropertyName = "DrivingLicenceNo";
-            this.dlNo.HeaderText = "Driving License No";
-            this.dlNo.MinimumWidth = 6;
-            this.dlNo.Name = "dlNo";
-            // 
-            // rentedCar
-            // 
-            this.rentedCar.DataPropertyName = "CarName";
-            this.rentedCar.HeaderText = "Rented Car";
-            this.rentedCar.MinimumWidth = 6;
-            this.rentedCar.Name = "rentedCar";
-            // 
-            // pickUp
-            // 
-            this.pickUp.DataPropertyName = "PickUpDate";
-            this.pickUp.HeaderText = "PickUp Date";
-            this.pickUp.MinimumWidth = 6;
-            this.pickUp.Name = "pickUp";
-            // 
-            // drop
-            // 
-            this.drop.DataPropertyName = "DropDate";
-            this.drop.HeaderText = "Drop Date";
-            this.drop.MinimumWidth = 6;
-            this.drop.Name = "drop";
-            // 
-            // cost
-            // 
-            this.cost.DataPropertyName = "Cost";
-            this.cost.HeaderText = "Cost";
-            this.cost.MinimumWidth = 6;
-            this.cost.Name = "cost";
-            // 
-            // compStatus
-            // 
-            this.compStatus.DataPropertyName = "CompletionStatus";
-            this.compStatus.HeaderText = "Completed";
-            this.compStatus.MinimumWidth = 6;
-            this.compStatus.Name = "compStatus";
-            this.compStatus.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.compStatus.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
             // dtPickUp
             // 
             this.dtPickUp.CustomFormat = "dd-MM-yyyy HH:mm:ss";
@@ -366,6 +299,73 @@
             this.lbCarId.TabIndex = 42;
             this.lbCarId.Text = "Car Id";
             this.lbCarId.Visible = false;
+            // 
+            // rentalId
+            // 
+            this.rentalId.DataPropertyName = "Id";
+            this.rentalId.HeaderText = "Id";
+            this.rentalId.MinimumWidth = 6;
+            this.rentalId.Name = "rentalId";
+            this.rentalId.Visible = false;
+            // 
+            // vehicleId
+            // 
+            this.vehicleId.DataPropertyName = "VehicleId";
+            this.vehicleId.HeaderText = "Car Id";
+            this.vehicleId.MinimumWidth = 6;
+            this.vehicleId.Name = "vehicleId";
+            this.vehicleId.Visible = false;
+            // 
+            // custName
+            // 
+            this.custName.DataPropertyName = "CustomerName";
+            this.custName.HeaderText = "Customer Name";
+            this.custName.MinimumWidth = 6;
+            this.custName.Name = "custName";
+            // 
+            // dlNo
+            // 
+            this.dlNo.DataPropertyName = "DrivingLicenceNo";
+            this.dlNo.HeaderText = "Driving License No";
+            this.dlNo.MinimumWidth = 6;
+            this.dlNo.Name = "dlNo";
+            // 
+            // rentedCar
+            // 
+            this.rentedCar.DataPropertyName = "CarName";
+            this.rentedCar.HeaderText = "Rented Car";
+            this.rentedCar.MinimumWidth = 6;
+            this.rentedCar.Name = "rentedCar";
+            // 
+            // pickUp
+            // 
+            this.pickUp.DataPropertyName = "PickUpDate";
+            this.pickUp.HeaderText = "PickUp Date";
+            this.pickUp.MinimumWidth = 6;
+            this.pickUp.Name = "pickUp";
+            // 
+            // drop
+            // 
+            this.drop.DataPropertyName = "DropDate";
+            this.drop.HeaderText = "Drop Date";
+            this.drop.MinimumWidth = 6;
+            this.drop.Name = "drop";
+            // 
+            // cost
+            // 
+            this.cost.DataPropertyName = "Cost";
+            this.cost.HeaderText = "Rental Cost";
+            this.cost.MinimumWidth = 6;
+            this.cost.Name = "cost";
+            // 
+            // compStatus
+            // 
+            this.compStatus.DataPropertyName = "CompletionStatus";
+            this.compStatus.HeaderText = "Completed";
+            this.compStatus.MinimumWidth = 6;
+            this.compStatus.Name = "compStatus";
+            this.compStatus.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.compStatus.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // OpenRentals
             // 
