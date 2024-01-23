@@ -86,6 +86,7 @@ namespace CarRentalManagement.Api.Repositories
             existingRecord.Cost = record.Cost;
             existingRecord.CompletionStatus = record.CompletionStatus;
             existingRecord.VehicleId = record.VehicleId;
+            existingRecord.Description = record.Description;
 
             // Shuffle Car Availability
             var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == record.VehicleId);

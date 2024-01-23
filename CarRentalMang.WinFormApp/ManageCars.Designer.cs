@@ -59,7 +59,7 @@
             // 
             // tbCarColor
             // 
-            this.tbCarColor.Location = new System.Drawing.Point(304, 496);
+            this.tbCarColor.Location = new System.Drawing.Point(521, 496);
             this.tbCarColor.Name = "tbCarColor";
             this.tbCarColor.Size = new System.Drawing.Size(198, 22);
             this.tbCarColor.TabIndex = 1;
@@ -69,7 +69,7 @@
             this.lbColor.AutoSize = true;
             this.lbColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbColor.Location = new System.Drawing.Point(305, 469);
+            this.lbColor.Location = new System.Drawing.Point(522, 469);
             this.lbColor.Name = "lbColor";
             this.lbColor.Size = new System.Drawing.Size(56, 22);
             this.lbColor.TabIndex = 4;
@@ -78,7 +78,7 @@
             // tbCarNo
             // 
             this.tbCarNo.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.tbCarNo.Location = new System.Drawing.Point(13, 570);
+            this.tbCarNo.Location = new System.Drawing.Point(790, 496);
             this.tbCarNo.Name = "tbCarNo";
             this.tbCarNo.Size = new System.Drawing.Size(198, 22);
             this.tbCarNo.TabIndex = 2;
@@ -88,7 +88,7 @@
             this.lbCarNo.AutoSize = true;
             this.lbCarNo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbCarNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCarNo.Location = new System.Drawing.Point(13, 543);
+            this.lbCarNo.Location = new System.Drawing.Point(790, 469);
             this.lbCarNo.Name = "lbCarNo";
             this.lbCarNo.Size = new System.Drawing.Size(155, 22);
             this.lbCarNo.TabIndex = 6;
@@ -96,7 +96,7 @@
             // 
             // tbCarBrand
             // 
-            this.tbCarBrand.Location = new System.Drawing.Point(305, 570);
+            this.tbCarBrand.Location = new System.Drawing.Point(12, 496);
             this.tbCarBrand.Name = "tbCarBrand";
             this.tbCarBrand.Size = new System.Drawing.Size(198, 22);
             this.tbCarBrand.TabIndex = 3;
@@ -106,7 +106,7 @@
             this.lbMake.AutoSize = true;
             this.lbMake.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbMake.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbMake.Location = new System.Drawing.Point(305, 543);
+            this.lbMake.Location = new System.Drawing.Point(12, 469);
             this.lbMake.Name = "lbMake";
             this.lbMake.Size = new System.Drawing.Size(55, 22);
             this.lbMake.TabIndex = 8;
@@ -114,7 +114,7 @@
             // 
             // tbCarName
             // 
-            this.tbCarName.Location = new System.Drawing.Point(13, 496);
+            this.tbCarName.Location = new System.Drawing.Point(268, 496);
             this.tbCarName.Name = "tbCarName";
             this.tbCarName.Size = new System.Drawing.Size(198, 22);
             this.tbCarName.TabIndex = 0;
@@ -124,7 +124,7 @@
             this.lbCarName.AutoSize = true;
             this.lbCarName.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbCarName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCarName.Location = new System.Drawing.Point(13, 469);
+            this.lbCarName.Location = new System.Drawing.Point(268, 469);
             this.lbCarName.Name = "lbCarName";
             this.lbCarName.Size = new System.Drawing.Size(59, 22);
             this.lbCarName.TabIndex = 10;
@@ -133,7 +133,7 @@
             // btnAdd
             // 
             this.btnAdd.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.btnAdd.Location = new System.Drawing.Point(856, 486);
+            this.btnAdd.Location = new System.Drawing.Point(124, 558);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(107, 43);
             this.btnAdd.TabIndex = 14;
@@ -144,7 +144,7 @@
             // btnUpdate
             // 
             this.btnUpdate.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.btnUpdate.Location = new System.Drawing.Point(856, 549);
+            this.btnUpdate.Location = new System.Drawing.Point(370, 558);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(107, 43);
             this.btnUpdate.TabIndex = 15;
@@ -155,7 +155,7 @@
             // btnDelete
             // 
             this.btnDelete.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.btnDelete.Location = new System.Drawing.Point(1001, 486);
+            this.btnDelete.Location = new System.Drawing.Point(621, 559);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(107, 42);
             this.btnDelete.TabIndex = 16;
@@ -166,7 +166,7 @@
             // btnReset
             // 
             this.btnReset.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.btnReset.Location = new System.Drawing.Point(1001, 549);
+            this.btnReset.Location = new System.Drawing.Point(876, 558);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(107, 42);
             this.btnReset.TabIndex = 17;

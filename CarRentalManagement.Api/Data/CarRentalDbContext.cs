@@ -14,5 +14,7 @@ namespace CarRentalManagement.Api.Data
         public DbSet<Car> Cars { get; set; }
         public DbSet<CarRentalRecord> CarRentalRecords { get; set; }
         public DbSet<ClosedRentals> ClosedRentals { get; set; }
+        public DbSet<CarMake> CarMakes { get; set; }
+        public DbSet<CarModel> CarModels { get; set; }
     }
 }

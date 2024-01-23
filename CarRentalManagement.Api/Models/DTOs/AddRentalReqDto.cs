@@ -28,7 +28,7 @@ namespace CarRentalManagement.Api.Models.DTOs
         public decimal Cost { get; set; }
         [Required]
         public bool CompletionStatus { get; set; }
-        
-       
+        public string? Description { get; set; } = "Customer has read and agreed to the rental Terms & Conditions.";
+
     }
 }

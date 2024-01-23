@@ -14,6 +14,7 @@ namespace CarRentalManagement.Api.Models.Domain
         public bool CompletionStatus { get; set; }
         public int VehicleId { get; set; }
         public string? CarName { get; set; }
+        public string? Description { get; set; }
 
         //Navigation properties
         public Car Vehicle { get; set; }
