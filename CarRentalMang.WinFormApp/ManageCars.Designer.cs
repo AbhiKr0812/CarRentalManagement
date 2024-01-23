@@ -40,8 +40,6 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tbAvailability = new System.Windows.Forms.TextBox();
             this.btnReset = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.gvCars)).BeginInit();
@@ -165,26 +163,6 @@
             this.btnDelete.UseVisualStyleBackColor = false;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(586, 543);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(102, 22);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "Availability";
-            // 
-            // tbAvailability
-            // 
-            this.tbAvailability.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.tbAvailability.Location = new System.Drawing.Point(586, 570);
-            this.tbAvailability.Name = "tbAvailability";
-            this.tbAvailability.Size = new System.Drawing.Size(198, 22);
-            this.tbAvailability.TabIndex = 13;
-            this.tbAvailability.Text = "True";
-            // 
             // btnReset
             // 
             this.btnReset.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
@@ -218,8 +196,6 @@
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnAdd);
-            this.Controls.Add(this.tbAvailability);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.tbCarName);
             this.Controls.Add(this.lbCarName);
             this.Controls.Add(this.tbCarBrand);
@@ -252,8 +228,6 @@
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnDelete;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox tbAvailability;
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Label label2;
     }

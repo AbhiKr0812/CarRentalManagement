@@ -13,5 +13,6 @@ namespace CarRentalManagement.Api.Data
         // Adding Existing Entities(Car.cs & CarRentalRecord.cs) as collection
         public DbSet<Car> Cars { get; set; }
         public DbSet<CarRentalRecord> CarRentalRecords { get; set; }
+        public DbSet<ClosedRentals> ClosedRentals { get; set; }
     }
 }

@@ -45,7 +45,7 @@ namespace CarRentalMang.WinFormApp
                         string json = await response.Content.ReadAsStringAsync();
                         List<Car> cars = JsonConvert.DeserializeObject<List<Car>>(json);
                         gvCars.DataSource = cars;
-                        //gvCars.Columns[0].Visible = false;
+                        gvCars.Columns[0].Visible = false;
                         gvCars.Columns[3].HeaderText = "License Plate Number";
 
                     }
@@ -75,7 +75,7 @@ namespace CarRentalMang.WinFormApp
                         Color = tbCarColor.Text,
                         Make = tbCarBrand.Text,
                         LicensePlateNumber = tbCarNo.Text,
-                        Availability = bool.Parse(tbAvailability.Text)
+                        Availability = true
 
                     };
                     var errorMsg = ValidateUserInput(newCar);
@@ -94,8 +94,7 @@ namespace CarRentalMang.WinFormApp
                                $"Name : {tbCarName.Text}\n\r" +
                                $"Color : {tbCarColor.Text}\n\r" +
                                $"Make : {tbCarBrand.Text}\n\r" +
-                               $"LplateNo.: {tbCarNo.Text}\n\r" +
-                               $"Availability : {tbAvailability.Text}\n\r"
+                               $"LplateNo.: {tbCarNo.Text}\n\r"
 
                               );
                         }
@@ -149,7 +148,8 @@ namespace CarRentalMang.WinFormApp
                             Color = tbCarColor.Text,
                             Make = tbCarBrand.Text,
                             LicensePlateNumber = tbCarNo.Text,
-                            Availability = bool.Parse(tbAvailability.Text)
+                            Availability = bool.Parse(gvCars.SelectedRows[0].Cells[5].Value.ToString())
+                            
                         };
 
                         var errorMsg = ValidateUserInput(carToBeUpdate);
@@ -168,9 +168,8 @@ namespace CarRentalMang.WinFormApp
                                    $"Name : {tbCarName.Text}\n\r" +
                                    $"Color : {tbCarColor.Text}\n\r" +
                                    $"Make : {tbCarBrand.Text}\n\r" +
-                                   $"LplateNo.: {tbCarNo.Text}\n\r" +
-                                   $"Availability : {tbAvailability.Text}\n\r"
-
+                                   $"LplateNo.: {tbCarNo.Text}\n\r" 
+                                  
                                   );
                                 PopulateGrid();
                             }
@@ -246,7 +245,6 @@ namespace CarRentalMang.WinFormApp
             tbCarColor.Text = gvCars.SelectedRows[0].Cells[2].Value.ToString();
             tbCarNo.Text = gvCars.SelectedRows[0].Cells[3].Value.ToString();
             tbCarBrand.Text = gvCars.SelectedRows[0].Cells[4].Value.ToString();
-            tbAvailability.Text = gvCars.SelectedRows[0].Cells[5].Value.ToString();
         }
 
         private string ValidateUserInput(Car car)

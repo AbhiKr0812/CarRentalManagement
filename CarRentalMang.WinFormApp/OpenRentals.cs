@@ -77,30 +77,29 @@ namespace CarRentalMang.WinFormApp
                         List<Rental> rentals = JsonConvert.DeserializeObject<List<Rental>>(json);
 
                         gvRentals.DataSource = rentals;
-                        
-                        try
+
+                        gvRentals.Columns[5].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
+                        gvRentals.Columns[6].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
+
+                        TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+                        foreach (DataGridViewRow row in gvRentals.Rows)
                         {
-                            gvRentals.Columns[5].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
-                            gvRentals.Columns[6].DefaultCellStyle.Format = "dd-MM-yyyy HH:mm:ss";
+                            DateTime pickUpDate = (DateTime)row.Cells[5].Value;
+                            DateTime convertedPickUpDate = TimeZoneInfo.ConvertTimeFromUtc(pickUpDate, timeZoneInfo);
+                            row.Cells[5].Value = convertedPickUpDate.ToString("dd-MM-yyyy HH:mm:ss");
 
-                            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
-                            foreach (DataGridViewRow row in gvRentals.Rows)
-                            {
-                                DateTime pickUpDate = (DateTime)row.Cells[5].Value;
-                                DateTime convertedPickUpDate = TimeZoneInfo.ConvertTimeFromUtc(pickUpDate, timeZoneInfo);
-                                row.Cells[5].Value = convertedPickUpDate.ToString("dd-MM-yyyy HH:mm:ss");
-
-                                DateTime dropDate = (DateTime)row.Cells[6].Value;
-                                DateTime convertedDropDate = TimeZoneInfo.ConvertTimeFromUtc(dropDate, timeZoneInfo);
-                                row.Cells[6].Value = convertedDropDate.ToString("dd-MM-yyyy HH:mm:ss");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-
-                            throw ex;
+                            DateTime dropDate = (DateTime)row.Cells[6].Value;
+                            DateTime convertedDropDate = TimeZoneInfo.ConvertTimeFromUtc(dropDate, timeZoneInfo);
+                            row.Cells[6].Value = convertedDropDate.ToString("dd-MM-yyyy HH:mm:ss");
                         }
 
+                    }
+                    else
+                    {
+                        string result = await response.Content.ReadAsStringAsync();
+                        if (result.Contains("no record available"))
+                            MessageBox.Show("There Is No Open Rentals Available At This Moment");
+                          
                     }
                 }
             }
@@ -228,6 +227,9 @@ namespace CarRentalMang.WinFormApp
 
                                 PopulateGrid();
                             }
+                            else
+                                MessageBox.Show("Server is not responding");
+                            
                         }
                         else
                             MessageBox.Show(textBoxError);
@@ -336,6 +338,9 @@ namespace CarRentalMang.WinFormApp
                 errorMessage += "Error : Drop Date/Time Should Be Greater Than PickUp Date/Time.\n\r";
             else if (dtDrop.Value - dtPickUp.Value < TimeSpan.FromHours(2))
                 errorMessage += "Error : Minimum Duration of a car to be rented is 2 hours.\n\r";
+            else if (dtDrop.Value - dtPickUp.Value > TimeSpan.FromHours(72))
+                errorMessage += "Error : A Car can not be rented for more than 72 hours.\n\r";
+
             if (string.IsNullOrEmpty(tbCost.Text))
                 errorMessage += "Error : Please Enter Cost";
             return errorMessage;
@@ -356,8 +361,6 @@ namespace CarRentalMang.WinFormApp
             dtPickUp.Text = DateTime.Now.ToString();
             dtDrop.Text = DateTime.Now.ToString();
             tbCost.Clear();
-
-            PopulateGrid();
 
             using (var client = new HttpClient())
             {
@@ -383,7 +386,9 @@ namespace CarRentalMang.WinFormApp
                     cbAvailCars.DataSource = availCars;
                 }
             }
-            
+
+            PopulateGrid();
+
         }
 
         private void btnClosedRentals_Click(object sender, EventArgs e)
@@ -393,7 +398,67 @@ namespace CarRentalMang.WinFormApp
             rentals.MdiParent = this.MdiParent;
         }
 
-       
+        private void tbCustName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char ch = e.KeyChar;
+
+            if (Char.IsLetter(ch))
+                e.Handled = false;
+
+            else if (ch == 32)        // Spacebar
+                e.Handled = false;
+
+            else if (ch == 8)        // Backspace
+                e.Handled = false;
+ 
+            else if(ch == 46)       // Delete
+                e.Handled = false;
+
+            else if (ch == 12)      // Clear
+                e.Handled = false;
+            else { e.Handled = true; }
+        }
+
+        private void tbDLNo_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char ch = e.KeyChar;
+
+            if (Char.IsLetterOrDigit(ch))
+                e.Handled = false;
+
+            else if (ch == 8)        // Backspace
+                e.Handled = false;
+
+            else if (ch == 46)       // Delete
+                e.Handled = false;
+
+            else if (ch == 12)      // Clear
+                e.Handled = false;
+            else { e.Handled = true; }
+        }
+
+        private void tbCost_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char ch = e.KeyChar;
+
+            if (Char.IsDigit(ch))
+                e.Handled = false;
+
+            else if (ch == 110)        // Decimal
+                e.Handled = false;
+
+            else if (ch == 8)        // Backspace
+                e.Handled = false;
+
+            else if (ch == 46)       // Delete
+                e.Handled = false;
+
+            else if (ch == 12)      // Clear
+                e.Handled = false;
+            else { e.Handled = true; }
+        }
+
+
         //private void gvRentals_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         //{
         //    tbCustName.Text = gvRentals.SelectedRows[0].Cells[1].Value.ToString();

@@ -35,7 +35,6 @@ namespace CarRentalManagement.Api.Controllers
             var cars = await _carRepository.GetAllAsync();
 
             //Map Domain Models to DTOs
-            _logger.LogInformation($" Existing Cars : {JsonSerializer.Serialize(cars)} Displayed Successfully");
             return Ok(_mapper.Map<List<CarDto>>(cars));
         }
 
@@ -51,7 +50,6 @@ namespace CarRentalManagement.Api.Controllers
 
             //Map/Convert Domain Model to DTO
             //Return DTO back to client
-            _logger.LogInformation($" Serched Car : {JsonSerializer.Serialize(car)} Displayed Successfully");
             return Ok(_mapper.Map<CarDto>(car));
         }
 

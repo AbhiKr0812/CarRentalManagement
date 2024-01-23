@@ -1,6 +1,8 @@
-﻿using CarRentalManagement.Api.Data;
+﻿using AutoMapper;
+using CarRentalManagement.Api.Data;
 using CarRentalManagement.Api.Exceptions;
 using CarRentalManagement.Api.Models.Domain;
+using CarRentalManagement.Api.Models.DTOs;
 using CarRentalManagement.Api.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +11,12 @@ namespace CarRentalManagement.Api.Repositories
     public class RentalRepository : IRentalRepository
     {
         private readonly CarRentalDbContext _carRentalDb;
+        private readonly IMapper _mapper;
 
-        public RentalRepository(CarRentalDbContext carRentalDb)
+        public RentalRepository(CarRentalDbContext carRentalDb, IMapper mapper)
         {
             _carRentalDb = carRentalDb;
+            _mapper = mapper;
         }
 
         public async Task<CarRentalRecord> CreateAsync(CarRentalRecord record)
@@ -39,7 +43,7 @@ namespace CarRentalManagement.Api.Repositories
 
         public async Task<List<CarRentalRecord>> GetOpenRentalsAsync()
         {
-            var rentals = await _carRentalDb.CarRentalRecords.Where(r => r.CompletionStatus == false).ToListAsync();
+            var rentals = await _carRentalDb.CarRentalRecords.ToListAsync();
             if (rentals.Count == 0)
                 throw new NotFoundException("There is no record available at this moment");
             foreach (var rental in rentals)
@@ -50,9 +54,9 @@ namespace CarRentalManagement.Api.Repositories
             return rentals;
         }
 
-        public async Task<List<CarRentalRecord>> GetClosedRentalsAsync()
+        public async Task<List<ClosedRentals>> GetClosedRentalsAsync()
         {
-            var rentals = await _carRentalDb.CarRentalRecords.Where(r => r.CompletionStatus == true).ToListAsync();
+            var rentals = await _carRentalDb.ClosedRentals.ToListAsync();
             if (rentals.Count == 0)
                 throw new NotFoundException("There is no record available at this moment");
             foreach (var rental in rentals)
@@ -87,7 +91,16 @@ namespace CarRentalManagement.Api.Repositories
             var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == record.VehicleId);
             car.Availability = record.CompletionStatus;
 
-            _carRentalDb.SaveChangesAsync();
+            // Add to ClosedRentals and Delete From Open Rentals
+            if (record.CompletionStatus == true)
+            {
+                var updatedRental = _mapper.Map<AddRentalReqDto>(existingRecord);
+                await _carRentalDb.ClosedRentals.AddAsync(_mapper.Map<ClosedRentals>(updatedRental));
+
+                _carRentalDb.CarRentalRecords.Remove(existingRecord);
+            }
+
+            await _carRentalDb.SaveChangesAsync();
             return existingRecord;
 
         }
@@ -108,22 +121,15 @@ namespace CarRentalManagement.Api.Repositories
             throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");
         }
 
-        public async Task<CarRentalRecord?> DeleteAsync(int id)
+        public async Task<ClosedRentals?> DeleteAsync(int id)
         {
-            var existingRecord = await _carRentalDb.CarRentalRecords.FirstOrDefaultAsync(r => r.Id == id);
+            var existingRecord = await _carRentalDb.ClosedRentals.FirstOrDefaultAsync(r => r.Id == id);
             if (existingRecord == null)
                 throw new NotFoundException($"There Is No Such Record Present With The Id: {id}");
 
-
-            if (existingRecord.CompletionStatus)
-            {
-                _carRentalDb.CarRentalRecords.Remove(existingRecord);
-                _carRentalDb.SaveChangesAsync();
-                return existingRecord;
-            }
-            else
-                throw new BadRequestException("Rental Record Completion-Status Should Be True, Before Deletion");
-
+            _carRentalDb.ClosedRentals.Remove(existingRecord);
+            await _carRentalDb.SaveChangesAsync();
+            return existingRecord;
 
         }
 
@@ -140,6 +146,8 @@ namespace CarRentalManagement.Api.Repositories
                 return errorMessage = "Drop Date/Time Should Be Greater Than PickUp Date/Time.";
             else if (carRental.DropDate - carRental.PickUpDate < TimeSpan.FromHours(2))
                 return errorMessage = " At least car should be rented for minimum duration of 2 hours.";
+            else if (carRental.DropDate - carRental.PickUpDate > TimeSpan.FromHours(72))
+                    return errorMessage = "A Car can not be rented for more than 72 hours.";
 
             if (!(carRental.Cost > 0))
                 return errorMessage = "Rental Cost Should Not Be Zero.";

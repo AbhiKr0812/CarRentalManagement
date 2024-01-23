@@ -2,7 +2,7 @@
 
 namespace CarRentalManagement.Api.Models.Domain
 {
-    public class CarRentalRecord
+    public class ClosedRentals
     {
         [Key]
         public int Id { get; set; }

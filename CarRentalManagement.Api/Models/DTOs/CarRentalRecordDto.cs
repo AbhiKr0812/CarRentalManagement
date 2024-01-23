@@ -13,9 +13,6 @@ namespace CarRentalManagement.Api.Models.DTOs
         public bool CompletionStatus { get; set; }
         public int VehicleId { get; set; }
         public string CarName { get; set; }
-
-        //Navigation properties
-        //public Car Vehicle { get; set; }
-        
+   
     }
 }

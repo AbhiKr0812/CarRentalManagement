@@ -6,7 +6,7 @@ namespace CarRentalManagement.Api.Repositories.IRepositories
     {
         Task<List<CarRentalRecord>> GetOpenRentalsAsync();
 
-        Task<List<CarRentalRecord>> GetClosedRentalsAsync();
+        Task<List<ClosedRentals>> GetClosedRentalsAsync();
 
         Task<CarRentalRecord?> GetByIdAsync(int id);
 
@@ -16,6 +16,6 @@ namespace CarRentalManagement.Api.Repositories.IRepositories
 
         Task<CarRentalRecord?> ApproveCompletion(int id);
 
-        Task<CarRentalRecord?> DeleteAsync(int id);
+        Task<ClosedRentals?> DeleteAsync(int id);
     }
 }
