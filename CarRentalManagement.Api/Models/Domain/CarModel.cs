@@ -7,6 +7,7 @@ namespace CarRentalManagement.Api.Models.Domain
         [Key]
         public int ModelId { get; set; }
         public string Name { get; set; }
+        public bool IsAvailable { get; set; }
 
         public int MakeId { get; set; }
         public CarMake Make { get; set; }

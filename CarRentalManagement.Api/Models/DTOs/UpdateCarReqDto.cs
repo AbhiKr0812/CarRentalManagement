@@ -23,6 +23,6 @@ namespace CarRentalManagement.Api.Models.DTOs
         [MinLength(4, ErrorMessage = "Car Maker Name has to be a minimum of 3 characters")]
         [MaxLength(15, ErrorMessage = "Car Maker Name has to be a maximum of 15 characters")]
         public string Make { get; set; }
-        public bool Availability { get; set; } = true;
+        public bool Availability { get; set; }
     }
 }
