@@ -18,6 +18,11 @@ namespace CarRentalManagement.Api.Mapping
 
             CreateMap<AddRentalReqDto,ClosedRentals>().ReverseMap();
             CreateMap<ClosedRentals, CarRentalRecordDto>().ReverseMap();
+
+            CreateMap<CarMake, MakeGetDto>().ReverseMap();
+            CreateMap<MakePostPutDto, CarMake>().ReverseMap();
+            CreateMap<CarModel, ModelGetDto>().ReverseMap();
+            CreateMap<ModelPostPutDto, CarModel>().ReverseMap();
         }
     }
 }

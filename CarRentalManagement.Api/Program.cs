@@ -23,6 +23,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("CarRentalConnect
 // Repository Injection
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<IRentalRepository, RentalRepository>();
+builder.Services.AddScoped<ICarMakeRepository, CarMakeRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 

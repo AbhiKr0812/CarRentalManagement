@@ -1,6 +1,6 @@
 ﻿namespace CarRentalManagement.Api.Models.DTOs
 {
-    public class ModelDto
+    public class ModelGetDto
     {
         public int ModelId { get; set; }
         public string Name { get; set; }

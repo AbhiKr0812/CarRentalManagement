@@ -12,15 +12,13 @@ namespace CarRentalManagement.Api.Controllers
     [ApiController]
     public class CarsController : ControllerBase
     {
-        private readonly CarRentalDbContext _carRentalDb;
         private readonly ICarRepository _carRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<CarsController> _logger;
 
-        public CarsController(CarRentalDbContext carRentalDb,
+        public CarsController(
             ICarRepository carRepository, IMapper mapper, ILogger<CarsController> logger)
         {
-            _carRentalDb = carRentalDb;
             _carRepository = carRepository;
             _mapper = mapper;
             _logger = logger;
@@ -64,7 +62,7 @@ namespace CarRentalManagement.Api.Controllers
 
             //Use Domain Model to create Region
             newCar = await _carRepository.CreateAsync(newCar);
-            await _carRentalDb.SaveChangesAsync();
+            
 
             //Map Domain Model back to DTO
             var carDto = _mapper.Map<CarDto>(newCar);
@@ -75,8 +73,8 @@ namespace CarRentalManagement.Api.Controllers
         #endregion
 
         #region Update A Car
-        [HttpPut("Update/{id:int}")]
-        //[Route("{id:int}")]
+        [HttpPut]
+        [Route("Update/{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCarReqDto updateCar)
         {
 

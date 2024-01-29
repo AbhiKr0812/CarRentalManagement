@@ -13,15 +13,13 @@ namespace CarRentalManagement.Api.Controllers
     [ApiController]
     public class RentalsController : ControllerBase
     {
-        private readonly CarRentalDbContext _carRentalDb;
         private readonly IRentalRepository _rentalRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<RentalsController> _logger;
 
-        public RentalsController(CarRentalDbContext carRentalDb,
-            IRentalRepository rentalRepository,IMapper mapper, ILogger<RentalsController> logger)
+        public RentalsController(IRentalRepository rentalRepository,IMapper mapper, 
+            ILogger<RentalsController> logger)
         {
-            _carRentalDb = carRentalDb;
             _rentalRepository = rentalRepository;
             _mapper = mapper;
             _logger = logger;
@@ -82,7 +80,6 @@ namespace CarRentalManagement.Api.Controllers
 
             //Use Domain Model to create Region
             newRental = await _rentalRepository.CreateAsync(newRental);
-            await _carRentalDb.SaveChangesAsync();
 
             //Map Domain Model back to DTO
             var rentalDto = _mapper.Map<CarRentalRecordDto>(newRental);
@@ -96,8 +93,8 @@ namespace CarRentalManagement.Api.Controllers
 
         #region Update Rental
 
-        [HttpPut("Update/{id:int}")]
-        //[Route("{id:int}")]
+        [HttpPut]
+        [Route("Update/{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateRentalRecord updateRental)
         {
             //Map DTO to Domain Model
@@ -133,12 +130,12 @@ namespace CarRentalManagement.Api.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var rentalToBeDeleted = await _rentalRepository.DeleteAsync(id);
+            var deletedRental = await _rentalRepository.DeleteAsync(id);
 
             // returning deleted rental == Optional { return Ok() also f9}
             // Convert Domain Model to DTO
-            _logger.LogInformation($"Existing Rental : {JsonSerializer.Serialize(rentalToBeDeleted)} Got Deleted Successfully");
-            return Ok(_mapper.Map<CarRentalRecordDto>(rentalToBeDeleted));
+            _logger.LogInformation($"Existing Rental : {JsonSerializer.Serialize(deletedRental)} Got Deleted Successfully");
+            return Ok(_mapper.Map<CarRentalRecordDto>(deletedRental));
         }
 
         #endregion
