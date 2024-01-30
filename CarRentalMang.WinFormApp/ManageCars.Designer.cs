@@ -36,7 +36,7 @@
             this.tbCarBrand = new System.Windows.Forms.TextBox();
             this.lbMake = new System.Windows.Forms.Label();
             this.tbCarName = new System.Windows.Forms.TextBox();
-            this.lbCarName = new System.Windows.Forms.Label();
+            this.lbCarModel = new System.Windows.Forms.Label();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
@@ -119,16 +119,16 @@
             this.tbCarName.Size = new System.Drawing.Size(198, 22);
             this.tbCarName.TabIndex = 0;
             // 
-            // lbCarName
+            // lbCarModel
             // 
-            this.lbCarName.AutoSize = true;
-            this.lbCarName.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbCarName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCarName.Location = new System.Drawing.Point(268, 469);
-            this.lbCarName.Name = "lbCarName";
-            this.lbCarName.Size = new System.Drawing.Size(59, 22);
-            this.lbCarName.TabIndex = 10;
-            this.lbCarName.Text = "Name";
+            this.lbCarModel.AutoSize = true;
+            this.lbCarModel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbCarModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbCarModel.Location = new System.Drawing.Point(268, 469);
+            this.lbCarModel.Name = "lbCarModel";
+            this.lbCarModel.Size = new System.Drawing.Size(61, 22);
+            this.lbCarModel.TabIndex = 10;
+            this.lbCarModel.Text = "Model";
             // 
             // btnAdd
             // 
@@ -197,7 +197,7 @@
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.tbCarName);
-            this.Controls.Add(this.lbCarName);
+            this.Controls.Add(this.lbCarModel);
             this.Controls.Add(this.tbCarBrand);
             this.Controls.Add(this.lbMake);
             this.Controls.Add(this.tbCarNo);
@@ -224,7 +224,7 @@
         private System.Windows.Forms.TextBox tbCarBrand;
         private System.Windows.Forms.Label lbMake;
         private System.Windows.Forms.TextBox tbCarName;
-        private System.Windows.Forms.Label lbCarName;
+        private System.Windows.Forms.Label lbCarModel;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnDelete;

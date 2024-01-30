@@ -11,8 +11,8 @@ namespace CarRentalManagement.Api.Models.DTOs
         public string CustomerName { get; set; }
 
         [Required]
-        [MinLength(11, ErrorMessage = "Driving License No. has to be a minimum of 10 characters")]
-        [MaxLength(11, ErrorMessage = "Driving License No. has to be a maximum of 10 characters")]
+        [MinLength(11, ErrorMessage = "Driving License No. has to be a minimum of 11 characters")]
+        [MaxLength(11, ErrorMessage = "Driving License No. has to be a maximum of 11 characters")]
         public string DrivingLicenceNo { get; set; }
 
         [Required]

@@ -6,15 +6,10 @@ namespace CarRentalManagement.Api.Models.Domain
     {
         [Key]
         public int Id { get; set; }
-        
-        public string Name { get; set; }
-
-        public string Color { get; set; }
-
-        public string LicensePlateNumber { get; set; }
-        
         public string Make { get; set; }
-       
-        public bool Availability { get; set; } = true;
+        public string Model { get; set; }
+        public string Color { get; set; }
+        public string LicensePlateNumber { get; set; }       
+        public bool Availability { get; set; }
     }
 }

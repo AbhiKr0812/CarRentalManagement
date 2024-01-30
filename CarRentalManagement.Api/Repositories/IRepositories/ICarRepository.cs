@@ -8,7 +8,7 @@ namespace CarRentalManagement.Api.Repositories.IRepositories
 
         Task<Car?> GetByIdAsync(int id);
 
-        Task<Car> CreateAsync(Car car);
+        Task<Car> CreateAsync(int makeId, int modelId, Car car);
 
         Task<Car?> UpdateAsync(int id, Car car);
 

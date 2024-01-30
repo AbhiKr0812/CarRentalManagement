@@ -4,6 +4,7 @@ using CarRentalManagement.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalManagement.Api.Migrations
 {
     [DbContext(typeof(CarRentalDbContext))]
-    partial class CarRentalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240130095258_Modified Car")]
+    partial class ModifiedCar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,15 +43,17 @@ namespace CarRentalManagement.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Make")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("MakeId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Model")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("ModelId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MakeId");
+
+                    b.HasIndex("ModelId");
 
                     b.ToTable("Cars");
                 });
@@ -182,6 +186,21 @@ namespace CarRentalManagement.Api.Migrations
                     b.HasIndex("VehicleId");
 
                     b.ToTable("ClosedRentals");
+                });
+
+            modelBuilder.Entity("CarRentalManagement.Api.Models.Domain.Car", b =>
+                {
+                    b.HasOne("CarRentalManagement.Api.Models.Domain.CarMake", "Make")
+                        .WithMany()
+                        .HasForeignKey("MakeId");
+
+                    b.HasOne("CarRentalManagement.Api.Models.Domain.CarModel", "Model")
+                        .WithMany()
+                        .HasForeignKey("ModelId");
+
+                    b.Navigation("Make");
+
+                    b.Navigation("Model");
                 });
 
             modelBuilder.Entity("CarRentalManagement.Api.Models.Domain.CarModel", b =>

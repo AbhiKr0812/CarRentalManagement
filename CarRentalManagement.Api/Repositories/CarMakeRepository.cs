@@ -100,7 +100,7 @@ namespace CarRentalManagement.Api.Repositories
 
             existingMake.Name = make.Name;
             
-            _carRentalDb.SaveChangesAsync();
+            await _carRentalDb.SaveChangesAsync();
             return existingMake;
         }
 
@@ -114,7 +114,7 @@ namespace CarRentalManagement.Api.Repositories
             existingModel.Name = modelToBeUpdate.Name;
             existingModel.IsAvailable = modelToBeUpdate.IsAvailable;
 
-            _carRentalDb.SaveChangesAsync();
+            await _carRentalDb.SaveChangesAsync();
             return existingModel;
         }
     }

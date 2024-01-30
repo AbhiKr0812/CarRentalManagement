@@ -49,7 +49,7 @@ namespace CarRentalManagement.Api.Repositories
             foreach (var rental in rentals)
             {
                 var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id .Equals(rental.VehicleId));
-                rental.CarName = car.Name + " " + car.Color;
+                rental.CarName = car.Model + " " + car.Color;
             }
             return rentals;
         }
@@ -62,7 +62,7 @@ namespace CarRentalManagement.Api.Repositories
             foreach (var rental in rentals)
             {
                 var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id.Equals(rental.VehicleId));
-                rental.CarName = car.Name + " " + car.Color;
+                rental.CarName = car.Model + " " + car.Color;
             }
             return rentals;
         }
@@ -116,7 +116,7 @@ namespace CarRentalManagement.Api.Repositories
                 else if (carRental.CompletionStatus == false)
                     carRental.CompletionStatus = true;
 
-                _carRentalDb.SaveChangesAsync();
+                await _carRentalDb.SaveChangesAsync();
                 return carRental;
             }
             throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");

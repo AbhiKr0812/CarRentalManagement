@@ -8,9 +8,9 @@ namespace CarRentalManagement.Api.Mapping
     {
         public AutoMapperProfiles()
         {
-            CreateMap<Car, CarDto>().ReverseMap();
-            CreateMap<AddCarRequestDto, Car>().ReverseMap();
-            CreateMap<UpdateCarReqDto, Car>().ReverseMap(); 
+            
+            CreateMap<Car, CarGetDto>().ReverseMap();
+            CreateMap<CarPostPutDto, Car>().ReverseMap();
 
             CreateMap<CarRentalRecord, CarRentalRecordDto>().ReverseMap();
             CreateMap<AddRentalReqDto,CarRentalRecord>().ReverseMap();

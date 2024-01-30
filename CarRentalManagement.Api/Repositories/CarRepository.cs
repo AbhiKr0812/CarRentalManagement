@@ -15,13 +15,24 @@ namespace CarRentalManagement.Api.Repositories
             _carRentalDb = carRentalDb;
         }
 
-        public async Task<Car> CreateAsync(Car car)
+        public async Task<Car> CreateAsync(int makeId, int modelId, Car car)
         {
-            var existingCar = await _carRentalDb.Cars.SingleOrDefaultAsync(c => c.LicensePlateNumber == car.LicensePlateNumber);
-            if (existingCar == null)
+            var errorMessage = ValidateCarNoCarColor(car);
+            if (errorMessage.Length == 0)
             {
                 if (car.Availability == true)
                 {
+                    var make = await _carRentalDb.CarMakes.FirstOrDefaultAsync(m => m.MakeId == makeId);
+                    if (make == null) throw new NotFoundException($"Make Id : {makeId} doesn't exist");
+                    car.Make = make.Name;
+                    var model = await _carRentalDb.CarModels.FirstOrDefaultAsync(m => m.ModelId == modelId);
+                    if (model == null) throw new NotFoundException($"Model Id : {modelId} doesn't exist");
+                    car.Model = model.Name;
+
+                    var carsWithSameColor = _carRentalDb.Cars.Where(c => c.Model == car.Model && c.Color == car.Color).ToList();
+                    if (carsWithSameColor.Count >= 3)
+                        throw new BadRequestException($"Limit exceeded : maximum 3 car of same color can be added");
+
                     await _carRentalDb.Cars.AddAsync(car);
                     await _carRentalDb.SaveChangesAsync();
                     return car;
@@ -29,8 +40,8 @@ namespace CarRentalManagement.Api.Repositories
                 throw new BadRequestException("Car Availability Should Be True");
             }
             else
-                throw new BadRequestException($"Car With License Plate No. : {car.LicensePlateNumber}  Already Exist");
-  
+                throw new BadRequestException(errorMessage);
+            
         }
 
         public async Task<Car?> DeleteAsync(int id)
@@ -74,13 +85,11 @@ namespace CarRentalManagement.Api.Repositories
             if (existingCar == null)
                 throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");
 
-            existingCar.Name = car.Name;
             existingCar.LicensePlateNumber = car.LicensePlateNumber;
-            existingCar.Make = car.Make;
             existingCar.Color = car.Color;
             existingCar.Availability = car.Availability;
 
-            _carRentalDb.SaveChangesAsync();
+            await _carRentalDb.SaveChangesAsync();
             return existingCar;
         }
 
@@ -94,12 +103,21 @@ namespace CarRentalManagement.Api.Repositories
                 else if (car.Availability == false)
                     car.Availability = true;
 
-                _carRentalDb.SaveChangesAsync();
+                await _carRentalDb.SaveChangesAsync();
                 return car;
             }    
             throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");
         }
 
+        public string ValidateCarNoCarColor(Car car)
+        {
+            var errorMsg = "";
 
+            var carWithSameNo = _carRentalDb.Cars.SingleOrDefault(c => c.LicensePlateNumber == car.LicensePlateNumber);
+            if (carWithSameNo != null)
+                return errorMsg = ($"Car With License Plate No. : {car.LicensePlateNumber} Already Exist");
+
+            return errorMsg;
+        }
     }
 }
