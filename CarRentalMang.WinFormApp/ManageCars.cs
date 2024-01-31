@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Text;
 using System.Windows.Forms;
+using System.Linq;
 
 
 namespace CarRentalMang.WinFormApp
@@ -16,10 +17,28 @@ namespace CarRentalMang.WinFormApp
             InitializeComponent();
         }
 
-        private void ManageCars_Load(object sender, EventArgs e)
+        private async void ManageCars_Load(object sender, EventArgs e)
         {
+            cbCarColor.SelectedIndex = 0;
             try
             {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:5006/api/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage response = await client.GetAsync("CarMakes");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+                        List<CarMake> carMakes = JsonConvert.DeserializeObject<List<CarMake>>(json);
+                       
+                        cbCarMake.DisplayMember = "Name";
+                        cbCarMake.ValueMember = "MakeId";
+                        cbCarMake.DataSource = carMakes;
+                    }
+                }
                 PopulateGrid();
             }
             catch (Exception ex)
@@ -46,7 +65,7 @@ namespace CarRentalMang.WinFormApp
                         List<Car> cars = JsonConvert.DeserializeObject<List<Car>>(json);
                         gvCars.DataSource = cars;
                         gvCars.Columns[0].Visible = false;
-                        gvCars.Columns[3].HeaderText = "License Plate Number";
+                        gvCars.Columns[4].HeaderText = "License Plate Number";
 
                     }
                 }
@@ -69,14 +88,14 @@ namespace CarRentalMang.WinFormApp
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var newCar = new Car
-                    {
-                        Name = tbCarName.Text,
-                        Color = tbCarColor.Text,
-                        Make = tbCarBrand.Text,
+                    var makeId = (int)cbCarMake.SelectedValue;
+                    var modelId = (int)cbCarModel.SelectedValue;
+
+                    var newCar = new CarPost
+                    {                     
+                        Color = cbCarColor.Text,
                         LicensePlateNumber = tbCarNo.Text,
                         Availability = true
-
                     };
                     var errorMsg = ValidateUserInput(newCar);
                     if (errorMsg.Length == 0)
@@ -84,16 +103,16 @@ namespace CarRentalMang.WinFormApp
                         var json = JsonConvert.SerializeObject(newCar);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                        HttpResponseMessage response = await client.PostAsync("Cars/Add", content);
+                        HttpResponseMessage response = await client.PostAsync($"Cars/{makeId}/{modelId}", content);
                         if (response.IsSuccessStatusCode)
                         {
                             //string result = await response.Content.ReadAsStringAsync();
                             //MessageBox.Show(result);
                             MessageBox.Show(
                                $"YOU HAVE ADDED : \n\r" +
-                               $"Name : {tbCarName.Text}\n\r" +
-                               $"Color : {tbCarColor.Text}\n\r" +
-                               $"Make : {tbCarBrand.Text}\n\r" +
+                               $"Make : {cbCarMake.Text}\n\r" +
+                               $"Model : {cbCarModel.Text}\n\r" +
+                               $"Color : {cbCarColor.Text}\n\r" +
                                $"LplateNo.: {tbCarNo.Text}\n\r"
 
                               );
@@ -103,8 +122,8 @@ namespace CarRentalMang.WinFormApp
                             string result = await response.Content.ReadAsStringAsync();
                             if (result.Contains("Already Exist"))
                                 MessageBox.Show($"Car With License Plate No. : {tbCarNo.Text}  Already Exist");
-                            else if (result.Contains("Car Availability Should Be True"))
-                                MessageBox.Show("Car Availability Should Be True,While Adding");
+                            else if (result.Contains("Model Limit exceeded"))
+                                MessageBox.Show("Model Limit exceeded : For a model, maximum 3 car of same color is allowed");
                             else 
                             MessageBox.Show("Server Is Not Responding");
                         }
@@ -142,42 +161,33 @@ namespace CarRentalMang.WinFormApp
                         //var id = int.Parse(tbCarId.Text);
                         var id = (int)gvCars.SelectedRows[0].Cells[0].Value;
 
-                        var carToBeUpdate = new Car
-                        {
-                            Name = tbCarName.Text,
-                            Color = tbCarColor.Text,
-                            Make = tbCarBrand.Text,
+                        var carToBeUpdate = new CarPost
+                        { 
+                            Color = cbCarColor.Text,
                             LicensePlateNumber = tbCarNo.Text,
-                            Availability = bool.Parse(gvCars.SelectedRows[0].Cells[5].Value.ToString())
-                            
+                            Availability = bool.Parse(gvCars.SelectedRows[0].Cells[5].Value.ToString())  
                         };
 
-                        var errorMsg = ValidateUserInput(carToBeUpdate);
-                        if (errorMsg.Length == 0)
-                        {
-                            var json = JsonConvert.SerializeObject(carToBeUpdate);
-                            var content = new StringContent(json, Encoding.UTF8, "application/json");
+                        var json = JsonConvert.SerializeObject(carToBeUpdate);
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                            HttpResponseMessage response = await client.PutAsync($"Cars/Update/{id}", content);
-                            if (response.IsSuccessStatusCode)
-                            {
-                                //string result = await response.Content.ReadAsStringAsync();
-                                //MessageBox.Show(result);
-                                MessageBox.Show(
-                                   $"YOU HAVE UPDATED : \n\r" +
-                                   $"Name : {tbCarName.Text}\n\r" +
-                                   $"Color : {tbCarColor.Text}\n\r" +
-                                   $"Make : {tbCarBrand.Text}\n\r" +
-                                   $"LplateNo.: {tbCarNo.Text}\n\r" 
-                                  
-                                  );
-                                PopulateGrid();
-                            }
-                            else
-                                MessageBox.Show(await response.Content.ReadAsStringAsync());
+                        HttpResponseMessage response = await client.PutAsync($"Cars/Update/{id}", content);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            //string result = await response.Content.ReadAsStringAsync();
+                            //MessageBox.Show(result);
+                            MessageBox.Show(
+                               $"YOU HAVE UPDATED : \n\r" +
+                               $"Make : {cbCarMake.Text}\n\r" +
+                               $"Model : {cbCarModel.Text}\n\r" +
+                               $"Color : {cbCarColor.Text}\n\r" +
+                               $"LplateNo.: {tbCarNo.Text}\n\r"
+
+                              );
+                            PopulateGrid();
                         }
                         else
-                            MessageBox.Show($"Error: {errorMsg}");
+                            MessageBox.Show(await response.Content.ReadAsStringAsync());
                     }
 
 
@@ -238,31 +248,62 @@ namespace CarRentalMang.WinFormApp
 
         }
 
+        private  void cbCarMake_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbCarMake.SelectedValue.ToString() != null)
+            {
+                var makeId = Convert.ToInt32(cbCarMake.SelectedValue.ToString());
+                LoadMakeModels(makeId);
+            }
+                
+        }
+
+        private async void LoadMakeModels(int makeId)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:5006/api/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = await client.GetAsync($"CarMakes/{makeId}/models");
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    List<CarModel> carModels = JsonConvert.DeserializeObject<List<CarModel>>(json);
+
+                    var cbCarModels = carModels.Select(m => new
+                    {
+                        ModelId = m.ModelId,
+                        m.Name,
+                        m.IsAvailable
+                    }).ToList();
+
+                    var availModles = cbCarModels.Where(m => m.IsAvailable == true).ToList();
+
+                    cbCarModel.DisplayMember = "Name";
+                    cbCarModel.ValueMember = "ModelId";
+                    cbCarModel.DataSource = availModles;
+                    
+                }
+            }
+        }
         private void gvCars_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             //tbCarId.Text = gvCars.SelectedRows[0].Cells[0].Value.ToString();
-            tbCarName.Text = gvCars.SelectedRows[0].Cells[1].Value.ToString();
-            tbCarColor.Text = gvCars.SelectedRows[0].Cells[2].Value.ToString();
-            tbCarNo.Text = gvCars.SelectedRows[0].Cells[3].Value.ToString();
-            tbCarBrand.Text = gvCars.SelectedRows[0].Cells[4].Value.ToString();
+            cbCarMake.Text = gvCars.SelectedRows[0].Cells[1].Value.ToString();
+            cbCarModel.Text = gvCars.SelectedRows[0].Cells[2].Value.ToString();
+            cbCarColor.Text = gvCars.SelectedRows[0].Cells[3].Value.ToString();
+            tbCarNo.Text = gvCars.SelectedRows[0].Cells[4].Value.ToString();
         }
 
-        private string ValidateUserInput(Car car)
+        private string ValidateUserInput(CarPost car)
         {
 
             var errorMessage = "";
 
-            if (string.IsNullOrWhiteSpace(car.Name))
-                errorMessage += "Error : Please Enter Name.\n\r";
-
-            if (car.Name.Length < 4 || car.Name.Length > 50)
-                errorMessage += "Error : Car Name Sould Be In The Range Of 4-50 Chars.\n\r";
-
             if (string.IsNullOrWhiteSpace(car.Color))
                 errorMessage += "Error : Please Enter Color.\n\r";
-
-            if (car.Color.Length < 3 || car.Color.Length > 50)
-                errorMessage += "Error : Car Color Sould Be In The Range Of 3-15 Chars.\n\r";
 
             if (string.IsNullOrWhiteSpace(car.LicensePlateNumber))
                 errorMessage += "Error : Please Enter License Plate Number.\n\r";
@@ -270,23 +311,19 @@ namespace CarRentalMang.WinFormApp
             if ((car.LicensePlateNumber).Length != 10)
                 errorMessage += "Error : License Plate Number Should Be 10-Characters Long.\n\r";
 
-            if (string.IsNullOrWhiteSpace(car.Make))
-                errorMessage += "Error : Please Enter Make Name.\n\r";
-
-            if (car.Make.Length < 4 || car.Make.Length > 24)
-                errorMessage += "Error : Car Make Sould Be In The Range Of 4-24 Chars.\n\r";
-
             return errorMessage;
         }
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            tbCarName.Clear();
-            tbCarColor.Clear();
+            cbCarMake.SelectedIndex = 0;
+            cbCarModel.SelectedIndex = 0;
+            cbCarColor.SelectedIndex = 0;
             tbCarNo.Clear();
-            tbCarBrand.Clear();
 
             PopulateGrid();
         }
+
+       
     }
 }

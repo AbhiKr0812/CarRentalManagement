@@ -31,7 +31,7 @@ namespace CarRentalManagement.Api.Repositories
 
                     var carsWithSameColor = _carRentalDb.Cars.Where(c => c.Model == car.Model && c.Color == car.Color).ToList();
                     if (carsWithSameColor.Count >= 3)
-                        throw new BadRequestException($"Limit exceeded : maximum 3 car of same color can be added");
+                        throw new BadRequestException("Model Limit exceeded : For a model, maximum 3 car of same color is allowed");
 
                     await _carRentalDb.Cars.AddAsync(car);
                     await _carRentalDb.SaveChangesAsync();

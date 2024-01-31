@@ -29,19 +29,24 @@
         private void InitializeComponent()
         {
             this.gvCars = new System.Windows.Forms.DataGridView();
-            this.tbCarColor = new System.Windows.Forms.TextBox();
+            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.carMake = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.carModel = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.carColor = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.carNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.carAvailability = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lbColor = new System.Windows.Forms.Label();
             this.tbCarNo = new System.Windows.Forms.TextBox();
             this.lbCarNo = new System.Windows.Forms.Label();
-            this.tbCarBrand = new System.Windows.Forms.TextBox();
             this.lbMake = new System.Windows.Forms.Label();
-            this.tbCarName = new System.Windows.Forms.TextBox();
             this.lbCarModel = new System.Windows.Forms.Label();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.cbCarMake = new System.Windows.Forms.ComboBox();
+            this.cbCarModel = new System.Windows.Forms.ComboBox();
+            this.cbCarColor = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.gvCars)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,6 +54,13 @@
             // 
             this.gvCars.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gvCars.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gvCars.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Id,
+            this.carMake,
+            this.carModel,
+            this.carColor,
+            this.carNo,
+            this.carAvailability});
             this.gvCars.Location = new System.Drawing.Point(12, 28);
             this.gvCars.Name = "gvCars";
             this.gvCars.RowHeadersWidth = 51;
@@ -57,12 +69,48 @@
             this.gvCars.TabIndex = 1;
             this.gvCars.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvCars_CellMouseDoubleClick);
             // 
-            // tbCarColor
+            // Id
             // 
-            this.tbCarColor.Location = new System.Drawing.Point(521, 496);
-            this.tbCarColor.Name = "tbCarColor";
-            this.tbCarColor.Size = new System.Drawing.Size(198, 22);
-            this.tbCarColor.TabIndex = 1;
+            this.Id.DataPropertyName = "Id";
+            this.Id.HeaderText = "CarId";
+            this.Id.MinimumWidth = 6;
+            this.Id.Name = "Id";
+            this.Id.Visible = false;
+            // 
+            // carMake
+            // 
+            this.carMake.DataPropertyName = "Make";
+            this.carMake.HeaderText = "Make";
+            this.carMake.MinimumWidth = 6;
+            this.carMake.Name = "carMake";
+            // 
+            // carModel
+            // 
+            this.carModel.DataPropertyName = "Model";
+            this.carModel.HeaderText = "Model";
+            this.carModel.MinimumWidth = 6;
+            this.carModel.Name = "carModel";
+            // 
+            // carColor
+            // 
+            this.carColor.DataPropertyName = "Color";
+            this.carColor.HeaderText = "Color";
+            this.carColor.MinimumWidth = 6;
+            this.carColor.Name = "carColor";
+            // 
+            // carNo
+            // 
+            this.carNo.DataPropertyName = "LicensePlateNumber";
+            this.carNo.HeaderText = "License Plate No";
+            this.carNo.MinimumWidth = 6;
+            this.carNo.Name = "carNo";
+            // 
+            // carAvailability
+            // 
+            this.carAvailability.DataPropertyName = "Availability";
+            this.carAvailability.HeaderText = "Available";
+            this.carAvailability.MinimumWidth = 6;
+            this.carAvailability.Name = "carAvailability";
             // 
             // lbColor
             // 
@@ -78,7 +126,7 @@
             // tbCarNo
             // 
             this.tbCarNo.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.tbCarNo.Location = new System.Drawing.Point(790, 496);
+            this.tbCarNo.Location = new System.Drawing.Point(790, 493);
             this.tbCarNo.Name = "tbCarNo";
             this.tbCarNo.Size = new System.Drawing.Size(198, 22);
             this.tbCarNo.TabIndex = 2;
@@ -94,13 +142,6 @@
             this.lbCarNo.TabIndex = 6;
             this.lbCarNo.Text = "License Plate No";
             // 
-            // tbCarBrand
-            // 
-            this.tbCarBrand.Location = new System.Drawing.Point(12, 496);
-            this.tbCarBrand.Name = "tbCarBrand";
-            this.tbCarBrand.Size = new System.Drawing.Size(198, 22);
-            this.tbCarBrand.TabIndex = 3;
-            // 
             // lbMake
             // 
             this.lbMake.AutoSize = true;
@@ -111,13 +152,6 @@
             this.lbMake.Size = new System.Drawing.Size(55, 22);
             this.lbMake.TabIndex = 8;
             this.lbMake.Text = "Make";
-            // 
-            // tbCarName
-            // 
-            this.tbCarName.Location = new System.Drawing.Point(268, 496);
-            this.tbCarName.Name = "tbCarName";
-            this.tbCarName.Size = new System.Drawing.Size(198, 22);
-            this.tbCarName.TabIndex = 0;
             // 
             // lbCarModel
             // 
@@ -150,6 +184,7 @@
             this.btnUpdate.TabIndex = 15;
             this.btnUpdate.Text = "Update";
             this.btnUpdate.UseVisualStyleBackColor = false;
+            this.btnUpdate.Visible = false;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // btnDelete
@@ -174,16 +209,41 @@
             this.btnReset.UseVisualStyleBackColor = false;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
-            // label2
+            // cbCarMake
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label2.Location = new System.Drawing.Point(12, 5);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(331, 20);
-            this.label2.TabIndex = 18;
-            this.label2.Text = "Please Double Click On A Row, To Update.";
+            this.cbCarMake.FormattingEnabled = true;
+            this.cbCarMake.Location = new System.Drawing.Point(12, 493);
+            this.cbCarMake.Name = "cbCarMake";
+            this.cbCarMake.Size = new System.Drawing.Size(174, 24);
+            this.cbCarMake.TabIndex = 19;
+            this.cbCarMake.SelectedIndexChanged += new System.EventHandler(this.cbCarMake_SelectedIndexChanged);
+            // 
+            // cbCarModel
+            // 
+            this.cbCarModel.FormattingEnabled = true;
+            this.cbCarModel.Location = new System.Drawing.Point(268, 493);
+            this.cbCarModel.Name = "cbCarModel";
+            this.cbCarModel.Size = new System.Drawing.Size(174, 24);
+            this.cbCarModel.TabIndex = 20;
+            // 
+            // cbCarColor
+            // 
+            this.cbCarColor.AutoCompleteCustomSource.AddRange(new string[] {
+            "Black",
+            "Grey",
+            "Red",
+            "White"});
+            this.cbCarColor.FormattingEnabled = true;
+            this.cbCarColor.Items.AddRange(new object[] {
+            "--Select--",
+            "Black",
+            "Grey",
+            "Red",
+            "White"});
+            this.cbCarColor.Location = new System.Drawing.Point(522, 493);
+            this.cbCarColor.Name = "cbCarColor";
+            this.cbCarColor.Size = new System.Drawing.Size(174, 24);
+            this.cbCarColor.TabIndex = 21;
             // 
             // ManageCars
             // 
@@ -191,18 +251,17 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.ClientSize = new System.Drawing.Size(1165, 627);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.cbCarColor);
+            this.Controls.Add(this.cbCarModel);
+            this.Controls.Add(this.cbCarMake);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnAdd);
-            this.Controls.Add(this.tbCarName);
             this.Controls.Add(this.lbCarModel);
-            this.Controls.Add(this.tbCarBrand);
             this.Controls.Add(this.lbMake);
             this.Controls.Add(this.tbCarNo);
             this.Controls.Add(this.lbCarNo);
-            this.Controls.Add(this.tbCarColor);
             this.Controls.Add(this.lbColor);
             this.Controls.Add(this.gvCars);
             this.Name = "ManageCars";
@@ -217,18 +276,23 @@
         #endregion
 
         private System.Windows.Forms.DataGridView gvCars;
-        private System.Windows.Forms.TextBox tbCarColor;
         private System.Windows.Forms.Label lbColor;
         private System.Windows.Forms.TextBox tbCarNo;
         private System.Windows.Forms.Label lbCarNo;
-        private System.Windows.Forms.TextBox tbCarBrand;
         private System.Windows.Forms.Label lbMake;
-        private System.Windows.Forms.TextBox tbCarName;
         private System.Windows.Forms.Label lbCarModel;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnReset;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cbCarMake;
+        private System.Windows.Forms.ComboBox cbCarModel;
+        private System.Windows.Forms.ComboBox cbCarColor;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn carMake;
+        private System.Windows.Forms.DataGridViewTextBoxColumn carModel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn carColor;
+        private System.Windows.Forms.DataGridViewTextBoxColumn carNo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn carAvailability;
     }
 }

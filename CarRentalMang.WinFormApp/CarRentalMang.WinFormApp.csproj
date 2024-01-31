@@ -72,6 +72,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Car.cs" />
+    <Compile Include="CarMake.cs" />
+    <Compile Include="CarModel.cs" />
+    <Compile Include="CarPost.cs" />
     <Compile Include="ClosedRentals.cs">
       <SubType>Form</SubType>
     </Compile>

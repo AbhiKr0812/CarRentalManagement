@@ -39,7 +39,7 @@ namespace CarRentalMang.WinFormApp
                         var cbCars = cars.Select(q => new
                         {
                             Id = q.Id,
-                            Name = q.Name + " " + q.Color,
+                            Name = q.Model + " " + q.Color,
                             Availability = q.Availability
                         }).ToList();
 
@@ -376,7 +376,7 @@ namespace CarRentalMang.WinFormApp
                     var cbCars = cars.Select(q => new
                     {
                         Id = q.Id,
-                        Name = q.Name + " " + q.Color,
+                        Name = q.Model + " " + q.Color,
                         Availability = q.Availability
                     }).ToList();
 
