@@ -39,15 +39,6 @@
             this.lbCarNo = new System.Windows.Forms.Label();
             this.lbPickUp = new System.Windows.Forms.Label();
             this.gvRentals = new System.Windows.Forms.DataGridView();
-            this.rentalId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vehicleId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.custName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.rentedCar = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.pickUp = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.drop = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cost = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.compStatus = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.dtPickUp = new System.Windows.Forms.DateTimePicker();
             this.dtDrop = new System.Windows.Forms.DateTimePicker();
             this.cbAvailCars = new System.Windows.Forms.ComboBox();
@@ -59,8 +50,15 @@
             this.label4 = new System.Windows.Forms.Label();
             this.tbCarId = new System.Windows.Forms.TextBox();
             this.lbCarId = new System.Windows.Forms.Label();
-            this.richTbComment = new System.Windows.Forms.RichTextBox();
-            this.lbComment = new System.Windows.Forms.Label();
+            this.rentalId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vehicleId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.custName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rentedCar = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pickUp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.drop = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cost = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.compStatus = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gvRentals)).BeginInit();
             this.SuspendLayout();
             // 
@@ -68,9 +66,9 @@
             // 
             this.btnUpdate.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.btnUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUpdate.Location = new System.Drawing.Point(381, 592);
+            this.btnUpdate.Location = new System.Drawing.Point(789, 555);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(122, 38);
+            this.btnUpdate.Size = new System.Drawing.Size(122, 46);
             this.btnUpdate.TabIndex = 29;
             this.btnUpdate.Text = "Update";
             this.btnUpdate.UseVisualStyleBackColor = false;
@@ -80,9 +78,9 @@
             // 
             this.btnAdd.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAdd.Location = new System.Drawing.Point(173, 592);
+            this.btnAdd.Location = new System.Drawing.Point(789, 475);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(122, 38);
+            this.btnAdd.Size = new System.Drawing.Size(122, 48);
             this.btnAdd.TabIndex = 28;
             this.btnAdd.Text = "Add ";
             this.btnAdd.UseVisualStyleBackColor = false;
@@ -91,7 +89,7 @@
             // tbCost
             // 
             this.tbCost.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.tbCost.Location = new System.Drawing.Point(492, 548);
+            this.tbCost.Location = new System.Drawing.Point(498, 579);
             this.tbCost.Name = "tbCost";
             this.tbCost.Size = new System.Drawing.Size(198, 22);
             this.tbCost.TabIndex = 27;
@@ -102,7 +100,7 @@
             this.label1.AutoSize = true;
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(492, 518);
+            this.label1.Location = new System.Drawing.Point(498, 549);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 22);
             this.label1.TabIndex = 26;
@@ -110,7 +108,7 @@
             // 
             // tbCustName
             // 
-            this.tbCustName.Location = new System.Drawing.Point(14, 471);
+            this.tbCustName.Location = new System.Drawing.Point(20, 502);
             this.tbCustName.Name = "tbCustName";
             this.tbCustName.Size = new System.Drawing.Size(198, 22);
             this.tbCustName.TabIndex = 25;
@@ -121,7 +119,7 @@
             this.lbCustName.AutoSize = true;
             this.lbCustName.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbCustName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCustName.Location = new System.Drawing.Point(14, 444);
+            this.lbCustName.Location = new System.Drawing.Point(20, 475);
             this.lbCustName.Name = "lbCustName";
             this.lbCustName.Size = new System.Drawing.Size(146, 22);
             this.lbCustName.TabIndex = 24;
@@ -132,7 +130,7 @@
             this.lbDrop.AutoSize = true;
             this.lbDrop.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbDrop.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbDrop.Location = new System.Drawing.Point(249, 518);
+            this.lbDrop.Location = new System.Drawing.Point(255, 549);
             this.lbDrop.Name = "lbDrop";
             this.lbDrop.Size = new System.Drawing.Size(145, 22);
             this.lbDrop.TabIndex = 22;
@@ -141,7 +139,7 @@
             // tbDLNo
             // 
             this.tbDLNo.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.tbDLNo.Location = new System.Drawing.Point(249, 471);
+            this.tbDLNo.Location = new System.Drawing.Point(255, 502);
             this.tbDLNo.Name = "tbDLNo";
             this.tbDLNo.Size = new System.Drawing.Size(198, 22);
             this.tbDLNo.TabIndex = 21;
@@ -152,7 +150,7 @@
             this.lbCarNo.AutoSize = true;
             this.lbCarNo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbCarNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCarNo.Location = new System.Drawing.Point(249, 444);
+            this.lbCarNo.Location = new System.Drawing.Point(255, 475);
             this.lbCarNo.Name = "lbCarNo";
             this.lbCarNo.Size = new System.Drawing.Size(172, 22);
             this.lbCarNo.TabIndex = 20;
@@ -163,7 +161,7 @@
             this.lbPickUp.AutoSize = true;
             this.lbPickUp.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbPickUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPickUp.Location = new System.Drawing.Point(14, 518);
+            this.lbPickUp.Location = new System.Drawing.Point(20, 549);
             this.lbPickUp.Name = "lbPickUp";
             this.lbPickUp.Size = new System.Drawing.Size(163, 22);
             this.lbPickUp.TabIndex = 18;
@@ -187,82 +185,15 @@
             this.gvRentals.Name = "gvRentals";
             this.gvRentals.RowHeadersWidth = 51;
             this.gvRentals.RowTemplate.Height = 24;
-            this.gvRentals.Size = new System.Drawing.Size(1090, 382);
+            this.gvRentals.Size = new System.Drawing.Size(1090, 401);
             this.gvRentals.TabIndex = 17;
             this.gvRentals.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvRentals_CellClick);
-            // 
-            // rentalId
-            // 
-            this.rentalId.DataPropertyName = "Id";
-            this.rentalId.HeaderText = "Id";
-            this.rentalId.MinimumWidth = 6;
-            this.rentalId.Name = "rentalId";
-            this.rentalId.Visible = false;
-            // 
-            // vehicleId
-            // 
-            this.vehicleId.DataPropertyName = "VehicleId";
-            this.vehicleId.HeaderText = "Car Id";
-            this.vehicleId.MinimumWidth = 6;
-            this.vehicleId.Name = "vehicleId";
-            this.vehicleId.Visible = false;
-            // 
-            // custName
-            // 
-            this.custName.DataPropertyName = "CustomerName";
-            this.custName.HeaderText = "Customer Name";
-            this.custName.MinimumWidth = 6;
-            this.custName.Name = "custName";
-            // 
-            // dlNo
-            // 
-            this.dlNo.DataPropertyName = "DrivingLicenceNo";
-            this.dlNo.HeaderText = "Driving License No";
-            this.dlNo.MinimumWidth = 6;
-            this.dlNo.Name = "dlNo";
-            // 
-            // rentedCar
-            // 
-            this.rentedCar.DataPropertyName = "CarName";
-            this.rentedCar.HeaderText = "Rented Car";
-            this.rentedCar.MinimumWidth = 6;
-            this.rentedCar.Name = "rentedCar";
-            // 
-            // pickUp
-            // 
-            this.pickUp.DataPropertyName = "PickUpDate";
-            this.pickUp.HeaderText = "PickUp Date";
-            this.pickUp.MinimumWidth = 6;
-            this.pickUp.Name = "pickUp";
-            // 
-            // drop
-            // 
-            this.drop.DataPropertyName = "DropDate";
-            this.drop.HeaderText = "Drop Date";
-            this.drop.MinimumWidth = 6;
-            this.drop.Name = "drop";
-            // 
-            // cost
-            // 
-            this.cost.DataPropertyName = "Cost";
-            this.cost.HeaderText = "Rental Cost";
-            this.cost.MinimumWidth = 6;
-            this.cost.Name = "cost";
-            // 
-            // compStatus
-            // 
-            this.compStatus.DataPropertyName = "CompletionStatus";
-            this.compStatus.HeaderText = "Completed";
-            this.compStatus.MinimumWidth = 6;
-            this.compStatus.Name = "compStatus";
-            this.compStatus.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.compStatus.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // dtPickUp
             // 
             this.dtPickUp.CustomFormat = "dd-MM-yyyy HH:mm:ss";
             this.dtPickUp.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtPickUp.Location = new System.Drawing.Point(14, 548);
+            this.dtPickUp.Location = new System.Drawing.Point(20, 579);
             this.dtPickUp.Name = "dtPickUp";
             this.dtPickUp.Size = new System.Drawing.Size(200, 22);
             this.dtPickUp.TabIndex = 31;
@@ -271,7 +202,7 @@
             // 
             this.dtDrop.CustomFormat = "dd-MM-yyyy HH:mm:ss";
             this.dtDrop.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtDrop.Location = new System.Drawing.Point(249, 548);
+            this.dtDrop.Location = new System.Drawing.Point(255, 579);
             this.dtDrop.Name = "dtDrop";
             this.dtDrop.Size = new System.Drawing.Size(200, 22);
             this.dtDrop.TabIndex = 32;
@@ -280,7 +211,7 @@
             // 
             this.cbAvailCars.FormattingEnabled = true;
             this.cbAvailCars.ItemHeight = 16;
-            this.cbAvailCars.Location = new System.Drawing.Point(492, 469);
+            this.cbAvailCars.Location = new System.Drawing.Point(498, 500);
             this.cbAvailCars.Name = "cbAvailCars";
             this.cbAvailCars.Size = new System.Drawing.Size(198, 24);
             this.cbAvailCars.TabIndex = 33;
@@ -290,7 +221,7 @@
             this.lbAvailableCars.AutoSize = true;
             this.lbAvailableCars.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbAvailableCars.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbAvailableCars.Location = new System.Drawing.Point(492, 444);
+            this.lbAvailableCars.Location = new System.Drawing.Point(498, 475);
             this.lbAvailableCars.Name = "lbAvailableCars";
             this.lbAvailableCars.Size = new System.Drawing.Size(2, 22);
             this.lbAvailableCars.TabIndex = 34;
@@ -298,7 +229,7 @@
             // tbRentalId
             // 
             this.tbRentalId.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.tbRentalId.Location = new System.Drawing.Point(408, 521);
+            this.tbRentalId.Location = new System.Drawing.Point(584, 552);
             this.tbRentalId.Name = "tbRentalId";
             this.tbRentalId.Size = new System.Drawing.Size(39, 22);
             this.tbRentalId.TabIndex = 38;
@@ -309,7 +240,7 @@
             this.lbrentalId.AutoSize = true;
             this.lbrentalId.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbrentalId.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbrentalId.Location = new System.Drawing.Point(408, 496);
+            this.lbrentalId.Location = new System.Drawing.Point(584, 527);
             this.lbrentalId.Name = "lbrentalId";
             this.lbrentalId.Size = new System.Drawing.Size(86, 22);
             this.lbrentalId.TabIndex = 37;
@@ -320,9 +251,9 @@
             // 
             this.bynReset.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.bynReset.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bynReset.Location = new System.Drawing.Point(578, 592);
+            this.bynReset.Location = new System.Drawing.Point(949, 475);
             this.bynReset.Name = "bynReset";
-            this.bynReset.Size = new System.Drawing.Size(122, 38);
+            this.bynReset.Size = new System.Drawing.Size(122, 48);
             this.bynReset.TabIndex = 39;
             this.bynReset.Text = "Reset";
             this.bynReset.UseVisualStyleBackColor = false;
@@ -332,9 +263,9 @@
             // 
             this.btnClosedRentals.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.btnClosedRentals.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClosedRentals.Location = new System.Drawing.Point(790, 587);
+            this.btnClosedRentals.Location = new System.Drawing.Point(949, 546);
             this.btnClosedRentals.Name = "btnClosedRentals";
-            this.btnClosedRentals.Size = new System.Drawing.Size(180, 43);
+            this.btnClosedRentals.Size = new System.Drawing.Size(122, 55);
             this.btnClosedRentals.TabIndex = 40;
             this.btnClosedRentals.Text = "Closed Rentals";
             this.btnClosedRentals.UseVisualStyleBackColor = false;
@@ -354,7 +285,7 @@
             // tbCarId
             // 
             this.tbCarId.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.tbCarId.Location = new System.Drawing.Point(547, 521);
+            this.tbCarId.Location = new System.Drawing.Point(675, 552);
             this.tbCarId.Name = "tbCarId";
             this.tbCarId.Size = new System.Drawing.Size(39, 22);
             this.tbCarId.TabIndex = 43;
@@ -365,31 +296,91 @@
             this.lbCarId.AutoSize = true;
             this.lbCarId.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbCarId.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCarId.Location = new System.Drawing.Point(548, 496);
+            this.lbCarId.Location = new System.Drawing.Point(676, 527);
             this.lbCarId.Name = "lbCarId";
             this.lbCarId.Size = new System.Drawing.Size(62, 22);
             this.lbCarId.TabIndex = 42;
             this.lbCarId.Text = "Car Id";
             this.lbCarId.Visible = false;
             // 
-            // richTbComment
+            // rentalId
             // 
-            this.richTbComment.Location = new System.Drawing.Point(729, 469);
-            this.richTbComment.Name = "richTbComment";
-            this.richTbComment.Size = new System.Drawing.Size(253, 101);
-            this.richTbComment.TabIndex = 44;
-            this.richTbComment.Text = "Customer has read and agreed to the rental Terms & Conditions.";
+            this.rentalId.DataPropertyName = "Id";
+            this.rentalId.HeaderText = "Id";
+            this.rentalId.MinimumWidth = 6;
+            this.rentalId.Name = "rentalId";
+            this.rentalId.Visible = false;
             // 
-            // lbComment
+            // vehicleId
             // 
-            this.lbComment.AutoSize = true;
-            this.lbComment.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbComment.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbComment.Location = new System.Drawing.Point(729, 444);
-            this.lbComment.Name = "lbComment";
-            this.lbComment.Size = new System.Drawing.Size(90, 22);
-            this.lbComment.TabIndex = 45;
-            this.lbComment.Text = "Comment";
+            this.vehicleId.DataPropertyName = "VehicleId";
+            this.vehicleId.HeaderText = "Car Id";
+            this.vehicleId.MinimumWidth = 6;
+            this.vehicleId.Name = "vehicleId";
+            this.vehicleId.Visible = false;
+            // 
+            // custName
+            // 
+            this.custName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.custName.DataPropertyName = "CustomerName";
+            this.custName.HeaderText = "Customer Name";
+            this.custName.MinimumWidth = 6;
+            this.custName.Name = "custName";
+            this.custName.Width = 122;
+            // 
+            // dlNo
+            // 
+            this.dlNo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.dlNo.DataPropertyName = "DrivingLicenceNo";
+            this.dlNo.HeaderText = "Driving License No";
+            this.dlNo.MinimumWidth = 6;
+            this.dlNo.Name = "dlNo";
+            this.dlNo.Width = 120;
+            // 
+            // rentedCar
+            // 
+            this.rentedCar.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.rentedCar.DataPropertyName = "CarName";
+            this.rentedCar.HeaderText = "Rented Car";
+            this.rentedCar.MinimumWidth = 6;
+            this.rentedCar.Name = "rentedCar";
+            this.rentedCar.Width = 96;
+            // 
+            // pickUp
+            // 
+            this.pickUp.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.pickUp.DataPropertyName = "PickUpDate";
+            this.pickUp.HeaderText = "PickUp Date";
+            this.pickUp.MinimumWidth = 6;
+            this.pickUp.Name = "pickUp";
+            this.pickUp.Width = 103;
+            // 
+            // drop
+            // 
+            this.drop.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.drop.DataPropertyName = "DropDate";
+            this.drop.HeaderText = "Drop Date";
+            this.drop.MinimumWidth = 6;
+            this.drop.Name = "drop";
+            this.drop.Width = 91;
+            // 
+            // cost
+            // 
+            this.cost.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.cost.DataPropertyName = "Cost";
+            this.cost.HeaderText = "Rental Cost";
+            this.cost.MinimumWidth = 6;
+            this.cost.Name = "cost";
+            this.cost.Width = 97;
+            // 
+            // compStatus
+            // 
+            this.compStatus.DataPropertyName = "CompletionStatus";
+            this.compStatus.HeaderText = "Completed";
+            this.compStatus.MinimumWidth = 6;
+            this.compStatus.Name = "compStatus";
+            this.compStatus.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.compStatus.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // OpenRentals
             // 
@@ -397,8 +388,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ClientSize = new System.Drawing.Size(1118, 642);
-            this.Controls.Add(this.lbComment);
-            this.Controls.Add(this.richTbComment);
             this.Controls.Add(this.tbCarId);
             this.Controls.Add(this.lbCarId);
             this.Controls.Add(this.label4);
@@ -462,7 +451,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn drop;
         private System.Windows.Forms.DataGridViewTextBoxColumn cost;
         private System.Windows.Forms.DataGridViewCheckBoxColumn compStatus;
-        private System.Windows.Forms.RichTextBox richTbComment;
-        private System.Windows.Forms.Label lbComment;
     }
 }

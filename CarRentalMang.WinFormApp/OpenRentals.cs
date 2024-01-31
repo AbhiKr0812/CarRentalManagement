@@ -38,9 +38,9 @@ namespace CarRentalMang.WinFormApp
                         List<Car> cars = JsonConvert.DeserializeObject<List<Car>>(json);
                         var cbCars = cars.Select(q => new
                         {
-                            Id = q.Id,
-                            Name = q.Model + " " + q.Color,
-                            Availability = q.Availability
+                            q.Id,
+                            Name = q.Model + " " + q.Color +"-"+ q.LicensePlateNumber,
+                            q.Availability
                         }).ToList();
 
                         var availCars = cbCars.Where(c => c.Availability == true).ToList();
@@ -253,7 +253,6 @@ namespace CarRentalMang.WinFormApp
                 var vehicleId = gvRentals.Rows[e.RowIndex].Cells[1].Value;
                 var name = gvRentals.Rows[e.RowIndex].Cells[2].Value;
                 var dlNo = gvRentals.Rows[e.RowIndex].Cells[3].Value;
-                var rentedCar = gvRentals.Rows[e.RowIndex].Cells[4].Value;
                 var pickUp = gvRentals.Rows[e.RowIndex].Cells[5].Value;
                 var drop = gvRentals.Rows[e.RowIndex].Cells[6].Value;
                 var cost = gvRentals.Rows[e.RowIndex].Cells[7].Value;
@@ -302,10 +301,11 @@ namespace CarRentalMang.WinFormApp
                 tbCarId.Text = gvRentals.Rows[e.RowIndex].Cells[1].Value.ToString();
                 tbCustName.Text = gvRentals.Rows[e.RowIndex].Cells[2].Value.ToString();
                 tbDLNo.Text = gvRentals.Rows[e.RowIndex].Cells[3].Value.ToString();
+                cbAvailCars.Text = gvRentals.Rows[e.RowIndex].Cells[4].Value.ToString();
                 dtPickUp.Text = gvRentals.Rows[e.RowIndex].Cells[5].Value.ToString();
                 dtDrop.Text = gvRentals.Rows[e.RowIndex].Cells[6].Value.ToString();
                 tbCost.Text = gvRentals.Rows[e.RowIndex].Cells[7].Value.ToString();
-                //tbCompletion.Text = gvRentals.Rows[e.RowIndex].Cells[8].Value.ToString();
+                
 
                 tbCustName.ReadOnly = true; tbDLNo.ReadOnly = true;
                 lbAvailableCars.Text = "Rented Car";
@@ -459,16 +459,5 @@ namespace CarRentalMang.WinFormApp
         }
 
 
-        //private void gvRentals_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
-        //{
-        //    tbCustName.Text = gvRentals.SelectedRows[0].Cells[1].Value.ToString();
-        //    tbDLNo.Text = gvRentals.SelectedRows[0].Cells[2].Value.ToString();
-        //    cbAvailCars.Text = gvRentals.SelectedRows[0].Cells[3].Value.ToString();
-        //    dtPickUp.Text = gvRentals.SelectedRows[0].Cells[4].Value.ToString();
-        //    dtDrop.Text = gvRentals.SelectedRows[0].Cells[5].Value.ToString();
-        //    tbCost.Text = gvRentals.SelectedRows[0].Cells[6].Value.ToString();
-        //    tbCompletion.Text = gvRentals.SelectedRows[0].Cells[7].Value.ToString();
-
-        //}
     }
 }

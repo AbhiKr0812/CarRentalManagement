@@ -17,8 +17,10 @@ namespace CarRentalManagement.Api.Repositories
 
         public async Task<Car> CreateAsync(int makeId, int modelId, Car car)
         {
-            var errorMessage = ValidateCarNoCarColor(car);
-            if (errorMessage.Length == 0)
+            var carWithSameNo = _carRentalDb.Cars.SingleOrDefault(c => c.LicensePlateNumber == car.LicensePlateNumber);
+            if (carWithSameNo != null)
+                throw new BadRequestException($"Car With License Plate No. : {car.LicensePlateNumber} Already Exist");
+            else
             {
                 if (car.Availability == true)
                 {
@@ -39,8 +41,6 @@ namespace CarRentalManagement.Api.Repositories
                 }
                 throw new BadRequestException("Car Availability Should Be True");
             }
-            else
-                throw new BadRequestException(errorMessage);
             
         }
 
@@ -89,6 +89,14 @@ namespace CarRentalManagement.Api.Repositories
             existingCar.Color = car.Color;
             existingCar.Availability = car.Availability;
 
+            var carsWithSameColor = _carRentalDb.Cars.Where(c => c.Model == existingCar.Model && c.Color == existingCar.Color).ToList();
+            if (carsWithSameColor.Count >= 3)
+                throw new BadRequestException("Model Limit exceeded : For a model, maximum 3 car of same color is allowed");
+
+            var carWithSameNo = _carRentalDb.Cars.SingleOrDefault(c => c.LicensePlateNumber == car.LicensePlateNumber);
+            if (carWithSameNo != null)
+                throw new BadRequestException($"Car With License Plate No. : {car.LicensePlateNumber} Already Exist");
+
             await _carRentalDb.SaveChangesAsync();
             return existingCar;
         }
@@ -109,13 +117,11 @@ namespace CarRentalManagement.Api.Repositories
             throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");
         }
 
-        public string ValidateCarNoCarColor(Car car)
+        public string ValidateCarNo(Car car)
         {
             var errorMsg = "";
 
-            var carWithSameNo = _carRentalDb.Cars.SingleOrDefault(c => c.LicensePlateNumber == car.LicensePlateNumber);
-            if (carWithSameNo != null)
-                return errorMsg = ($"Car With License Plate No. : {car.LicensePlateNumber} Already Exist");
+            
 
             return errorMsg;
         }

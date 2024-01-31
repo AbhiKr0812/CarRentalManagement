@@ -26,6 +26,6 @@ namespace CarRentalManagement.Api.Models.DTOs
         [Required]
         public decimal Cost { get; set; }
         public bool CompletionStatus { get; set; }
-        public string? Description { get; set; }
+        
     }
 }

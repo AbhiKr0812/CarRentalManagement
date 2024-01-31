@@ -49,7 +49,7 @@ namespace CarRentalManagement.Api.Repositories
             foreach (var rental in rentals)
             {
                 var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id .Equals(rental.VehicleId));
-                rental.CarName = car.Model + " " + car.Color;
+                rental.CarName = car.Model + " " + car.Color + "-" + car.LicensePlateNumber;
             }
             return rentals;
         }
@@ -86,7 +86,6 @@ namespace CarRentalManagement.Api.Repositories
             existingRecord.Cost = record.Cost;
             existingRecord.CompletionStatus = record.CompletionStatus;
             existingRecord.VehicleId = record.VehicleId;
-            existingRecord.Description = record.Description;
 
             // Shuffle Car Availability
             var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == record.VehicleId);

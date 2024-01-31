@@ -29,12 +29,6 @@
         private void InitializeComponent()
         {
             this.gvCars = new System.Windows.Forms.DataGridView();
-            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.carMake = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.carModel = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.carColor = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.carNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.carAvailability = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lbColor = new System.Windows.Forms.Label();
             this.tbCarNo = new System.Windows.Forms.TextBox();
             this.lbCarNo = new System.Windows.Forms.Label();
@@ -47,6 +41,14 @@
             this.cbCarMake = new System.Windows.Forms.ComboBox();
             this.cbCarModel = new System.Windows.Forms.ComboBox();
             this.cbCarColor = new System.Windows.Forms.ComboBox();
+            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.carNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.carModel = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.carColor = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.carMake = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.carAvailability = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tbCarId = new System.Windows.Forms.TextBox();
+            this.lbCarId = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.gvCars)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,10 +58,10 @@
             this.gvCars.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gvCars.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Id,
-            this.carMake,
+            this.carNo,
             this.carModel,
             this.carColor,
-            this.carNo,
+            this.carMake,
             this.carAvailability});
             this.gvCars.Location = new System.Drawing.Point(12, 28);
             this.gvCars.Name = "gvCars";
@@ -67,50 +69,8 @@
             this.gvCars.RowTemplate.Height = 24;
             this.gvCars.Size = new System.Drawing.Size(1141, 419);
             this.gvCars.TabIndex = 1;
-            this.gvCars.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gvCars_CellMouseDoubleClick);
-            // 
-            // Id
-            // 
-            this.Id.DataPropertyName = "Id";
-            this.Id.HeaderText = "CarId";
-            this.Id.MinimumWidth = 6;
-            this.Id.Name = "Id";
-            this.Id.Visible = false;
-            // 
-            // carMake
-            // 
-            this.carMake.DataPropertyName = "Make";
-            this.carMake.HeaderText = "Make";
-            this.carMake.MinimumWidth = 6;
-            this.carMake.Name = "carMake";
-            // 
-            // carModel
-            // 
-            this.carModel.DataPropertyName = "Model";
-            this.carModel.HeaderText = "Model";
-            this.carModel.MinimumWidth = 6;
-            this.carModel.Name = "carModel";
-            // 
-            // carColor
-            // 
-            this.carColor.DataPropertyName = "Color";
-            this.carColor.HeaderText = "Color";
-            this.carColor.MinimumWidth = 6;
-            this.carColor.Name = "carColor";
-            // 
-            // carNo
-            // 
-            this.carNo.DataPropertyName = "LicensePlateNumber";
-            this.carNo.HeaderText = "License Plate No";
-            this.carNo.MinimumWidth = 6;
-            this.carNo.Name = "carNo";
-            // 
-            // carAvailability
-            // 
-            this.carAvailability.DataPropertyName = "Availability";
-            this.carAvailability.HeaderText = "Available";
-            this.carAvailability.MinimumWidth = 6;
-            this.carAvailability.Name = "carAvailability";
+            this.gvCars.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gvCars_CellClick);
+
             // 
             // lbColor
             // 
@@ -184,7 +144,6 @@
             this.btnUpdate.TabIndex = 15;
             this.btnUpdate.Text = "Update";
             this.btnUpdate.UseVisualStyleBackColor = false;
-            this.btnUpdate.Visible = false;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // btnDelete
@@ -245,12 +204,78 @@
             this.cbCarColor.Size = new System.Drawing.Size(174, 24);
             this.cbCarColor.TabIndex = 21;
             // 
+            // Id
+            // 
+            this.Id.DataPropertyName = "Id";
+            this.Id.HeaderText = "CarId";
+            this.Id.MinimumWidth = 6;
+            this.Id.Name = "Id";
+            this.Id.Visible = false;
+            // 
+            // carNo
+            // 
+            this.carNo.DataPropertyName = "LicensePlateNumber";
+            this.carNo.HeaderText = "License Plate No";
+            this.carNo.MinimumWidth = 6;
+            this.carNo.Name = "carNo";
+            // 
+            // carModel
+            // 
+            this.carModel.DataPropertyName = "Model";
+            this.carModel.HeaderText = "Model";
+            this.carModel.MinimumWidth = 6;
+            this.carModel.Name = "carModel";
+            // 
+            // carColor
+            // 
+            this.carColor.DataPropertyName = "Color";
+            this.carColor.HeaderText = "Color";
+            this.carColor.MinimumWidth = 6;
+            this.carColor.Name = "carColor";
+            // 
+            // carMake
+            // 
+            this.carMake.DataPropertyName = "Make";
+            this.carMake.HeaderText = "Make";
+            this.carMake.MinimumWidth = 6;
+            this.carMake.Name = "carMake";
+            // 
+            // carAvailability
+            // 
+            this.carAvailability.DataPropertyName = "Availability";
+            this.carAvailability.HeaderText = "Available";
+            this.carAvailability.MinimumWidth = 6;
+            this.carAvailability.Name = "carAvailability";
+            // 
+            // tbCarId
+            // 
+            this.tbCarId.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tbCarId.Location = new System.Drawing.Point(11, 557);
+            this.tbCarId.Name = "tbCarId";
+            this.tbCarId.Size = new System.Drawing.Size(39, 22);
+            this.tbCarId.TabIndex = 45;
+            this.tbCarId.Visible = false;
+            // 
+            // lbCarId
+            // 
+            this.lbCarId.AutoSize = true;
+            this.lbCarId.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbCarId.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbCarId.Location = new System.Drawing.Point(12, 532);
+            this.lbCarId.Name = "lbCarId";
+            this.lbCarId.Size = new System.Drawing.Size(62, 22);
+            this.lbCarId.TabIndex = 44;
+            this.lbCarId.Text = "Car Id";
+            this.lbCarId.Visible = false;
+            // 
             // ManageCars
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.ClientSize = new System.Drawing.Size(1165, 627);
+            this.Controls.Add(this.tbCarId);
+            this.Controls.Add(this.lbCarId);
             this.Controls.Add(this.cbCarColor);
             this.Controls.Add(this.cbCarModel);
             this.Controls.Add(this.cbCarMake);
@@ -289,10 +314,12 @@
         private System.Windows.Forms.ComboBox cbCarModel;
         private System.Windows.Forms.ComboBox cbCarColor;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn carMake;
+        private System.Windows.Forms.DataGridViewTextBoxColumn carNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn carModel;
         private System.Windows.Forms.DataGridViewTextBoxColumn carColor;
-        private System.Windows.Forms.DataGridViewTextBoxColumn carNo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn carMake;
         private System.Windows.Forms.DataGridViewTextBoxColumn carAvailability;
+        private System.Windows.Forms.TextBox tbCarId;
+        private System.Windows.Forms.Label lbCarId;
     }
 }
