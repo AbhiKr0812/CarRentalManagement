@@ -12,8 +12,6 @@ namespace CarRentalManagement.Api.Repositories.IRepositories
 
         Task<Car?> UpdateAsync(int id, Car car);
 
-        Task<Car?> ShuffleCarAvailabilityAsync(int id);
-
         Task<Car?> DeleteAsync(int id);
     }
 }

@@ -45,7 +45,8 @@ namespace CarRentalManagement.Api.Repositories
         {
             var rentals = await _carRentalDb.CarRentalRecords.ToListAsync();
             if (rentals.Count == 0)
-                throw new NotFoundException("There is no record available at this moment");
+                return new List<CarRentalRecord>();
+                
             foreach (var rental in rentals)
             {
                 var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id .Equals(rental.VehicleId));
@@ -58,7 +59,7 @@ namespace CarRentalManagement.Api.Repositories
         {
             var rentals = await _carRentalDb.ClosedRentals.ToListAsync();
             if (rentals.Count == 0)
-                throw new NotFoundException("There is no record available at this moment");
+                return new List<ClosedRentals> ();
             foreach (var rental in rentals)
             {
                 var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id.Equals(rental.VehicleId));
@@ -103,22 +104,6 @@ namespace CarRentalManagement.Api.Repositories
             await _carRentalDb.SaveChangesAsync();
             return existingRecord;
 
-        }
-
-        public async Task<CarRentalRecord?> ApproveCompletion(int id)
-        {
-            var carRental = await _carRentalDb.CarRentalRecords.FirstOrDefaultAsync(c => c.Id == id);
-            if (carRental != null)
-            {
-                if (carRental.CompletionStatus == true)
-                    carRental.CompletionStatus = false;
-                else if (carRental.CompletionStatus == false)
-                    carRental.CompletionStatus = true;
-
-                await _carRentalDb.SaveChangesAsync();
-                return carRental;
-            }
-            throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");
         }
 
         public async Task<ClosedRentals?> DeleteAsync(int id)

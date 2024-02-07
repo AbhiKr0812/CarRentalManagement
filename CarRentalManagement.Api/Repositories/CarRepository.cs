@@ -66,7 +66,7 @@ namespace CarRentalManagement.Api.Repositories
         {
             var cars = await _carRentalDb.Cars.ToListAsync();
             if (cars.Count == 0)
-                throw new NotFoundException("There Is No Car Available At This Moment");
+                return new List<Car>();
             return cars;
         }
 
@@ -90,7 +90,7 @@ namespace CarRentalManagement.Api.Repositories
             existingCar.Availability = car.Availability;
 
             var carsWithSameColor = _carRentalDb.Cars.Where(c => c.Model == existingCar.Model && c.Color == existingCar.Color).ToList();
-            if (carsWithSameColor.Count >= 3)
+            if (carsWithSameColor.Count > 3)
                 throw new BadRequestException("Model Limit exceeded : For a model, maximum 3 car of same color is allowed");
 
             var carWithSameNo = _carRentalDb.Cars.SingleOrDefault(c => c.LicensePlateNumber == car.LicensePlateNumber);
@@ -100,30 +100,6 @@ namespace CarRentalManagement.Api.Repositories
             await _carRentalDb.SaveChangesAsync();
             return existingCar;
         }
-
-        public async Task<Car?> ShuffleCarAvailabilityAsync(int id)
-        {
-            var car = await _carRentalDb.Cars.FirstOrDefaultAsync(c => c.Id == id);
-            if (car != null)
-            {
-                if (car.Availability == true)
-                    car.Availability = false;
-                else if (car.Availability == false)
-                    car.Availability = true;
-
-                await _carRentalDb.SaveChangesAsync();
-                return car;
-            }    
-            throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");
-        }
-
-        public string ValidateCarNo(Car car)
-        {
-            var errorMsg = "";
-
-            
-
-            return errorMsg;
-        }
+ 
     }
 }

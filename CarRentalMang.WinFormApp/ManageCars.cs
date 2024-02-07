@@ -64,9 +64,18 @@ namespace CarRentalMang.WinFormApp
                     {
                         string json = await response.Content.ReadAsStringAsync();
                         List<Car> cars = JsonConvert.DeserializeObject<List<Car>>(json);
-                        gvCars.DataSource = cars;
+
+                        var availableCars = cars.Where(c => c.Availability == true).Select(c => new 
+                        {
+                            c.Id,c.Make,c.Model,c.Color,c.LicensePlateNumber
+                        }).ToList();
+
+                        gvCars.DataSource = availableCars;
                         
                     }
+                    else
+                        MessageBox.Show("Server Is Not Responding");
+
                 }
             }
             catch (Exception ex)
@@ -87,49 +96,57 @@ namespace CarRentalMang.WinFormApp
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var makeId = (int)cbCarMake.SelectedValue;
-                    var modelId = (int)cbCarModel.SelectedValue;
+                    if (cbCarMake.SelectedValue == null)
+                        MessageBox.Show($"{cbCarMake.Text} Doesn't Exist, Please Select Existing Makes From The List");
 
-                    var newCar = new CarPost
-                    {                     
-                        Color = cbCarColor.Text,
-                        LicensePlateNumber = tbCarNo.Text,
-                        Availability = true
-                    };
-                    var errorMsg = ValidateUserInput(newCar);
-                    if (errorMsg.Length == 0)
+                    else if (cbCarModel.SelectedValue == null)
+                        MessageBox.Show($"{cbCarModel.Text} Doesn't Exist, Please Select Existing Models From The List");
+                    else
                     {
-                        var json = JsonConvert.SerializeObject(newCar);
-                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+                        var makeId = (int)cbCarMake.SelectedValue;
+                        var modelId = (int)cbCarModel.SelectedValue;
 
-                        HttpResponseMessage response = await client.PostAsync($"Cars/{makeId}/{modelId}", content);
-                        if (response.IsSuccessStatusCode)
+                        var newCar = new CarPost
                         {
-                            
-                            MessageBox.Show(
-                               $"YOU HAVE ADDED : \n\r" +
-                               $"Make : {cbCarMake.Text}\n\r" +
-                               $"Model : {cbCarModel.Text}\n\r" +
-                               $"Color : {cbCarColor.Text}\n\r" +
-                               $"LplateNo.: {tbCarNo.Text}\n\r"
+                            Color = cbCarColor.Text,
+                            LicensePlateNumber = tbCarNo.Text,
+                            Availability = true
+                        };
+                        var errorMsg = ValidateUserInput(newCar);
+                        if (errorMsg.Length == 0)
+                        {
+                            var json = JsonConvert.SerializeObject(newCar);
+                            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                              );
+                            HttpResponseMessage response = await client.PostAsync($"Cars/{makeId}/{modelId}", content);
+                            if (response.IsSuccessStatusCode)
+                            {
+
+                                MessageBox.Show(
+                                   $"YOU HAVE ADDED : \n\r" +
+                                   $"Make : {cbCarMake.Text}\n\r" +
+                                   $"Model : {cbCarModel.Text}\n\r" +
+                                   $"Color : {cbCarColor.Text}\n\r" +
+                                   $"LplateNo.: {tbCarNo.Text}\n\r"
+
+                                  );
+                            }
+                            else
+                            {
+                                string result = await response.Content.ReadAsStringAsync();
+                                if (result.Contains("Already Exist"))
+                                    MessageBox.Show($"Car With License Plate No. : {tbCarNo.Text}  Already Exist");
+                                else if (result.Contains("Model Limit exceeded"))
+                                    MessageBox.Show("Model Limit exceeded ");
+                                else
+                                    MessageBox.Show("Server Is Not Responding");
+                            }
+
                         }
                         else
-                        {
-                            string result = await response.Content.ReadAsStringAsync();
-                            if (result.Contains("Already Exist"))
-                                MessageBox.Show($"Car With License Plate No. : {tbCarNo.Text}  Already Exist");
-                            else if (result.Contains("Model Limit exceeded"))
-                                MessageBox.Show("Model Limit exceeded : For a model, maximum 3 car of same color is allowed");
-                            else 
-                            MessageBox.Show("Server Is Not Responding");
-                        }
-
+                            MessageBox.Show(errorMsg);
                     }
-                    else
-                        MessageBox.Show(errorMsg);
-
+  
                 }
                 PopulateGrid();
             }
@@ -156,7 +173,7 @@ namespace CarRentalMang.WinFormApp
                     }
                     else
                     {
-                        //var id = int.Parse(tbCarId.Text);
+                      
                         var id = int.Parse(tbCarId.Text);
 
                         var carToBeUpdate = new CarPost
@@ -190,7 +207,7 @@ namespace CarRentalMang.WinFormApp
                             if (result.Contains("Already Exist"))
                                 MessageBox.Show($"Car With License Plate No. : {tbCarNo.Text}  Already Exist");
                             else if (result.Contains("Model Limit exceeded"))
-                                MessageBox.Show("Model Limit exceeded : For a model, maximum 3 car of same color is allowed");
+                                MessageBox.Show("Model Limit exceeded");
                             else
                                 MessageBox.Show("Server Is Not Responding");
                         }
@@ -218,13 +235,13 @@ namespace CarRentalMang.WinFormApp
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    if (gvCars.SelectedRows.Count == 0)
+                    if (tbCarId.Text.Length == 0)
                     {
                         MessageBox.Show("Please Select A Car");
                     }
                     else
                     {
-                        var id = (int)gvCars.SelectedRows[0].Cells[0].Value;
+                        var id = int.Parse(tbCarId.Text);
 
                         DialogResult dr = MessageBox.Show("Are You Sure Want To Delete This Record?",
                             "Delete", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
@@ -234,9 +251,11 @@ namespace CarRentalMang.WinFormApp
                             HttpResponseMessage response = await client.DeleteAsync($"Cars/Delete/{id}");
                             if (response.IsSuccessStatusCode)
                             {
-                                //string result = await response.Content.ReadAsStringAsync();
-                                //MessageBox.Show(result);
                                 MessageBox.Show("Deleted Successfully!");
+                                cbCarMake.SelectedIndex = 0;
+                                cbCarModel.SelectedIndex = 0;
+                                cbCarColor.SelectedIndex = 0;
+                                tbCarNo.Clear();
                                 PopulateGrid();
                             }
                             else
@@ -299,22 +318,19 @@ namespace CarRentalMang.WinFormApp
         }
         private void gvCars_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+
             if (gvCars.Columns[e.ColumnIndex].HeaderText == "License Plate No")
             {
-                if (gvCars.Rows[e.RowIndex].Cells[5].Value.ToString() != "True")
-                    MessageBox.Show("Please Select An Available Car");
-                else
-                {
-                    cbCarMake.Enabled = false;
-                    cbCarModel.Enabled = false;
+                
+                cbCarMake.Enabled = false;
+                cbCarModel.Enabled = false;
 
-                    tbCarId.Text = gvCars.Rows[e.RowIndex].Cells[0].Value.ToString();
-                    cbCarMake.Text = gvCars.Rows[e.RowIndex].Cells[1].Value.ToString();
-                    cbCarModel.Text = gvCars.Rows[e.RowIndex].Cells[2].Value.ToString();
-                    cbCarColor.Text = gvCars.Rows[e.RowIndex].Cells[3].Value.ToString();
-                    tbCarNo.Text = gvCars.Rows[e.RowIndex].Cells[4].Value.ToString();
-                }
-                   
+                tbCarId.Text = gvCars.Rows[e.RowIndex].Cells[0].Value.ToString();
+                cbCarMake.Text = gvCars.Rows[e.RowIndex].Cells[1].Value.ToString();
+                cbCarModel.Text = gvCars.Rows[e.RowIndex].Cells[2].Value.ToString();
+                cbCarColor.Text = gvCars.Rows[e.RowIndex].Cells[3].Value.ToString();
+                tbCarNo.Text = gvCars.Rows[e.RowIndex].Cells[4].Value.ToString();
+
             }
         }
         private string ValidateUserInput(CarPost car)
@@ -340,11 +356,25 @@ namespace CarRentalMang.WinFormApp
             cbCarMake.SelectedIndex = 0;
             cbCarModel.SelectedIndex = 0;
             cbCarColor.SelectedIndex = 0;
-            tbCarNo.Clear();
-
-            PopulateGrid();
+            tbCarNo.Clear(); 
         }
 
-        
+        private void tbCarNo_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char ch = e.KeyChar;
+
+            if (Char.IsLetterOrDigit(ch))
+                e.Handled = false;
+
+            else if (ch == 8)        // Backspace
+                e.Handled = false;
+
+            else if (ch == 46)       // Delete
+                e.Handled = false;
+
+            else if (ch == 12)       // Clear
+                e.Handled = false;
+            else { e.Handled = true; }
+        }
     }
 }

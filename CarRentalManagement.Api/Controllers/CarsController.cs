@@ -92,21 +92,6 @@ namespace CarRentalManagement.Api.Controllers
 
         #endregion
 
-        #region Toggle Car Availability
-        [HttpPut("Availability/{id:int}")]
-        //[Route("{id:int}")]
-        public async Task<IActionResult> ShuffleAvailability([FromRoute] int id)
-        {
-
-            // Update if region exists
-            var updatedCar = await _carRepository.ShuffleCarAvailabilityAsync(id);
-
-            // Convert Domain Model to DTO
-            return Ok(_mapper.Map<CarGetDto>(updatedCar));
-        }
-
-        #endregion
-
         #region Delete A Car
         [HttpDelete]
         [Route("Delete/{id:int}")]

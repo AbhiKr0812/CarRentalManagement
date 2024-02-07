@@ -49,6 +49,9 @@ namespace CarRentalMang.WinFormApp
                         cbAvailCars.DataSource = availCars;
                         lbAvailableCars.Text = "Available Cars";
                     }
+                    else
+                        MessageBox.Show("Server Is Not Responding");
+
                 }
                 
                 PopulateGrid();
@@ -95,12 +98,8 @@ namespace CarRentalMang.WinFormApp
 
                     }
                     else
-                    {
-                        string result = await response.Content.ReadAsStringAsync();
-                        if (result.Contains("no record available"))
-                            MessageBox.Show("There Is No Open Rentals Available At This Moment");
-                          
-                    }
+                        MessageBox.Show("Server Is Not Responding");
+
                 }
             }
             catch (Exception ex)
@@ -131,7 +130,6 @@ namespace CarRentalMang.WinFormApp
                         DropDate = ConvertIntoUTC(dtDrop.Value.ToString()),
                         Cost = Convert.ToDecimal(tbCost.Text),
                         CompletionStatus = false
-                        //CompletionStatus = bool.Parse(tbCompletion.Text)
 
                     };
 
@@ -158,9 +156,8 @@ namespace CarRentalMang.WinFormApp
                     else
                     {
                         string result = await response.Content.ReadAsStringAsync();
-                        if (result.Contains("Should Be False"))
-                            MessageBox.Show("Error : Completion Status Should Be False, While Adding");
-                        else if (result.Contains("already occupied"))
+                       
+                        if (result.Contains("already occupied"))
                             MessageBox.Show($"Error : Driving License {tbDLNo.Text} Is Already Occupied With Active Rental.");
                         else
                         MessageBox.Show("Error : Server is not responding");
@@ -213,8 +210,6 @@ namespace CarRentalMang.WinFormApp
                             HttpResponseMessage response = await client.PutAsync($"Rentals/Update/{id}", content);
                             if (response.IsSuccessStatusCode)
                             {
-                                //string result = await response.Content.ReadAsStringAsync();
-                                //MessageBox.Show(result);
                                 MessageBox.Show(
                                     $"YOU HAVE UPDATED: \n\r" +
                                     $"Customer Name: {tbCustName.Text}\n\r" +
@@ -375,9 +370,9 @@ namespace CarRentalMang.WinFormApp
                     List<Car> cars = JsonConvert.DeserializeObject<List<Car>>(json);
                     var cbCars = cars.Select(q => new
                     {
-                        Id = q.Id,
-                        Name = q.Model + " " + q.Color,
-                        Availability = q.Availability
+                        q.Id,
+                        Name = q.Model + " " + q.Color + "-" + q.LicensePlateNumber,
+                        q.Availability
                     }).ToList();
 
                     var availCars = cbCars.Where(c => c.Availability == true).ToList();
@@ -386,8 +381,6 @@ namespace CarRentalMang.WinFormApp
                     cbAvailCars.DataSource = availCars;
                 }
             }
-
-            PopulateGrid();
 
         }
 
@@ -408,13 +401,13 @@ namespace CarRentalMang.WinFormApp
             else if (ch == 32)        // Spacebar
                 e.Handled = false;
 
-            else if (ch == 8)        // Backspace
+            else if (ch == 8)         // Backspace
                 e.Handled = false;
  
-            else if(ch == 46)       // Delete
+            else if(ch == 46)         // Delete
                 e.Handled = false;
 
-            else if (ch == 12)      // Clear
+            else if (ch == 12)        // Clear
                 e.Handled = false;
             else { e.Handled = true; }
         }
@@ -432,7 +425,7 @@ namespace CarRentalMang.WinFormApp
             else if (ch == 46)       // Delete
                 e.Handled = false;
 
-            else if (ch == 12)      // Clear
+            else if (ch == 12)       // Clear
                 e.Handled = false;
             else { e.Handled = true; }
         }

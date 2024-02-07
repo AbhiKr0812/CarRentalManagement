@@ -14,8 +14,6 @@ namespace CarRentalManagement.Api.Repositories.IRepositories
 
         Task<CarRentalRecord?> UpdateAsync(int id, CarRentalRecord record);
 
-        Task<CarRentalRecord?> ApproveCompletion(int id);
-
         Task<ClosedRentals?> DeleteAsync(int id);
     }
 }

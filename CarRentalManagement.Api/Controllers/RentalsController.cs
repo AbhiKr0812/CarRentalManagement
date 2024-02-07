@@ -109,22 +109,6 @@ namespace CarRentalManagement.Api.Controllers
 
         #endregion
 
-        #region Approve Rental Completion
-
-        //[HttpPut("Approve/{id:int}")]
-        ////[Route("{id:int}")]
-        //public async Task<IActionResult> Update([FromRoute] int id)
-        //{
-        //    //Update if region exists
-        //    var rentalToBeApprove = await _rentalRepository.ApproveCompletion(id);
-
-        //    // Convert Domain Model to DTO
-
-        //    return Ok(_mapper.Map<CarRentalRecordDto>(rentalToBeApprove));
-        //}
-
-        #endregion
-
         #region Delete A Rental
         [HttpDelete]
         [Route("{id:int}")]

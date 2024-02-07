@@ -1,5 +1,6 @@
 ﻿
 using CarRentalManagement.Api.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
 
@@ -14,6 +15,7 @@ namespace CarRentalManagement.Api.Middleware
             _logger = logger;
         }
 
+
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             try
@@ -22,7 +24,8 @@ namespace CarRentalManagement.Api.Middleware
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Something Went Wrong, While Processing{context.Request.Path}");
+                _logger.LogError(ex, $"Error has occured, While Processing{context.Request.Path}");
+                
                 await HandleException(context, ex);
             }
         }
@@ -39,11 +42,6 @@ namespace CarRentalManagement.Api.Middleware
                 message = e.Message;
                 statusCode = HttpStatusCode.NotFound;
 
-            }
-            else if (exceptionType == typeof(NotImplementedException))
-            {
-                message = e.Message;
-                statusCode = HttpStatusCode.NotImplemented;
             }
             else if (exceptionType == typeof(BadRequestException))
             {
@@ -74,4 +72,21 @@ namespace CarRentalManagement.Api.Middleware
             app.UseMiddleware<ExceptionMiddleware>();
         }
     }
+
+    //
+
+    
+
+    //context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+    //ProblemDetails problem = new()
+    //{
+    //    Status = (int)HttpStatusCode.InternalServerError,
+    //    Type = "Server error",
+    //    Title = "Server error",
+    //    Detail = "An internal server has occured"
+    //};
+
+    //string json = JsonSerializer.Serialize(problem);
+    //context.Response.ContentType = "application/json";
+    //await context.Response.WriteAsync(json);
 }
