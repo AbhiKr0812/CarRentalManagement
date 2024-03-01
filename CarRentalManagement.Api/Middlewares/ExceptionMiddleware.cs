@@ -15,7 +15,6 @@ namespace CarRentalManagement.Api.Middleware
             _logger = logger;
         }
 
-
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             try
@@ -60,7 +59,6 @@ namespace CarRentalManagement.Api.Middleware
             return context.Response.WriteAsync(exceptionResult.ToString());
 
         }
-
 
     }
 

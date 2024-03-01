@@ -344,7 +344,7 @@ namespace CarRentalMang.WinFormApp
             if (string.IsNullOrWhiteSpace(car.LicensePlateNumber))
                 errorMessage += "Error : Please Enter License Plate Number.\n\r";
 
-            if ((car.LicensePlateNumber).Length != 10)
+            else if ((car.LicensePlateNumber).Length != 10)
                 errorMessage += "Error : License Plate Number Should Be 10-Characters Long.\n\r";
 
             return errorMessage;

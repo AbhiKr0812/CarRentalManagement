@@ -43,11 +43,10 @@ namespace CarRentalManagement.Api.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            //Get Car From Database: Domain Model
+            // Get Car From Database: Domain Model
             var car = await _carRepository.GetByIdAsync(id);
 
-            //Map/Convert Domain Model to DTO
-            //Return DTO back to client
+            // Map/Convert Domain Model to DTO
             return Ok(_mapper.Map<CarGetDto>(car));
         }
 
@@ -58,18 +57,18 @@ namespace CarRentalManagement.Api.Controllers
         public async Task<IActionResult> Create([FromRoute]int makeId, 
           int modelId,[FromBody] CarPostPutDto carPost)
         {
-            //Map or Convert DTO to Domain Model
+            // Map or Convert DTO to Domain Model
             var newCar = _mapper.Map<Car>(carPost);
 
-            //Use Domain Model to create Region
-            newCar = await _carRepository.CreateAsync(makeId,modelId, newCar);
-            
+            // Use Domain Model to create Region
+            var addedCarId = await _carRepository.CreateAsync(makeId,modelId, newCar);
 
-            //Map Domain Model back to DTO
-            var carDto = _mapper.Map<CarGetDto>(newCar);
+            // Retrieve Newly Added Car and Map to Dto
+            var addedCar = await _carRepository.GetByIdAsync(addedCarId);
+            var carDto = _mapper.Map<CarGetDto>(addedCar);
 
             _logger.LogInformation($" Car : {JsonSerializer.Serialize(carDto)} Got Added Successfully");
-            return CreatedAtAction(nameof(GetById), new { newCar.Id }, carDto);
+            return CreatedAtAction(nameof(GetById), new { addedCar.Id },carDto);
         }
         #endregion
 
