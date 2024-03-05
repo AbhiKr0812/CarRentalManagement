@@ -1,4 +1,4 @@
-CREATE PROCEDURE sp_AddCar
+ALTER PROCEDURE [dbo].[sp_AddCar]
     @LicensePlateNumber NVARCHAR(MAX),
     @Color NVARCHAR(MAX),
     @Availability BIT,
@@ -15,17 +15,17 @@ BEGIN
     -- Check if a car with the same license plate number already exists
     IF EXISTS (SELECT 1 FROM Cars WHERE LicensePlateNumber = @LicensePlateNumber)
     BEGIN
-          PRINT 'A car with the entered LicensePlateNumber already exists.'   
+          RAISERROR('A car with the entered LicensePlateNumber already exists.',16,1)  
     END
 	-- Check if the specified MakeId exist
 	ELSE IF NOT EXISTS (SELECT 1 FROM CarMakes WHERE MakeId = @MakeId)
 	BEGIN
-	      PRINT 'Make does not exist with the entered MakeId.'
+	      RAISERROR('Make does not exist with the entered MakeId.',16,1)
 	END
 	-- Check if the specified ModelId exist
 	ELSE IF NOT EXISTS (SELECT 1 FROM CarModels WHERE ModelId = @ModelId)
     BEGIN
-         PRINT 'Model does not exist with the entered ModelId.'
+          RAISERROR('Model does not exist with the entered ModelId.',16,1)
     END
 
 	ELSE
@@ -45,19 +45,32 @@ BEGIN
 
 	IF @ModelWithSameColor >= 3
 	BEGIN
-	      PRINT 'Model Limit Exceeded : For a model, maximum 3 car of same color is allowed'
+	      RAISERROR('Model Limit Exceeded : For a model, maximum 3 car of same color is allowed',16,1)
 	END
 	
 	ELSE
 	BEGIN
+	 BEGIN TRAN
+	      DECLARE @Error INT
 	      SET NOCOUNT ON;
-
           -- Insert the car details into the Car table
           INSERT INTO Cars (LicensePlateNumber, Color, Availability, Make, Model)
           VALUES (@LicensePlateNumber, @Color, @Availability, @MakeName, @ModelName);
-
+		  
+		  SET @Error = @@ERROR
           -- Retrieve Newly Added CarID
           SET @NewCarId = SCOPE_IDENTITY();
+
+		  IF (@Error <> 0)
+		  BEGIN
+		       ROLLBACK TRANSACTION
+			   PRINT 'Transaction rolled back'
+		  END
+		  ELSE
+		  BEGIN 
+	            COMMIT TRAN
+				PRINT 'Transaction committed'
+	      END
 	END 
 
 	END
