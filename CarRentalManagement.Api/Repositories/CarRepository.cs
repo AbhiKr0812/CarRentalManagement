@@ -19,7 +19,8 @@ namespace CarRentalManagement.Api.Repositories
 
         public async Task<int> CreateAsync(int makeId, int modelId, Car car)
         {
-            string sqlQuery = "exec sp_AddCar @LicensePlateNumber,@Color,@Availability,@MakeId,@ModelId,@NewCarId OUTPUT";
+            string sqlQuery = "exec sp_AddCar @LicensePlateNumber,@Color,@Availability," +
+                "@MakeId,@ModelId,@NewCarId OUTPUT,@ResultType OUTPUT";
 
             var parameters = new[]
             {
@@ -28,11 +29,15 @@ namespace CarRentalManagement.Api.Repositories
                 new SqlParameter("@Color", car.Color),
                 new SqlParameter("@LicensePlateNumber",car.LicensePlateNumber),
                 new SqlParameter("@Availability",car.Availability),
-                new SqlParameter("@NewCarId",SqlDbType.Int){Direction=ParameterDirection.Output}
+                new SqlParameter("@NewCarId",SqlDbType.Int){Direction=ParameterDirection.Output},
+                new SqlParameter("@ResultType",SqlDbType.NVarChar,50){Direction=ParameterDirection.Output}
             };
 
             await _carRentalDb.Database.ExecuteSqlRawAsync(sqlQuery, parameters);
 
+            var resultType = (string)parameters[6].Value;
+            if (resultType == "LPN_Error")
+                throw new BadRequestException($"Car With License Plate No. : {car.LicensePlateNumber} Already Exist");
             var newCarId = (int)parameters[5].Value;
             return newCarId;
         }
