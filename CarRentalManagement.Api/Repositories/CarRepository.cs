@@ -17,7 +17,7 @@ namespace CarRentalManagement.Api.Repositories
             _carRentalDb = carRentalDb;
         }
 
-        public async Task<int> CreateAsync(int makeId, int modelId, Car car)
+        public async Task<Car> CreateAsync(int makeId, int modelId, Car car)
         {
             string sqlQuery = "exec sp_AddCar @LicensePlateNumber,@Color,@Availability," +
                 "@MakeId,@ModelId,@NewCarId OUTPUT,@ResultType OUTPUT";
@@ -38,31 +38,54 @@ namespace CarRentalManagement.Api.Repositories
             var resultType = (string)parameters[6].Value;
             if (resultType == "LPN_Error")
                 throw new BadRequestException($"Car With License Plate No. : {car.LicensePlateNumber} Already Exist");
+            else if (resultType == "MkId_Error")
+                throw new NotFoundException($"Make Id : {makeId} doesn't exist");
+            else if (resultType == "MdlId_Error")
+                throw new NotFoundException($"Model Id : {modelId} doesn't exist");
+            else if (resultType == "Color_Error")
+                throw new BadRequestException("Model Limit exceeded : For a model, maximum 3 car of same color is allowed");
+
             var newCarId = (int)parameters[5].Value;
-            return newCarId;
+            var addedCar = await GetByIdAsync(newCarId);
+
+            return addedCar;
         }
 
         public async Task<Car?> DeleteAsync(int id)
         {
-            var existingCar =  await _carRentalDb.Cars.FirstOrDefaultAsync(x => x.Id == id);
-            
-            if (existingCar == null)
+            string sqlQuery = "exec usp_deleteCar @Id, @Result OUTPUT";
+
+            var parameters = new[]
+            {
+                new SqlParameter("@Id", id),
+                new SqlParameter("@Result",SqlDbType.NVarChar,50){Direction=ParameterDirection.Output}
+
+            };
+
+            var carToBeDeleted = await GetByIdAsync(id);
+
+            await _carRentalDb.Database.ExecuteSqlRawAsync(sqlQuery, parameters);
+
+            var result = (string)parameters[1].Value;
+
+            if (result == "Not Found")
                 throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");
 
-            if (existingCar.Availability == true)
-            {
-                _carRentalDb.Cars.Remove(existingCar);
-                _carRentalDb.SaveChanges();
-                return existingCar;
-            }
-            else
+            else if (result == "Availability = False")
                 throw new BadRequestException("Car Availability Should Be True, To Delete A Car");
-            
+
+            if (result == "Success")
+            {    
+                return carToBeDeleted;
+            }
+            return null;
         }
 
         public async  Task<List<Car>> GetAllAsync()
         {
-            var cars = await _carRentalDb.Cars.ToListAsync();
+            //var cars = await _carRentalDb.Cars.ToListAsync();
+            string sqlQuery = "exec usp_getAllCars";
+            var cars = await _carRentalDb.Cars.FromSqlRaw(sqlQuery).ToListAsync();
             if (cars.Count == 0)
                 return new List<Car>();
             return cars;
@@ -70,7 +93,10 @@ namespace CarRentalManagement.Api.Repositories
 
         public async Task<Car?> GetByIdAsync(int id)
         {
-            var car = await _carRentalDb.Cars.FirstOrDefaultAsync(x => x.Id == id);
+            //var car = await _carRentalDb.Cars.FirstOrDefaultAsync(x => x.Id == id);
+            string sqlQuery = "SELECT * FROM Cars WHERE Id = @Id";
+            SqlParameter parameter = new SqlParameter("@Id", id);
+            var car = await _carRentalDb.Cars.FromSqlRaw(sqlQuery, parameter).FirstOrDefaultAsync();
             if (car == null)
                 throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");
             return car;
@@ -78,25 +104,38 @@ namespace CarRentalManagement.Api.Repositories
 
         public async Task<Car?> UpdateAsync(int id, Car car)
         {
-            var existingCar = await _carRentalDb.Cars.FirstOrDefaultAsync(x => x.Id == id);
+            // Parameters should pass in same order as it is present in Db stored procedure
+            string sqlQuery = "exec usp_updateCar @Id," +
+                "@Color,@LicensePlateNumber,@ResultType OUTPUT";
 
-            if (existingCar == null)
+            var parameters = new[]
+            {
+                new SqlParameter("@Id", id),
+                new SqlParameter("@Color", car.Color),
+                new SqlParameter("@LicensePlateNumber", car.LicensePlateNumber),
+                new SqlParameter("@ResultType",SqlDbType.NVarChar,50){Direction=ParameterDirection.Output}
+            };
+
+            await _carRentalDb.Database.ExecuteSqlRawAsync(sqlQuery, parameters);
+
+            var resultType = (string)parameters[3].Value;
+
+            if (resultType == "Not Found")
                 throw new NotFoundException($"Car With The Provided Id : {id} Doesn't Exist");
 
-            existingCar.LicensePlateNumber = car.LicensePlateNumber;
-            existingCar.Color = car.Color;
-            existingCar.Availability = car.Availability;
-
-            var carsWithSameColor = _carRentalDb.Cars.Where(c => c.Model == existingCar.Model && c.Color == existingCar.Color).ToList();
-            if (carsWithSameColor.Count > 3)
-                throw new BadRequestException("Model Limit exceeded : For a model, maximum 3 car of same color is allowed");
-
-            var carWithSameNo = _carRentalDb.Cars.SingleOrDefault(c => c.LicensePlateNumber == car.LicensePlateNumber);
-            if (carWithSameNo != null)
+            else if (resultType == "LPN_Error")
                 throw new BadRequestException($"Car With License Plate No. : {car.LicensePlateNumber} Already Exist");
 
-            await _carRentalDb.SaveChangesAsync();
-            return existingCar;
+            else if (resultType == "Color_Error")
+                throw new BadRequestException("Model Limit exceeded : For a model, maximum 3 car of same color is allowed");
+
+            if (resultType == "Success")
+            {
+                var updatedCar = await GetByIdAsync(id);
+                return updatedCar;
+            }
+                
+            return null;
         }
  
     }

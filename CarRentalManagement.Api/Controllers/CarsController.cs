@@ -61,10 +61,10 @@ namespace CarRentalManagement.Api.Controllers
             var newCar = _mapper.Map<Car>(carPost);
 
             // Use Domain Model to create Region
-            var addedCarId = await _carRepository.CreateAsync(makeId,modelId, newCar);
+            var addedCar = await _carRepository.CreateAsync(makeId,modelId, newCar);
 
             // Retrieve Newly Added Car and Map to Dto
-            var addedCar = await _carRepository.GetByIdAsync(addedCarId);
+            
             var carDto = _mapper.Map<CarGetDto>(addedCar);
 
             _logger.LogInformation($" Car : {JsonSerializer.Serialize(carDto)} Got Added Successfully");
